@@ -1,0 +1,344 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VerifiK - Dashboard de Câmeras | LOGOS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{% static 'css/logos.css' %}">
+    <style>
+        .camera-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .camera-card:hover {
+            border-color: #D4AF37;
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.2);
+        }
+        
+        .camera-preview {
+            background: #1a1a1a;
+            aspect-ratio: 16/9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+        }
+        
+        .status-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status-online {
+            background: #28a745;
+            color: white;
+        }
+        
+        .status-offline {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .status-error {
+            background: #ffc107;
+            color: #000;
+        }
+        
+        .event-item {
+            border-left: 4px solid #e0e0e0;
+            transition: all 0.2s ease;
+        }
+        
+        .event-item:hover {
+            background: #f8f9fa;
+            border-left-color: #D4AF37;
+        }
+        
+        .severity-critical {
+            border-left-color: #dc3545 !important;
+        }
+        
+        .severity-high {
+            border-left-color: #fd7e14 !important;
+        }
+        
+        .severity-medium {
+            border-left-color: #ffc107 !important;
+        }
+        
+        .severity-low {
+            border-left-color: #17a2b8 !important;
+        }
+        
+        .stat-card {
+            border-radius: 12px;
+            border: 1px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .ai-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: #1B4D3E;">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/" style="color: #D4AF37;">
+                <i class="bi bi-camera-video-fill me-2"></i>VerifiK
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'cameras:dashboard' %}">
+                            <i class="bi bi-grid-fill me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'cameras:events_list' %}">
+                            <i class="bi bi-bell-fill me-1"></i>Eventos
+                            {% if events_unacknowledged > 0 %}
+                            <span class="badge bg-danger">{{ events_unacknowledged }}</span>
+                            {% endif %}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/cameras/camera/">
+                            <i class="bi bi-gear-fill me-1"></i>Configurar
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/api-test">
+                            <i class="bi bi-code-square me-1"></i>API
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">
+                            <i class="bi bi-house-fill me-1"></i>Home
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container my-5">
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col">
+                <h1 class="mb-2">
+                    <i class="bi bi-camera-video-fill me-2" style="color: #D4AF37;"></i>
+                    Dashboard VerifiK
+                </h1>
+                <p class="text-muted">Monitoramento em tempo real com Inteligência Artificial</p>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-3">
+                <div class="stat-card p-4 h-100">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="text-muted mb-0">Câmeras Online</h6>
+                        <i class="bi bi-camera-video text-success" style="font-size: 24px;"></i>
+                    </div>
+                    <h2 class="mb-0">{{ cameras_online }}/{{ cameras_total }}</h2>
+                    <small class="text-muted">
+                        {% if cameras_total > 0 %}
+                        {{ cameras_online|floatformat:0|add:0|mul:100|div:cameras_total|floatformat:0 }}% operacional
+                        {% else %}
+                        Nenhuma câmera cadastrada
+                        {% endif %}
+                    </small>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="stat-card p-4 h-100">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="text-muted mb-0">Eventos (24h)</h6>
+                        <i class="bi bi-exclamation-triangle text-warning" style="font-size: 24px;"></i>
+                    </div>
+                    <h2 class="mb-0">{{ events_total }}</h2>
+                    <small class="text-danger">{{ events_critical }} críticos</small>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="stat-card p-4 h-100">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="text-muted mb-0">IA Ativa</h6>
+                        <i class="bi bi-cpu text-primary" style="font-size: 24px;"></i>
+                    </div>
+                    <h2 class="mb-0">{{ cameras_ai_enabled }}</h2>
+                    <small class="text-muted">{{ ai_models.count }} modelos disponíveis</small>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="stat-card p-4 h-100">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="text-muted mb-0">Alertas</h6>
+                        <i class="bi bi-bell text-info" style="font-size: 24px;"></i>
+                    </div>
+                    <h2 class="mb-0">{{ alerts_unread }}</h2>
+                    <small class="text-muted">não lidos</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Câmeras Grid -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3>
+                        <i class="bi bi-grid-3x3-gap-fill me-2" style="color: #D4AF37;"></i>
+                        Câmeras
+                    </h3>
+                    <a href="/admin/cameras/camera/add/" class="btn btn-sm" style="background: #D4AF37; color: white;">
+                        <i class="bi bi-plus-lg me-1"></i>Adicionar Câmera
+                    </a>
+                </div>
+
+                {% if camera_list %}
+                <div class="row g-4">
+                    {% for camera in camera_list %}
+                    <div class="col-md-4 col-lg-3">
+                        <div class="camera-card">
+                            <div class="position-relative">
+                                <div class="camera-preview">
+                                    <i class="bi bi-camera-video-off" style="font-size: 48px;"></i>
+                                </div>
+                                <span class="status-badge status-{{ camera.status }}">
+                                    {{ camera.get_status_display }}
+                                </span>
+                            </div>
+                            <div class="p-3">
+                                <h6 class="mb-1">{{ camera.name }}</h6>
+                                <p class="text-muted small mb-2">
+                                    <i class="bi bi-geo-alt-fill me-1"></i>{{ camera.location }}
+                                </p>
+                                {% if camera.ai_enabled %}
+                                <span class="ai-badge">
+                                    <i class="bi bi-cpu me-1"></i>IA Ativa
+                                </span>
+                                {% endif %}
+                                <div class="mt-2">
+                                    <a href="{% url 'cameras:camera_detail' camera.id %}" class="btn btn-sm btn-outline-secondary w-100">
+                                        <i class="bi bi-eye me-1"></i>Detalhes
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-5">
+                    <i class="bi bi-camera-video-off" style="font-size: 64px; color: #ccc;"></i>
+                    <h4 class="mt-3 text-muted">Nenhuma câmera cadastrada</h4>
+                    <p class="text-muted">Adicione câmeras para começar o monitoramento</p>
+                    <a href="/admin/cameras/camera/add/" class="btn mt-3" style="background: #D4AF37; color: white;">
+                        <i class="bi bi-plus-lg me-2"></i>Adicionar Primeira Câmera
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Eventos Recentes -->
+        <div class="row">
+            <div class="col-12">
+                <h3 class="mb-3">
+                    <i class="bi bi-clock-history me-2" style="color: #D4AF37;"></i>
+                    Eventos Recentes
+                </h3>
+
+                {% if recent_events %}
+                <div class="card">
+                    <div class="list-group list-group-flush">
+                        {% for event in recent_events %}
+                        <div class="list-group-item event-item severity-{{ event.severity }}">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1">{{ event.get_event_type_display }}</h6>
+                                    <p class="mb-1 text-muted small">
+                                        <i class="bi bi-camera-video me-1"></i>{{ event.camera.name }}
+                                        <span class="ms-2">
+                                            <i class="bi bi-geo-alt me-1"></i>{{ event.camera.location }}
+                                        </span>
+                                    </p>
+                                    {% if event.description %}
+                                    <p class="mb-0 small">{{ event.description }}</p>
+                                    {% endif %}
+                                </div>
+                                <div class="text-end ms-3">
+                                    <span class="badge bg-{{ event.severity }}">
+                                        {{ event.get_severity_display }}
+                                    </span>
+                                    <small class="d-block text-muted mt-1">
+                                        {{ event.detected_at|timesince }} atrás
+                                    </small>
+                                    {% if not event.acknowledged %}
+                                    <small class="d-block text-warning mt-1">
+                                        <i class="bi bi-exclamation-circle-fill me-1"></i>Pendente
+                                    </small>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="text-center mt-3">
+                    <a href="{% url 'cameras:events_list' %}" class="btn btn-outline-secondary">
+                        Ver Todos os Eventos
+                        <i class="bi bi-arrow-right ms-2"></i>
+                    </a>
+                </div>
+                {% else %}
+                <div class="text-center py-5">
+                    <i class="bi bi-check-circle" style="font-size: 64px; color: #28a745;"></i>
+                    <h4 class="mt-3 text-muted">Nenhum evento detectado</h4>
+                    <p class="text-muted">Sistema monitorando normalmente</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-5 py-4" style="background: #1B4D3E; color: white;">
+        <div class="container text-center">
+            <p class="mb-0">© 2025 LOGOS - Grupo Lisboa. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

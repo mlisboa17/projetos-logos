@@ -1,0 +1,131 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ camera.name }} - VerifiK | LOGOS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{% static 'css/logos.css' %}">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: #1B4D3E;">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="{% url 'cameras:dashboard' %}" style="color: #D4AF37;">
+                <i class="bi bi-camera-video-fill me-2"></i>VerifiK
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="{% url 'cameras:dashboard' %}">
+                    <i class="bi bi-arrow-left me-1"></i>Voltar ao Dashboard
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <!-- Camera Header -->
+        <div class="row mb-4">
+            <div class="col">
+                <h1>{{ camera.name }}</h1>
+                <p class="text-muted">
+                    <i class="bi bi-geo-alt-fill me-1"></i>{{ camera.location }}
+                    {% if camera.store %}
+                    <span class="ms-3">
+                        <i class="bi bi-shop me-1"></i>{{ camera.store.name }}
+                    </span>
+                    {% endif %}
+                </p>
+            </div>
+            <div class="col-auto">
+                <span class="badge bg-{{ camera.status }} fs-6">
+                    {{ camera.get_status_display }}
+                </span>
+            </div>
+        </div>
+
+        <!-- Camera Info -->
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Stream ao Vivo</h5>
+                    </div>
+                    <div class="card-body" style="background: #1a1a1a; aspect-ratio: 16/9;">
+                        <div class="d-flex align-items-center justify-content-center h-100">
+                            <div class="text-center text-white-50">
+                                <i class="bi bi-camera-video-off" style="font-size: 64px;"></i>
+                                <p class="mt-3">Stream não disponível no modo demo</p>
+                                <small>URL: {{ camera.stream_url }}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h6 class="mb-0">Informações</h6>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Código:</strong> {{ camera.code }}</p>
+                        <p><strong>IP:</strong> {{ camera.ip_address }}</p>
+                        <p><strong>Porta:</strong> {{ camera.port }}</p>
+                        <p><strong>Gravando:</strong> {{ camera.is_recording|yesno:"Sim,Não" }}</p>
+                        <p class="mb-0"><strong>IA Ativa:</strong> {{ camera.ai_enabled|yesno:"Sim,Não" }}</p>
+                    </div>
+                </div>
+                
+                {% if camera.ai_enabled %}
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="mb-0">Configuração IA</h6>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Modelo:</strong> {{ camera.ai_model.name }}</p>
+                        <p><strong>Confiança:</strong> {{ camera.confidence_threshold|floatformat:2 }}</p>
+                        <p class="mb-0"><strong>FPS:</strong> {{ camera.detection_fps }}</p>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Events -->
+        <div class="row">
+            <div class="col-12">
+                <h3 class="mb-3">Eventos (Últimos 7 dias)</h3>
+                
+                {% if events %}
+                <div class="card">
+                    <div class="list-group list-group-flush">
+                        {% for event in events %}
+                        <div class="list-group-item">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6>{{ event.get_event_type_display }}</h6>
+                                    <p class="mb-0 text-muted small">{{ event.detected_at }}</p>
+                                </div>
+                                <span class="badge bg-{{ event.severity }}">
+                                    {{ event.get_severity_display }}
+                                </span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% else %}
+                <div class="alert alert-success">
+                    <i class="bi bi-check-circle me-2"></i>
+                    Nenhum evento detectado nos últimos 7 dias
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
