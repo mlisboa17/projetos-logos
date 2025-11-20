@@ -1,53 +1,91 @@
-{% extends 'verifik/base.html' %}
+{% extends 'base.html' %}
+
+{% block title %}VerifiK - Dashboard{% endblock %}
 
 {% block content %}
-<div class="stats-grid">
-    <div class="stat-card">
-        <h3>Produtos Cadastrados</h3>
-        <div class="number">{{ total_produtos }}</div>
+<div class="container">
+    <div class="row mb-4">
+        <div class="col">
+            <h1><i class="bi bi-camera-video me-2"></i>VerifiK - Dashboard</h1>
+            <p class="text-muted">Monitoramento inteligente de vendas com IA</p>
+        </div>
     </div>
-    
-    <div class="stat-card" style="border-left-color: #27ae60;">
-        <h3>Câmeras Ativas</h3>
-        <div class="number" style="color: #27ae60;">{{ total_cameras }}</div>
-    </div>
-    
-    <div class="stat-card" style="border-left-color: #3498db;">
-        <h3>Vendas Hoje</h3>
-        <div class="number" style="color: #3498db;">{{ vendas_hoje }}</div>
-    </div>
-    
-    <div class="stat-card" style="border-left-color: #f39c12;">
-        <h3>Detecções Hoje</h3>
-        <div class="number" style="color: #f39c12;">{{ deteccoes_hoje }}</div>
-    </div>
-    
-    <div class="stat-card" style="border-left-color: #e74c3c;">
-        <h3>Incidentes Abertos</h3>
-        <div class="number" style="color: #e74c3c;">{{ incidentes_abertos }}</div>
-    </div>
-    
-    <div class="stat-card" style="border-left-color: #9b59b6;">
-        <h3>Funcionários Ativos</h3>
-        <div class="number" style="color: #9b59b6;">{{ total_funcionarios }}</div>
-    </div>
-</div>
 
-{% if incidentes_abertos > 0 %}
-<div class="card">
-    <h2>🚨 Últimos Incidentes</h2>
-    {% if ultimos_incidentes %}
-    <table>
-        <thead>
-            <tr>
-                <th>Data/Hora</th>
-                <th>Tipo</th>
-                <th>Produto</th>
-                <th>Câmera</th>
-                <th>Severidade</th>
-                <th>Status</th>
-            </tr>
-        </thead>
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-box me-2"></i>Produtos Cadastrados</h5>
+                    <h2 class="mb-0">{{ total_produtos }}</h2>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card border-success">
+                <div class="card-body">
+                    <h5 class="card-title text-success"><i class="bi bi-camera me-2"></i>Câmeras Ativas</h5>
+                    <h2 class="mb-0 text-success">{{ total_cameras }}</h2>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card border-primary">
+                <div class="card-body">
+                    <h5 class="card-title text-primary"><i class="bi bi-cart-check me-2"></i>Vendas Hoje</h5>
+                    <h2 class="mb-0 text-primary">{{ vendas_hoje }}</h2>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card border-warning">
+                <div class="card-body">
+                    <h5 class="card-title text-warning"><i class="bi bi-eye me-2"></i>Detecções Hoje</h5>
+                    <h2 class="mb-0 text-warning">{{ deteccoes_hoje }}</h2>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card border-danger">
+                <div class="card-body">
+                    <h5 class="card-title text-danger"><i class="bi bi-exclamation-triangle me-2"></i>Incidentes Abertos</h5>
+                    <h2 class="mb-0 text-danger">{{ incidentes_abertos }}</h2>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card border-info">
+                <div class="card-body">
+                    <h5 class="card-title text-info"><i class="bi bi-people me-2"></i>Funcionários Ativos</h5>
+                    <h2 class="mb-0 text-info">{{ total_funcionarios }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if incidentes_abertos > 0 %}
+    <div class="card">
+        <div class="card-header bg-danger text-white">
+            <h5 class="mb-0"><i class="bi bi-exclamation-triangle me-2"></i>Últimos Incidentes</h5>
+        </div>
+        <div class="card-body">
+            {% if ultimos_incidentes %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Data/Hora</th>
+                            <th>Tipo</th>
+                            <th>Produto</th>
+                            <th>Câmera</th>
+                            <th>Severidade</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
         <tbody>
             {% for incidente in ultimos_incidentes %}
             <tr>

@@ -112,7 +112,10 @@ class OperacaoVenda(models.Model):
         ('PENDENTE', 'Pendente'),
     ]
     
-    numero_venda = models.CharField(max_length=50, unique=True)
+    # Integração com LOGOS
+    organization = models.ForeignKey('accounts.Organization', on_delete=models.CASCADE, related_name='verifik_vendas', null=True, blank=True)
+    
+    numero_venda = models.CharField(max_length=50)
     funcionario = models.ForeignKey(Funcionario, on_delete=models.SET_NULL, null=True)
     data_hora = models.DateTimeField(default=timezone.now)
     valor_total = models.DecimalField(max_digits=10, decimal_places=2)
@@ -123,6 +126,7 @@ class OperacaoVenda(models.Model):
         verbose_name = 'Operação de Venda'
         verbose_name_plural = 'Operações de Vendas'
         ordering = ['-data_hora']
+        unique_together = [['organization', 'numero_venda']]  # Número único por organização
 
     def __str__(self):
         return f"Venda #{self.numero_venda} - {self.data_hora.strftime('%d/%m/%Y %H:%M')}"
@@ -335,6 +339,9 @@ class Camera(models.Model):
         ('MANUTENCAO', 'Em Manutenção'),
         ('ERRO', 'Com Erro'),
     ]
+    
+    # Integração com LOGOS
+    organization = models.ForeignKey('accounts.Organization', on_delete=models.CASCADE, related_name='verifik_cameras', null=True, blank=True)
     
     nome = models.CharField(max_length=100)
     localizacao = models.CharField(max_length=255, help_text="Ex: Caixa 1, Entrada, Setor A")

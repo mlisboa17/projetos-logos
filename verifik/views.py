@@ -6,7 +6,6 @@ from django.db.models import Count, Sum, Q, Max
 from django.db import models
 from django.utils import timezone
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from datetime import timedelta
@@ -27,58 +26,39 @@ from .utils import (
 )
 
 
-# ==============================================
-# 🔐 AUTENTICAÇÃO
-# ==============================================
-
-def login_view(request):
-    """Página de login"""
-    if request.user.is_authenticated:
-        return redirect('home')
-    
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        
-        user = authenticate(request, username=username, password=password)
-        
-        if user is not None:
-            login(request, user)
-            messages.success(request, f'Bem-vindo, {user.get_full_name() or user.username}!')
-            return redirect('home')
-        else:
-            messages.error(request, 'Usuário ou senha inválidos!')
-    
-    return render(request, 'verifik/login.html')
-
-
-def logout_view(request):
-    """Logout do sistema"""
-    logout(request)
-    messages.info(request, 'Você saiu do sistema.')
-    return redirect('login')
 
 
 # ==============================================
 # 📄 VIEWS HTML
 # ==============================================
 
-@login_required(login_url='login')
+@login_required
 def home(request):
     """Página inicial do VerifiK - Dashboard com estatísticas"""
+    
+    # Verificar se usuário tem acesso ao VerifiK
+    if not request.user.active_organization:
+        messages.warning(request, 'Selecione uma organização para acessar o VerifiK.')
+        return redirect('/')
+    
+    # Filtrar por organização ativa
+    org = request.user.active_organization
+    
     agora = timezone.now()
     inicio_dia = agora - timedelta(days=1)
     
-    # Estatísticas gerais
+    # Estatísticas gerais da organização
     estatisticas = {
-        'total_produtos': Produto.objects.filter(ativo=True).count(),
-        'total_cameras': Camera.objects.filter(ativa=True).count(),
-        'total_funcionarios': Funcionario.objects.filter(ativo=True).count(),
+        'total_produtos': Produto.objects.filter(organization=org, ativo=True).count(),
+        'total_cameras': Camera.objects.filter(organization=org, ativa=True).count(),
+        'total_funcionarios': Funcionario.objects.filter(organization=org, ativo=True).count(),
         'vendas_hoje': OperacaoVenda.objects.filter(
+            organization=org,
             data_hora__gte=inicio_dia,
             status='CONCLUIDA'
         ).count(),
         'deteccoes_hoje': DeteccaoProduto.objects.filter(
+            camera__organization=org,
             data_hora_deteccao__gte=inicio_dia
         ).count(),
         'incidentes_abertos': Incidente.objects.filter(

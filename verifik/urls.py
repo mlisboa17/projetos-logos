@@ -16,16 +16,12 @@ router.register(r'cameras', views.CameraViewSet)
 router.register(r'camera-status', views.CameraStatusViewSet)
 
 urlpatterns = [
-    # Autenticação
-    path('login/', views.login_view, name='login'),
-    path('logout/', views.logout_view, name='logout'),
-    
     # Páginas HTML
-    path('', views.home, name='home'),
-    path('produtos/', views.produtos_lista, name='produtos_lista'),
-    path('produtos/<int:pk>/', views.produto_detalhe, name='produto_detalhe'),
-    path('produtos/<int:produto_id>/adicionar-imagem/', views.adicionar_imagem, name='adicionar_imagem'),
-    path('imagens/<int:imagem_id>/remover/', views.remover_imagem, name='remover_imagem'),
+    path('', views.home, name='verifik_home'),
+    path('produtos/', views.produtos_lista, name='verifik_produtos_lista'),
+    path('produtos/<int:pk>/', views.produto_detalhe, name='verifik_produto_detalhe'),
+    path('produtos/<int:produto_id>/adicionar-imagem/', views.adicionar_imagem, name='verifik_adicionar_imagem'),
+    path('imagens/<int:imagem_id>/remover/', views.remover_imagem, name='verifik_remover_imagem'),
     
     # API REST
     path('api/', include(router.urls)),

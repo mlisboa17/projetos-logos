@@ -57,7 +57,7 @@ urlpatterns = [
     path('switch-org/<int:org_id>/', accounts_views.switch_organization, name='switch_organization'),
     
     # VerifiK URLs
-    path('verifik/', include('cameras.urls')),
+    path('verifik/', include('verifik.urls')),
     
     # Django Admin
     path('admin/', admin.site.urls),
