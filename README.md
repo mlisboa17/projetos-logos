@@ -89,7 +89,7 @@ Sistema de Inteligência Artificial que detecta furtos internos em tempo real at
 ## 📁 Estrutura do Projeto
 
 ```
-ProjetoLogus/
+projetologos/
 ├── index.html                      # Homepage LOGUS (Grupo Lisboa)
 ├── verifik/
 │   ├── index.html                  # Landing page VerifiK

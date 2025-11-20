@@ -16,7 +16,7 @@ Django é um framework **batteries-included** mais robusto e completo:
 ## Estrutura do Projeto Django
 
 ```
-ProjetoLogus/
+projetologos/
 ├── manage.py
 ├── logos/                    # Projeto Django principal
 │   ├── __init__.py
@@ -69,7 +69,7 @@ ProjetoLogus/
 ## Instalação Django
 
 ```bash
-cd ProjetoLogus
+cd projetologos
 
 # Criar novo projeto Django
 pip install django djangorestframework django-tenants django-cors-headers celery redis

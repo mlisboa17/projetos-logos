@@ -53,6 +53,9 @@ urlpatterns = [
     path('admin/approve-user/<int:user_id>/', accounts_views.approve_user, name='approve_user'),
     path('admin/reject-user/<int:user_id>/', accounts_views.reject_user, name='reject_user'),
     
+    # VerifiK URLs
+    path('verifik/', include('cameras.urls')),
+    
     # Django Admin
     path('admin/', admin.site.urls),
     
