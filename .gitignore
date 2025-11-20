@@ -1,7 +1,18 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+*.egg-info/
+dist/
+build/
+
 # Dependencies
 node_modules/
-venv/
-__pycache__/
 
 # Outros projetos (não fazer parte deste commit)
 ProjetoVerifiK/
@@ -25,10 +36,16 @@ desktop.ini
 *.log
 logs/
 
-# Build
-dist/
-build/
-
 # Cache
 .cache/
 *.pyc
+
+# Database
+*.db
+*.sqlite3
+
+# AI Models (arquivos grandes)
+*.pt
+*.pth
+*.onnx
+models/*.pt
