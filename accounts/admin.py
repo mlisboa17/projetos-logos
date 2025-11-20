@@ -51,7 +51,18 @@ class UserAdmin(BaseUserAdmin):
         (None, {'fields': ('username', 'password')}),
         ('Informações Pessoais', {'fields': ('first_name', 'last_name', 'email', 'phone', 'avatar')}),
         ('Organização', {'fields': ('organization', 'is_org_admin', 'is_super_admin')}),
-        ('Permissões', {
+        ('Permissões por Módulo', {
+            'fields': (
+                'can_access_verifik',
+                'can_access_erp_hub', 
+                'can_access_fuel_prices',
+                'can_manage_users',
+                'can_view_reports',
+                'can_edit_settings'
+            ),
+            'description': 'Defina quais módulos e funcionalidades este usuário pode acessar'
+        }),
+        ('Permissões do Sistema', {
             'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions'),
             'classes': ('collapse',)
         }),

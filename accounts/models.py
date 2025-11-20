@@ -110,8 +110,17 @@ class User(AbstractUser):
     phone = models.CharField('Telefone', max_length=20, blank=True)
     avatar = models.ImageField('Avatar', upload_to='users/avatars/', null=True, blank=True)
     
+    # Permissões
     is_org_admin = models.BooleanField('Admin da Organização', default=False)
     is_super_admin = models.BooleanField('Super Admin LOGOS', default=False)
+    
+    # Permissões por módulo (definidas pelo admin na aprovação)
+    can_access_verifik = models.BooleanField('Acesso VerifiK', default=False, help_text='Pode acessar módulo de câmeras')
+    can_access_erp_hub = models.BooleanField('Acesso ERP Hub', default=False, help_text='Pode acessar integrações ERP')
+    can_access_fuel_prices = models.BooleanField('Acesso Fuel Prices', default=False, help_text='Pode acessar preços de combustível')
+    can_manage_users = models.BooleanField('Gerenciar Usuários', default=False, help_text='Pode aprovar/rejeitar usuários')
+    can_view_reports = models.BooleanField('Ver Relatórios', default=False, help_text='Pode visualizar relatórios')
+    can_edit_settings = models.BooleanField('Editar Configurações', default=False, help_text='Pode alterar configurações')
     
     last_login_at = models.DateTimeField('Último Login', null=True, blank=True)
     
