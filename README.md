@@ -176,7 +176,7 @@ Pasta destino: /public_html/
 start index.html
 
 # Opção 2: Servidor local Python
-cd ProjetoLogus
+cd projetologos
 python -m http.server 8000
 # Acesse: http://localhost:8000
 
@@ -346,7 +346,7 @@ npx http-server -p 8000
 ```bash
 # 1. Clone o repositório
 git clone [repository-url]
-cd ProjetoLogus
+cd projetologos
 
 # 2. Abra no navegador
 start index.html
