@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOGOS - Central de ERPs</title>
+    
+    <!-- Bootstrap 5.3 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --gold: #D4AF37;
+            --gold-dark: #B8941D;
+            --green: #1B4D3E;
+            --green-dark: #0F2922;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, var(--green-dark) 100%);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(10, 10, 10, 0.95) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .erp-card {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.9) 0%, rgba(27, 77, 62, 0.5) 100%);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.3s;
+            cursor: pointer;
+            height: 100%;
+        }
+
+        .erp-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--gold);
+            box-shadow: 0 15px 40px rgba(212, 175, 55, 0.4);
+        }
+
+        .erp-icon {
+            font-size: 4rem;
+            color: var(--gold);
+            margin-bottom: 1.5rem;
+        }
+
+        .erp-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .erp-description {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-access {
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+            color: #000;
+            font-weight: 700;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            transition: all 0.3s;
+        }
+
+        .btn-access:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.5);
+            color: #000;
+        }
+
+        .company-badge {
+            background: rgba(212, 175, 55, 0.2);
+            color: var(--gold);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            margin: 0.25rem;
+            display: inline-block;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--gold) 0%, #FFF 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 2rem;
+        }
+
+        .status-online {
+            color: #10b981;
+        }
+
+        .status-offline {
+            color: #ef4444;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <img src="assets/images/logos-icon.jpg" alt="LOGOS" height="35">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="erp-hub.html">Central de ERPs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html">Preços</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="verifik/">VerifiK</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="bi bi-person-circle me-1"></i> Admin
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <div class="container py-5">
+        <!-- HEADER -->
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <h1 class="section-title">Central de Sistemas ERP</h1>
+                <p class="lead text-white-50">
+                    Acesse todos os sistemas do Grupo Lisboa em um único lugar
+                </p>
+            </div>
+        </div>
+
+        <!-- POSTOS LISBOA -->
+        <div class="mb-5">
+            <h3 class="text-warning mb-4">
+                <i class="bi bi-fuel-pump me-2"></i>
+                Postos Lisboa
+            </h3>
+            <div class="row g-4">
+                <!-- ERP Principal Postos -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="erp-card">
+                        <div class="text-center">
+                            <i class="bi bi-speedometer2 erp-icon"></i>
+                            <div class="erp-name">WebPostos</div>
+                            <div class="erp-description">
+                                Gestão operacional dos postos de combustível
+                            </div>
+                            <div class="mb-3">
+                                <span class="company-badge">Postos Lisboa</span>
+                            </div>
+                            <div class="mb-3">
+                                <i class="bi bi-circle-fill status-online"></i>
+                                <small class="text-white-50">Online</small>
+                            </div>
+                            <button class="btn btn-access w-100">
+                                <i class="bi bi-box-arrow-up-right me-2"></i>
+                                Acessar Sistema
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Controle de Estoque -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="erp-card">
+                        <div class="text-center">
+                            <i class="bi bi-boxes erp-icon"></i>
+                            <div class="erp-name">Controle de Tanques</div>
+                            <div class="erp-description">
+                                Monitoramento de níveis e gestão de estoque
+                            </div>
+                            <div class="mb-3">
+                                <span class="company-badge">Postos Lisboa</span>
+                            </div>
+                            <div class="mb-3">
+                                <i class="bi bi-circle-fill status-online"></i>
+                                <small class="text-white-50">Online</small>
+                            </div>
+                            <button class="btn btn-access w-100">
+                                <i class="bi bi-box-arrow-up-right me-2"></i>
+                                Acessar Sistema
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fiscal/NF-e -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="erp-card">
+                        <div class="text-center">
+                            <i class="bi bi-file-earmark-text erp-icon"></i>
+                            <div class="erp-name">Sistema Fiscal</div>
+                            <div class="erp-description">
+                                Emissão de NF-e e gestão tributária
+                            </div>
+                            <div class="mb-3">
+                                <span class="company-badge">Postos Lisboa</span>
+                            </div>
+                            <div class="mb-3">
+                                <i class="bi bi-circle-fill status-online"></i>
+                                <small class="text-white-50">Online</small>
+                            </div>
+                            <button class="btn btn-access w-100">
+                                <i class="bi bi-box-arrow-up-right me-2"></i>
+                                Acessar Sistema
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SERTÃ CONVENIÊNCIAS -->
+        <div class="mb-5">
+            <h3 class="text-warning mb-4">
+                <i class="bi bi-shop me-2"></i>
+                Sertã Conveniências
+            </h3>
+            <div class="row g-4">
+                <!-- PDV -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="erp-card">
+                        <div class="text-center">
+                            <i class="bi bi-cart erp-icon"></i>
+                            <div class="erp-name">Bling ERP</div>
+                            <div class="erp-description">
+                                PDV e gestão de vendas das lojas
+                            </div>
+                            <div class="mb-3">
+                                <span class="company-badge">Sertã</span>
+                            </div>
+                            <div class="mb-3">
+                                <i class="bi bi-circle-fill status-online"></i>
+                                <small class="text-white-50">Online</small>
+                            </div>
+                            <button class="btn btn-access w-100">
+                                <i class="bi bi-box-arrow-up-right me-2"></i>
+                                Acessar Sistema
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Estoque -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="erp-card">
+                        <div class="text-center">
+                            <i class="bi bi-box-seam erp-icon"></i>
+                            <div class="erp-name">Gestão de Estoque</div>
+                            <div class="erp-description">
+                                Controle de mercadorias e fornecedores
+                            </div>
+                            <div class="mb-3">
+                                <span class="company-badge">Sertã</span>
+                            </div>
+                            <div class="mb-3">
+                                <i class="bi bi-circle-fill status-online"></i>
+                                <small class="text-white-50">Online</small>
+                            </div>
+                            <button class="btn btn-access w-100">
+                                <i class="bi bi-box-arrow-up-right me-2"></i>
+                                Acessar Sistema
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RESTAURANTE SERTÃ -->
+        <div class="mb-5">
+            <h3 class="text-warning mb-4">
+                <i class="bi bi-egg-fried me-2"></i>
+                Restaurante Sertã
+            </h3>
+            <div class="row g-4">
+                <!-- iFood/Delivery -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="erp-card">
+                        <div class="text-center">
+                            <i class="bi bi-bicycle erp-icon"></i>
+                            <div class="erp-name">Central de Delivery</div>
+                            <div class="erp-description">
+                                Gestão iFood, Uber Eats e delivery próprio
+                            </div>
+                            <div class="mb-3">
+                                <span class="company-badge">Restaurante</span>
+                            </div>
+                            <div class="mb-3">
+                                <i class="bi bi-circle-fill status-online"></i>
+                                <small class="text-white-50">Online</small>
+                            </div>
+                            <button class="btn btn-access w-100">
+                                <i class="bi bi-box-arrow-up-right me-2"></i>
+                                Acessar Sistema
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cardápio Digital -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="erp-card">
+                        <div class="text-center">
+                            <i class="bi bi-book erp-icon"></i>
+                            <div class="erp-name">Cardápio Digital</div>
+                            <div class="erp-description">
+                                Gestão de cardápio e preços
+                            </div>
+                            <div class="mb-3">
+                                <span class="company-badge">Restaurante</span>
+                            </div>
+                            <div class="mb-3">
+                                <i class="bi bi-circle-fill status-online"></i>
+                                <small class="text-white-50">Online</small>
+                            </div>
+                            <button class="btn btn-access w-100">
+                                <i class="bi bi-box-arrow-up-right me-2"></i>
+                                Acessar Sistema
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SUBWAY -->
+        <div class="mb-5">
+            <h3 class="text-warning mb-4">
+                <i class="bi bi-shop-window me-2"></i>
+                Subway (3 unidades)
+            </h3>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-4">
+                    <div class="erp-card">
+                        <div class="text-center">
+                            <i class="bi bi-building erp-icon"></i>
+                            <div class="erp-name">Portal Franqueado</div>
+                            <div class="erp-description">
+                                Acesso ao sistema da franquia Subway
+                            </div>
+                            <div class="mb-3">
+                                <span class="company-badge">Subway</span>
+                            </div>
+                            <div class="mb-3">
+                                <i class="bi bi-circle-fill status-online"></i>
+                                <small class="text-white-50">Online</small>
+                            </div>
+                            <button class="btn btn-access w-100">
+                                <i class="bi bi-box-arrow-up-right me-2"></i>
+                                Acessar Portal
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ZÉ DELIVERY -->
+        <div class="mb-5">
+            <h3 class="text-warning mb-4">
+                <i class="bi bi-cup-straw me-2"></i>
+                Zé Delivery (5 unidades)
+            </h3>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-4">
+                    <div class="erp-card">
+                        <div class="text-center">
+                            <i class="bi bi-truck erp-icon"></i>
+                            <div class="erp-name">Portal Parceiro</div>
+                            <div class="erp-description">
+                                Gestão de vendas e pedidos Zé Delivery
+                            </div>
+                            <div class="mb-3">
+                                <span class="company-badge">Zé Delivery</span>
+                            </div>
+                            <div class="mb-3">
+                                <i class="bi bi-circle-fill status-online"></i>
+                                <small class="text-white-50">Online</small>
+                            </div>
+                            <button class="btn btn-access w-100">
+                                <i class="bi bi-box-arrow-up-right me-2"></i>
+                                Acessar Portal
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SISTEMAS CORPORATIVOS -->
+        <div class="mb-5">
+            <h3 class="text-warning mb-4">
+                <i class="bi bi-gear me-2"></i>
+                Sistemas Corporativos
+            </h3>
+            <div class="row g-4">
+                <!-- RH -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="erp-card">
+                        <div class="text-center">
+                            <i class="bi bi-people erp-icon"></i>
+                            <div class="erp-name">Gestão de RH</div>
+                            <div class="erp-description">
+                                Folha de pagamento e controle de ponto
+                            </div>
+                            <div class="mb-3">
+                                <span class="company-badge">Grupo Lisboa</span>
+                            </div>
+                            <div class="mb-3">
+                                <i class="bi bi-circle-fill status-online"></i>
+                                <small class="text-white-50">Online</small>
+                            </div>
+                            <button class="btn btn-access w-100">
+                                <i class="bi bi-box-arrow-up-right me-2"></i>
+                                Acessar Sistema
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Financeiro -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="erp-card">
+                        <div class="text-center">
+                            <i class="bi bi-currency-dollar erp-icon"></i>
+                            <div class="erp-name">Financeiro</div>
+                            <div class="erp-description">
+                                Contas a pagar/receber e fluxo de caixa
+                            </div>
+                            <div class="mb-3">
+                                <span class="company-badge">Grupo Lisboa</span>
+                            </div>
+                            <div class="mb-3">
+                                <i class="bi bi-circle-fill status-online"></i>
+                                <small class="text-white-50">Online</small>
+                            </div>
+                            <button class="btn btn-access w-100">
+                                <i class="bi bi-box-arrow-up-right me-2"></i>
+                                Acessar Sistema
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contabilidade -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="erp-card">
+                        <div class="text-center">
+                            <i class="bi bi-calculator erp-icon"></i>
+                            <div class="erp-name">Contabilidade</div>
+                            <div class="erp-description">
+                                Sistema contábil e balanços
+                            </div>
+                            <div class="mb-3">
+                                <span class="company-badge">Grupo Lisboa</span>
+                            </div>
+                            <div class="mb-3">
+                                <i class="bi bi-circle-fill status-online"></i>
+                                <small class="text-white-50">Online</small>
+                            </div>
+                            <button class="btn btn-access w-100">
+                                <i class="bi bi-box-arrow-up-right me-2"></i>
+                                Acessar Sistema
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Simular acesso aos ERPs (depois integrar com APIs reais)
+        document.querySelectorAll('.btn-access').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                const erpName = this.closest('.erp-card').querySelector('.erp-name').textContent;
+                alert(`Redirecionando para ${erpName}...\n\n(Em desenvolvimento - integração com APIs)`);
+            });
+        });
+    </script>
+</body>
+</html>

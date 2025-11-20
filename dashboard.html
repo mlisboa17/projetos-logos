@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard LOGOS - Preços de Combustíveis</title>
+    
+    <!-- Bootstrap 5.3 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --gold: #D4AF37;
+            --gold-dark: #B8941D;
+            --green: #1B4D3E;
+            --green-dark: #0F2922;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, var(--green-dark) 100%);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(10, 10, 10, 0.95) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .price-card {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.9) 0%, rgba(27, 77, 62, 0.5) 100%);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .price-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+        }
+
+        .price-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--gold);
+        }
+
+        .price-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .trend-up {
+            color: #ef4444;
+        }
+
+        .trend-down {
+            color: #10b981;
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+            color: #000;
+            font-weight: 700;
+            border: none;
+            transition: all 0.3s;
+        }
+
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.4);
+            color: #000;
+        }
+
+        .fuel-icon {
+            font-size: 3rem;
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <img src="assets/images/logos-icon.jpg" alt="LOGOS" height="35">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="dashboard.html">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="verifik/">VerifiK</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
+                            <i class="bi bi-person-circle me-1"></i> Entrar
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <div class="container py-5">
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <h1 class="display-4 fw-bold mb-3" style="background: linear-gradient(135deg, var(--gold) 0%, #FFF 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    Preços de Combustíveis
+                </h1>
+                <p class="lead text-white-50">Acompanhe em tempo real os preços médios em Recife/PE</p>
+                <small class="text-white-50">
+                    <i class="bi bi-clock me-1"></i>
+                    Última atualização: <span id="lastUpdate">--</span>
+                </small>
+            </div>
+        </div>
+
+        <!-- COMBUSTÍVEIS -->
+        <div class="row g-4 mb-5">
+            <!-- Gasolina Comum -->
+            <div class="col-md-6 col-lg-3">
+                <div class="price-card text-center">
+                    <i class="bi bi-fuel-pump fuel-icon"></i>
+                    <div class="price-label mb-2">Gasolina Comum</div>
+                    <div class="price-value">R$ <span id="gasolinaComum">--</span></div>
+                    <small class="trend-down">
+                        <i class="bi bi-arrow-down-circle me-1"></i>
+                        <span id="gasolinaTrend">0.0%</span>
+                    </small>
+                </div>
+            </div>
+
+            <!-- Gasolina Aditivada -->
+            <div class="col-md-6 col-lg-3">
+                <div class="price-card text-center">
+                    <i class="bi bi-fuel-pump-fill fuel-icon"></i>
+                    <div class="price-label mb-2">Gasolina Aditivada</div>
+                    <div class="price-value">R$ <span id="gasolinaAditivada">--</span></div>
+                    <small class="trend-up">
+                        <i class="bi bi-arrow-up-circle me-1"></i>
+                        <span id="aditivadaTrend">0.0%</span>
+                    </small>
+                </div>
+            </div>
+
+            <!-- Etanol -->
+            <div class="col-md-6 col-lg-3">
+                <div class="price-card text-center">
+                    <i class="bi bi-droplet-fill fuel-icon"></i>
+                    <div class="price-label mb-2">Etanol</div>
+                    <div class="price-value">R$ <span id="etanol">--</span></div>
+                    <small class="trend-down">
+                        <i class="bi bi-arrow-down-circle me-1"></i>
+                        <span id="etanolTrend">0.0%</span>
+                    </small>
+                </div>
+            </div>
+
+            <!-- Diesel S10 -->
+            <div class="col-md-6 col-lg-3">
+                <div class="price-card text-center">
+                    <i class="bi bi-truck fuel-icon"></i>
+                    <div class="price-label mb-2">Diesel S10</div>
+                    <div class="price-value">R$ <span id="dieselS10">--</span></div>
+                    <small class="trend-up">
+                        <i class="bi bi-arrow-up-circle me-1"></i>
+                        <span id="dieselTrend">0.0%</span>
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <!-- PETRÓLEO INTERNACIONAL -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <h3 class="text-warning mb-4">
+                    <i class="bi bi-globe me-2"></i>
+                    Petróleo Internacional
+                </h3>
+            </div>
+            <div class="col-md-6">
+                <div class="price-card text-center">
+                    <i class="bi bi-graph-up fuel-icon"></i>
+                    <div class="price-label mb-2">Brent (Barril)</div>
+                    <div class="price-value">$ <span id="brent">--</span></div>
+                    <small class="trend-up">
+                        <i class="bi bi-arrow-up-circle me-1"></i>
+                        <span id="brentTrend">0.0%</span>
+                    </small>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="price-card text-center">
+                    <i class="bi bi-graph-down fuel-icon"></i>
+                    <div class="price-label mb-2">WTI (Barril)</div>
+                    <div class="price-value">$ <span id="wti">--</span></div>
+                    <small class="trend-down">
+                        <i class="bi bi-arrow-down-circle me-1"></i>
+                        <span id="wtiTrend">0.0%</span>
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <!-- CALL TO ACTION -->
+        <div class="row">
+            <div class="col-12 text-center">
+                <div class="price-card p-5">
+                    <h4 class="text-warning mb-3">Quer acompanhar preços personalizados?</h4>
+                    <p class="text-white-50 mb-4">
+                        Crie sua conta e configure alertas de preços para sua região
+                    </p>
+                    <button class="btn btn-gold btn-lg" data-bs-toggle="modal" data-bs-target="#registerModal">
+                        <i class="bi bi-person-plus me-2"></i>
+                        Cadastrar Gratuitamente
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOGIN MODAL -->
+    <div class="modal fade" id="loginModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-dark border-warning">
+                <div class="modal-header border-warning">
+                    <h5 class="modal-title text-warning">Login</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control bg-dark text-white border-secondary" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Senha</label>
+                            <input type="password" class="form-control bg-dark text-white border-secondary" required>
+                        </div>
+                        <button type="submit" class="btn btn-gold w-100">Entrar</button>
+                    </form>
+                </div>
+                <div class="modal-footer border-warning">
+                    <small class="text-white-50">
+                        Não tem conta? 
+                        <a href="#" class="text-warning" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#registerModal">
+                            Cadastre-se
+                        </a>
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- REGISTER MODAL -->
+    <div class="modal fade" id="registerModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-dark border-warning">
+                <div class="modal-header border-warning">
+                    <h5 class="modal-title text-warning">Cadastro</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="registerForm">
+                        <div class="mb-3">
+                            <label class="form-label">Nome Completo</label>
+                            <input type="text" class="form-control bg-dark text-white border-secondary" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control bg-dark text-white border-secondary" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Telefone</label>
+                            <input type="tel" class="form-control bg-dark text-white border-secondary" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Senha</label>
+                            <input type="password" class="form-control bg-dark text-white border-secondary" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Cidade</label>
+                            <select class="form-select bg-dark text-white border-secondary">
+                                <option selected>Recife</option>
+                                <option>Olinda</option>
+                                <option>Jaboatão dos Guararapes</option>
+                                <option>Cabo de Santo Agostinho</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-gold w-100">Criar Conta</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Dashboard Script -->
+    <script>
+        // Simular dados de preços (depois será API real)
+        function updatePrices() {
+            const prices = {
+                gasolinaComum: (5.89 + Math.random() * 0.2).toFixed(2),
+                gasolinaAditivada: (6.15 + Math.random() * 0.2).toFixed(2),
+                etanol: (4.29 + Math.random() * 0.2).toFixed(2),
+                dieselS10: (5.45 + Math.random() * 0.2).toFixed(2),
+                brent: (82.50 + Math.random() * 2).toFixed(2),
+                wti: (78.30 + Math.random() * 2).toFixed(2)
+            };
+
+            document.getElementById('gasolinaComum').textContent = prices.gasolinaComum;
+            document.getElementById('gasolinaAditivada').textContent = prices.gasolinaAditivada;
+            document.getElementById('etanol').textContent = prices.etanol;
+            document.getElementById('dieselS10').textContent = prices.dieselS10;
+            document.getElementById('brent').textContent = prices.brent;
+            document.getElementById('wti').textContent = prices.wti;
+
+            // Trends simulados
+            document.getElementById('gasolinaTrend').textContent = '0.5%';
+            document.getElementById('aditivadaTrend').textContent = '1.2%';
+            document.getElementById('etanolTrend').textContent = '0.8%';
+            document.getElementById('dieselTrend').textContent = '0.3%';
+            document.getElementById('brentTrend').textContent = '2.1%';
+            document.getElementById('wtiTrend').textContent = '1.5%';
+
+            // Update timestamp
+            const now = new Date();
+            document.getElementById('lastUpdate').textContent = now.toLocaleString('pt-BR');
+        }
+
+        // Update prices on load and every 30 seconds
+        updatePrices();
+        setInterval(updatePrices, 30000);
+
+        // Form handlers
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Login em desenvolvimento - Backend em construção');
+        });
+
+        document.getElementById('registerForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Cadastro em desenvolvimento - Backend em construção');
+        });
+    </script>
+</body>
+</html>

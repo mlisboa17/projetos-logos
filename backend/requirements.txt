@@ -1,0 +1,38 @@
+# FastAPI e dependências
+fastapi==0.115.0
+uvicorn[standard]==0.32.0
+pydantic==2.10.0
+pydantic-settings==2.6.0
+
+# Database
+sqlalchemy==2.0.35
+# psycopg2-binary==2.9.10  # Requer PostgreSQL instalado - usar SQLite por enquanto
+alembic==1.13.3
+
+# Authentication
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-multipart==0.0.12
+
+# Environment
+python-dotenv==1.0.1
+
+# Web Scraping
+requests==2.32.3
+beautifulsoup4==4.12.3
+lxml==5.3.0
+
+# Computer Vision & AI
+ultralytics==8.3.0
+opencv-python==4.10.0.84
+torch==2.5.1
+torchvision==0.20.1
+numpy==2.2.0
+pillow==11.0.0
+
+# Task Queue
+celery==5.4.0
+redis==5.2.0
+
+# Utilities
+python-dateutil==2.9.0

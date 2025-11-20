@@ -1,0 +1,440 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOGOS - Plataforma de Gestão Empresarial</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="{% static 'css/logos.css' %}" rel="stylesheet">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <span class="logo-text">LOGOS</span>
+                <span class="ms-2 text-gold fs-6 fw-light">by Grupo Lisboa</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#recursos">Recursos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#integracoes">Integrações</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#planos">Planos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contato">Contato</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'api_test' %}">
+                        <i class="bi bi-code-slash me-1"></i>API
+                    </a></li>
+                    <li class="nav-item ms-3">
+                        <a class="btn btn-outline-light btn-sm me-2" href="{% url 'register' %}">
+                            <i class="bi bi-person-plus me-1"></i>Cadastrar
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-gold btn-sm" href="/admin">
+                            <i class="bi bi-box-arrow-in-right me-1"></i>Entrar
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center min-vh-100">
+                <div class="col-lg-6 text-white">
+                    <div class="hero-badge mb-3">
+                        <i class="bi bi-stars text-gold me-2"></i>
+                        Plataforma Multi-Tenant SaaS
+                    </div>
+                    <h1 class="display-3 fw-bold mb-4">
+                        Gestão <span class="text-gold">Inteligente</span> para Seu Negócio
+                    </h1>
+                    <p class="lead mb-4">
+                        Centralize todas as operações do seu grupo empresarial em uma única plataforma. 
+                        Integre ERPs, monitore câmeras, acompanhe preços e muito mais.
+                    </p>
+                    <div class="d-flex gap-3 mb-5">
+                        <a href="{% url 'register' %}" class="btn btn-gold btn-lg">
+                            <i class="bi bi-person-plus me-2"></i>Criar Conta Grátis
+                        </a>
+                        <a href="#recursos" class="btn btn-outline-light btn-lg">
+                            <i class="bi bi-play-circle me-2"></i>Ver Recursos
+                        </a>
+                    </div>
+                    <div class="hero-stats row g-4">
+                        <div class="col-4">
+                            <div class="stat-card">
+                                <h3 class="text-gold mb-0">16+</h3>
+                                <p class="mb-0 small">ERPs Integrados</p>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="stat-card">
+                                <h3 class="text-gold mb-0">100%</h3>
+                                <p class="mb-0 small">Cloud Native</p>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="stat-card">
+                                <h3 class="text-gold mb-0">24/7</h3>
+                                <p class="mb-0 small">Monitoramento</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 d-none d-lg-block">
+                    <div class="hero-illustration">
+                        <div class="floating-card card-1">
+                            <i class="bi bi-speedometer2 text-gold fs-3"></i>
+                            <h5 class="mt-2 mb-1">Dashboard em Tempo Real</h5>
+                            <p class="small text-muted mb-0">Monitore todas as métricas</p>
+                        </div>
+                        <div class="floating-card card-2">
+                            <i class="bi bi-hdd-network text-success fs-3"></i>
+                            <h5 class="mt-2 mb-1">Integração Total</h5>
+                            <p class="small text-muted mb-0">Conecte todos seus sistemas</p>
+                        </div>
+                        <div class="floating-card card-3">
+                            <i class="bi bi-shield-check text-info fs-3"></i>
+                            <h5 class="mt-2 mb-1">Segurança Avançada</h5>
+                            <p class="small text-muted mb-0">JWT + Multi-tenant</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recursos Section -->
+    <section id="recursos" class="py-5 bg-light">
+        <div class="container py-5">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold">Recursos <span class="text-gold">Poderosos</span></h2>
+                <p class="lead text-muted">Tudo que você precisa para gerenciar seu negócio</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="feature-card h-100">
+                        <div class="feature-icon bg-gold">
+                            <i class="bi bi-diagram-3"></i>
+                        </div>
+                        <h4>Multi-Tenant SaaS</h4>
+                        <p class="text-muted">Arquitetura isolada por organização. Cada cliente tem seus dados completamente separados e seguros.</p>
+                        <ul class="feature-list">
+                            <li>Isolamento total de dados</li>
+                            <li>White-label customizável</li>
+                            <li>Domínio próprio</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card h-100">
+                        <div class="feature-icon bg-success">
+                            <i class="bi bi-plugin"></i>
+                        </div>
+                        <h4>16+ Integrações ERP</h4>
+                        <p class="text-muted">Conecte-se com WebPostos, Linx, SAP, TOTVS, iFood, Uber Eats e muito mais.</p>
+                        <ul class="feature-list">
+                            <li>Sincronização automática</li>
+                            <li>Mapeamento de campos flexível</li>
+                            <li>Logs detalhados</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card h-100">
+                        <div class="feature-icon bg-info">
+                            <i class="bi bi-camera-video"></i>
+                        </div>
+                        <h4>Monitoramento VerifiK</h4>
+                        <p class="text-muted">Integração com câmeras inteligentes usando YOLOv8 para detecção de eventos.</p>
+                        <ul class="feature-list">
+                            <li>Detecção em tempo real</li>
+                            <li>Alertas automáticos</li>
+                            <li>Histórico de eventos</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card h-100">
+                        <div class="feature-icon bg-warning">
+                            <i class="bi bi-fuel-pump"></i>
+                        </div>
+                        <h4>Preços de Combustíveis</h4>
+                        <p class="text-muted">Acompanhe e compare preços de combustíveis em tempo real entre seus postos.</p>
+                        <ul class="feature-list">
+                            <li>Comparação automática</li>
+                            <li>Histórico de preços</li>
+                            <li>Alertas de variação</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card h-100">
+                        <div class="feature-icon bg-danger">
+                            <i class="bi bi-building"></i>
+                        </div>
+                        <h4>Gestão Multi-Lojas</h4>
+                        <p class="text-muted">Gerencie múltiplas unidades, postos, restaurantes e franquias em um só lugar.</p>
+                        <ul class="feature-list">
+                            <li>Dashboard consolidado</li>
+                            <li>Geolocalização</li>
+                            <li>Hierarquia organizacional</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card h-100">
+                        <div class="feature-icon bg-primary">
+                            <i class="bi bi-graph-up-arrow"></i>
+                        </div>
+                        <h4>Analytics & Relatórios</h4>
+                        <p class="text-muted">Insights poderosos com dashboards interativos e relatórios personalizados.</p>
+                        <ul class="feature-list">
+                            <li>KPIs em tempo real</li>
+                            <li>Exportação de dados</li>
+                            <li>Gráficos interativos</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Integrações Section -->
+    <section id="integracoes" class="py-5">
+        <div class="container py-5">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold">Integrações <span class="text-gold">Nativas</span></h2>
+                <p class="lead text-muted">Conecte-se com as principais plataformas do mercado</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-6 col-md-3">
+                    <div class="integration-card">
+                        <i class="bi bi-plug"></i>
+                        <h6>WebPostos</h6>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="integration-card">
+                        <i class="bi bi-plug"></i>
+                        <h6>Linx</h6>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="integration-card">
+                        <i class="bi bi-plug"></i>
+                        <h6>SAP</h6>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="integration-card">
+                        <i class="bi bi-plug"></i>
+                        <h6>TOTVS</h6>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="integration-card">
+                        <i class="bi bi-plug"></i>
+                        <h6>iFood</h6>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="integration-card">
+                        <i class="bi bi-plug"></i>
+                        <h6>Uber Eats</h6>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="integration-card">
+                        <i class="bi bi-plug"></i>
+                        <h6>Rappi</h6>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="integration-card">
+                        <i class="bi bi-plug"></i>
+                        <h6>Zé Delivery</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Planos Section -->
+    <section id="planos" class="py-5 bg-dark text-white">
+        <div class="container py-5">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold">Planos <span class="text-gold">Flexíveis</span></h2>
+                <p class="lead">Escolha o plano ideal para o seu negócio</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-6">
+                    <div class="pricing-card">
+                        <div class="pricing-header">
+                            <h4>Free</h4>
+                            <div class="pricing-price">
+                                <span class="currency">R$</span>
+                                <span class="amount">0</span>
+                                <span class="period">/mês</span>
+                            </div>
+                        </div>
+                        <ul class="pricing-features">
+                            <li><i class="bi bi-check-circle-fill text-success"></i> 1 Loja</li>
+                            <li><i class="bi bi-check-circle-fill text-success"></i> 3 Usuários</li>
+                            <li><i class="bi bi-check-circle-fill text-success"></i> 1 Integração ERP</li>
+                            <li><i class="bi bi-x-circle-fill text-muted"></i> Câmeras</li>
+                            <li><i class="bi bi-x-circle-fill text-muted"></i> White-label</li>
+                        </ul>
+                        <a href="#" class="btn btn-outline-gold w-100">Começar Grátis</a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="pricing-card">
+                        <div class="pricing-header">
+                            <h4>Basic</h4>
+                            <div class="pricing-price">
+                                <span class="currency">R$</span>
+                                <span class="amount">297</span>
+                                <span class="period">/mês</span>
+                            </div>
+                        </div>
+                        <ul class="pricing-features">
+                            <li><i class="bi bi-check-circle-fill text-success"></i> 3 Lojas</li>
+                            <li><i class="bi bi-check-circle-fill text-success"></i> 10 Usuários</li>
+                            <li><i class="bi bi-check-circle-fill text-success"></i> 3 Integrações ERP</li>
+                            <li><i class="bi bi-check-circle-fill text-success"></i> 5 Câmeras</li>
+                            <li><i class="bi bi-x-circle-fill text-muted"></i> White-label</li>
+                        </ul>
+                        <a href="#" class="btn btn-outline-gold w-100">Assinar</a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="pricing-card featured">
+                        <div class="featured-badge">Mais Popular</div>
+                        <div class="pricing-header">
+                            <h4>Professional</h4>
+                            <div class="pricing-price">
+                                <span class="currency">R$</span>
+                                <span class="amount">897</span>
+                                <span class="period">/mês</span>
+                            </div>
+                        </div>
+                        <ul class="pricing-features">
+                            <li><i class="bi bi-check-circle-fill text-gold"></i> 10 Lojas</li>
+                            <li><i class="bi bi-check-circle-fill text-gold"></i> 50 Usuários</li>
+                            <li><i class="bi bi-check-circle-fill text-gold"></i> 10 Integrações ERP</li>
+                            <li><i class="bi bi-check-circle-fill text-gold"></i> 20 Câmeras</li>
+                            <li><i class="bi bi-check-circle-fill text-gold"></i> White-label</li>
+                        </ul>
+                        <a href="#" class="btn btn-gold w-100">Assinar</a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="pricing-card">
+                        <div class="pricing-header">
+                            <h4>Enterprise</h4>
+                            <div class="pricing-price">
+                                <span class="amount">Custom</span>
+                            </div>
+                        </div>
+                        <ul class="pricing-features">
+                            <li><i class="bi bi-check-circle-fill text-success"></i> Lojas Ilimitadas</li>
+                            <li><i class="bi bi-check-circle-fill text-success"></i> Usuários Ilimitados</li>
+                            <li><i class="bi bi-check-circle-fill text-success"></i> ERPs Ilimitados</li>
+                            <li><i class="bi bi-check-circle-fill text-success"></i> Câmeras Ilimitadas</li>
+                            <li><i class="bi bi-check-circle-fill text-success"></i> White-label Total</li>
+                        </ul>
+                        <a href="#" class="btn btn-outline-gold w-100">Fale Conosco</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contato Section -->
+    <section id="contato" class="py-5 bg-light">
+        <div class="container py-5">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h2 class="display-5 fw-bold mb-4">Entre em <span class="text-gold">Contato</span></h2>
+                    <p class="lead text-muted mb-4">Tem dúvidas? Estamos aqui para ajudar!</p>
+                    <div class="contact-info">
+                        <div class="d-flex mb-3">
+                            <i class="bi bi-envelope text-gold fs-4 me-3"></i>
+                            <div>
+                                <h6 class="mb-1">Email</h6>
+                                <p class="text-muted mb-0">contato@grupolisboa.com.br</p>
+                            </div>
+                        </div>
+                        <div class="d-flex mb-3">
+                            <i class="bi bi-telephone text-gold fs-4 me-3"></i>
+                            <div>
+                                <h6 class="mb-1">Telefone</h6>
+                                <p class="text-muted mb-0">(81) 3333-4444</p>
+                            </div>
+                        </div>
+                        <div class="d-flex">
+                            <i class="bi bi-geo-alt text-gold fs-4 me-3"></i>
+                            <div>
+                                <h6 class="mb-1">Endereço</h6>
+                                <p class="text-muted mb-0">Recife - PE, Brasil</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <form class="contact-form">
+                        <div class="mb-3">
+                            <input type="text" class="form-control" placeholder="Nome completo">
+                        </div>
+                        <div class="mb-3">
+                            <input type="email" class="form-control" placeholder="E-mail">
+                        </div>
+                        <div class="mb-3">
+                            <input type="tel" class="form-control" placeholder="Telefone">
+                        </div>
+                        <div class="mb-3">
+                            <textarea class="form-control" rows="4" placeholder="Mensagem"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-gold btn-lg w-100">
+                            <i class="bi bi-send me-2"></i>Enviar Mensagem
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h4 class="logo-text mb-3">LOGOS</h4>
+                    <p class="text-muted">Plataforma de gestão empresarial desenvolvida pelo Grupo Lisboa.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-2">© 2025 Grupo Lisboa. Todos os direitos reservados.</p>
+                    <div class="social-links">
+                        <a href="#" class="text-gold me-3"><i class="bi bi-facebook fs-5"></i></a>
+                        <a href="#" class="text-gold me-3"><i class="bi bi-instagram fs-5"></i></a>
+                        <a href="#" class="text-gold me-3"><i class="bi bi-linkedin fs-5"></i></a>
+                        <a href="#" class="text-gold"><i class="bi bi-whatsapp fs-5"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/logos.js' %}"></script>
+</body>
+</html>

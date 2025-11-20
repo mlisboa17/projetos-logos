@@ -1,0 +1,405 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Testing - LOGOS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="{% static 'css/logos.css' %}" rel="stylesheet">
+    <style>
+        body {
+            background: #f8f9fa;
+        }
+        
+        .api-header {
+            background: linear-gradient(135deg, #1B4D3E 0%, #0d1117 100%);
+            color: white;
+            padding: 40px 0;
+            margin-bottom: 40px;
+        }
+        
+        .logo-text {
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #D4AF37, #FFD700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .endpoint-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+        
+        .method-badge {
+            padding: 5px 15px;
+            border-radius: 5px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        
+        .method-get { background: #28a745; color: white; }
+        .method-post { background: #007bff; color: white; }
+        .method-put { background: #ffc107; color: black; }
+        .method-delete { background: #dc3545; color: white; }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+        }
+        
+        .response-area {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .test-button {
+            background: linear-gradient(135deg, #D4AF37, #FFD700);
+            color: #000;
+            border: none;
+            font-weight: 600;
+        }
+        
+        .test-button:hover {
+            background: linear-gradient(135deg, #FFD700, #D4AF37);
+            color: #000;
+        }
+        
+        .token-display {
+            background: #e9ecef;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <div class="api-header">
+        <div class="container">
+            <h1 class="logo-text mb-2">LOGOS API</h1>
+            <p class="mb-0">REST API Testing Interface</p>
+        </div>
+    </div>
+    
+    <div class="container pb-5">
+        <!-- Token Storage -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="endpoint-card">
+                    <h5><i class="bi bi-key text-warning me-2"></i>Token de Autenticação</h5>
+                    <div id="tokenDisplay" class="token-display mb-3">
+                        <em>Nenhum token armazenado. Faça login primeiro.</em>
+                    </div>
+                    <button class="btn btn-sm btn-danger" onclick="clearToken()">
+                        <i class="bi bi-trash me-1"></i>Limpar Token
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Authentication Endpoints -->
+        <h3 class="mb-3"><i class="bi bi-shield-lock me-2"></i>Autenticação</h3>
+        
+        <!-- Register -->
+        <div class="endpoint-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <span class="method-badge method-post me-2">POST</span>
+                    <code>/api/auth/register/</code>
+                </div>
+                <button class="btn test-button" onclick="testRegister()">
+                    <i class="bi bi-play-fill me-1"></i>Testar
+                </button>
+            </div>
+            <p class="text-muted mb-3">Registra novo usuário (aguarda aprovação)</p>
+            <div class="code-block mb-3">
+{
+  "username": "joao.silva",
+  "email": "joao@example.com",
+  "password": "senha123",
+  "password2": "senha123",
+  "first_name": "João",
+  "last_name": "Silva",
+  "phone": "(81) 99999-9999",
+  "organization": 1
+}
+            </div>
+            <div id="registerResponse" class="response-area" style="display:none;"></div>
+        </div>
+        
+        <!-- Login -->
+        <div class="endpoint-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <span class="method-badge method-post me-2">POST</span>
+                    <code>/api/auth/login/</code>
+                </div>
+                <button class="btn test-button" onclick="testLogin()">
+                    <i class="bi bi-play-fill me-1"></i>Testar
+                </button>
+            </div>
+            <p class="text-muted mb-3">Login e geração de tokens JWT</p>
+            <div class="code-block mb-3">
+{
+  "username": "admin",
+  "password": "M@rcio1309"
+}
+            </div>
+            <div id="loginResponse" class="response-area" style="display:none;"></div>
+        </div>
+        
+        <!-- Users Endpoints -->
+        <h3 class="mb-3 mt-5"><i class="bi bi-people me-2"></i>Usuários</h3>
+        
+        <!-- Get Me -->
+        <div class="endpoint-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <span class="method-badge method-get me-2">GET</span>
+                    <code>/api/users/me/</code>
+                </div>
+                <button class="btn test-button" onclick="testGetMe()">
+                    <i class="bi bi-play-fill me-1"></i>Testar
+                </button>
+            </div>
+            <p class="text-muted mb-2">Retorna dados do usuário logado</p>
+            <small class="text-warning"><i class="bi bi-lock me-1"></i>Requer autenticação</small>
+            <div id="getMeResponse" class="response-area mt-3" style="display:none;"></div>
+        </div>
+        
+        <!-- List Users -->
+        <div class="endpoint-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <span class="method-badge method-get me-2">GET</span>
+                    <code>/api/users/</code>
+                </div>
+                <button class="btn test-button" onclick="testListUsers()">
+                    <i class="bi bi-play-fill me-1"></i>Testar
+                </button>
+            </div>
+            <p class="text-muted mb-2">Lista todos os usuários (filtrado por organização)</p>
+            <small class="text-warning"><i class="bi bi-lock me-1"></i>Requer autenticação</small>
+            <div id="listUsersResponse" class="response-area mt-3" style="display:none;"></div>
+        </div>
+        
+        <!-- Pending Users -->
+        <div class="endpoint-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <span class="method-badge method-get me-2">GET</span>
+                    <code>/api/users/pending/</code>
+                </div>
+                <button class="btn test-button" onclick="testPendingUsers()">
+                    <i class="bi bi-play-fill me-1"></i>Testar
+                </button>
+            </div>
+            <p class="text-muted mb-2">Lista usuários pendentes de aprovação</p>
+            <small class="text-danger"><i class="bi bi-shield-check me-1"></i>Apenas super admins</small>
+            <div id="pendingUsersResponse" class="response-area mt-3" style="display:none;"></div>
+        </div>
+        
+        <!-- Organizations Endpoints -->
+        <h3 class="mb-3 mt-5"><i class="bi bi-building me-2"></i>Organizações</h3>
+        
+        <!-- List Organizations -->
+        <div class="endpoint-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <span class="method-badge method-get me-2">GET</span>
+                    <code>/api/organizations/</code>
+                </div>
+                <button class="btn test-button" onclick="testListOrganizations()">
+                    <i class="bi bi-play-fill me-1"></i>Testar
+                </button>
+            </div>
+            <p class="text-muted mb-2">Lista organizações (filtrado por permissão)</p>
+            <small class="text-warning"><i class="bi bi-lock me-1"></i>Requer autenticação</small>
+            <div id="listOrganizationsResponse" class="response-area mt-3" style="display:none;"></div>
+        </div>
+        
+        <!-- ERP Integrations -->
+        <h3 class="mb-3 mt-5"><i class="bi bi-plugin me-2"></i>Integrações ERP</h3>
+        
+        <!-- List ERPs -->
+        <div class="endpoint-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <span class="method-badge method-get me-2">GET</span>
+                    <code>/api/erp-integrations/</code>
+                </div>
+                <button class="btn test-button" onclick="testListERPs()">
+                    <i class="bi bi-play-fill me-1"></i>Testar
+                </button>
+            </div>
+            <p class="text-muted mb-2">Lista integrações ERP</p>
+            <small class="text-warning"><i class="bi bi-lock me-1"></i>Requer autenticação</small>
+            <div id="listERPsResponse" class="response-area mt-3" style="display:none;"></div>
+        </div>
+        
+        <!-- Stores -->
+        <h3 class="mb-3 mt-5"><i class="bi bi-shop me-2"></i>Lojas</h3>
+        
+        <!-- List Stores -->
+        <div class="endpoint-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <span class="method-badge method-get me-2">GET</span>
+                    <code>/api/stores/</code>
+                </div>
+                <button class="btn test-button" onclick="testListStores()">
+                    <i class="bi bi-play-fill me-1"></i>Testar
+                </button>
+            </div>
+            <p class="text-muted mb-2">Lista lojas/unidades</p>
+            <small class="text-warning"><i class="bi bi-lock me-1"></i>Requer autenticação</small>
+            <div id="listStoresResponse" class="response-area mt-3" style="display:none;"></div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const API_BASE = 'http://localhost:8000/api';
+        let accessToken = localStorage.getItem('accessToken');
+        
+        // Update token display
+        function updateTokenDisplay() {
+            const display = document.getElementById('tokenDisplay');
+            if (accessToken) {
+                display.innerHTML = `<strong>Access Token:</strong><br>${accessToken}`;
+            } else {
+                display.innerHTML = '<em>Nenhum token armazenado. Faça login primeiro.</em>';
+            }
+        }
+        
+        function clearToken() {
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            accessToken = null;
+            updateTokenDisplay();
+            alert('Token limpo!');
+        }
+        
+        function showResponse(elementId, data, isError = false) {
+            const element = document.getElementById(elementId);
+            element.style.display = 'block';
+            element.style.color = isError ? '#ff6b6b' : '#4caf50';
+            element.textContent = JSON.stringify(data, null, 2);
+        }
+        
+        async function apiRequest(url, method = 'GET', body = null, requiresAuth = false) {
+            const headers = {
+                'Content-Type': 'application/json'
+            };
+            
+            if (requiresAuth && accessToken) {
+                headers['Authorization'] = `Bearer ${accessToken}`;
+            }
+            
+            const options = {
+                method,
+                headers
+            };
+            
+            if (body) {
+                options.body = JSON.stringify(body);
+            }
+            
+            try {
+                const response = await fetch(url, options);
+                const data = await response.json();
+                return { ok: response.ok, data, status: response.status };
+            } catch (error) {
+                return { ok: false, data: { error: error.message }, status: 0 };
+            }
+        }
+        
+        async function testRegister() {
+            const body = {
+                username: "joao.silva",
+                email: "joao@example.com",
+                password: "senha123",
+                password2: "senha123",
+                first_name: "João",
+                last_name: "Silva",
+                phone: "(81) 99999-9999",
+                organization: 1
+            };
+            
+            const result = await apiRequest(`${API_BASE}/auth/register/`, 'POST', body);
+            showResponse('registerResponse', result.data, !result.ok);
+        }
+        
+        async function testLogin() {
+            const body = {
+                username: "admin",
+                password: "M@rcio1309"
+            };
+            
+            const result = await apiRequest(`${API_BASE}/auth/login/`, 'POST', body);
+            showResponse('loginResponse', result.data, !result.ok);
+            
+            if (result.ok && result.data.tokens) {
+                accessToken = result.data.tokens.access;
+                localStorage.setItem('accessToken', accessToken);
+                localStorage.setItem('refreshToken', result.data.tokens.refresh);
+                updateTokenDisplay();
+            }
+        }
+        
+        async function testGetMe() {
+            const result = await apiRequest(`${API_BASE}/users/me/`, 'GET', null, true);
+            showResponse('getMeResponse', result.data, !result.ok);
+        }
+        
+        async function testListUsers() {
+            const result = await apiRequest(`${API_BASE}/users/`, 'GET', null, true);
+            showResponse('listUsersResponse', result.data, !result.ok);
+        }
+        
+        async function testPendingUsers() {
+            const result = await apiRequest(`${API_BASE}/users/pending/`, 'GET', null, true);
+            showResponse('pendingUsersResponse', result.data, !result.ok);
+        }
+        
+        async function testListOrganizations() {
+            const result = await apiRequest(`${API_BASE}/organizations/`, 'GET', null, true);
+            showResponse('listOrganizationsResponse', result.data, !result.ok);
+        }
+        
+        async function testListERPs() {
+            const result = await apiRequest(`${API_BASE}/erp-integrations/`, 'GET', null, true);
+            showResponse('listERPsResponse', result.data, !result.ok);
+        }
+        
+        async function testListStores() {
+            const result = await apiRequest(`${API_BASE}/stores/`, 'GET', null, true);
+            showResponse('listStoresResponse', result.data, !result.ok);
+        }
+        
+        // Initialize
+        updateTokenDisplay();
+    </script>
+</body>
+</html>

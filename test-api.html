@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOGOS API - Teste Interativo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1B4D3E 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #D4AF37 0%, #FFF 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.95) 0%, rgba(27, 77, 62, 0.6) 100%);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #D4AF37;
+            box-shadow: 0 20px 60px rgba(212, 175, 55, 0.3);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            margin-right: 15px;
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #D4AF37;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.9rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            border-radius: 10px;
+            font-size: 14px;
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        input:focus {
+            border-color: #D4AF37;
+            outline: none;
+            background: rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        button {
+            background: linear-gradient(135deg, #D4AF37 0%, #B8941D 100%);
+            color: #000;
+            padding: 14px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            font-family: 'Poppins', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.5);
+        }
+
+        button:active {
+            transform: translateY(-1px);
+        }
+
+        .token-info {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(27, 77, 62, 0.3));
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border-left: 4px solid #D4AF37;
+        }
+
+        .token-label {
+            color: #D4AF37;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .token-value {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.75rem;
+            font-family: monospace;
+            word-break: break-all;
+        }
+
+        .response {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 5px solid;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .response.success {
+            background: linear-gradient(135deg, rgba(40, 167, 69, 0.15), rgba(40, 167, 69, 0.05));
+            border-color: #28a745;
+            color: #90ee90;
+        }
+
+        .response.error {
+            background: linear-gradient(135deg, rgba(220, 53, 69, 0.15), rgba(220, 53, 69, 0.05));
+            border-color: #dc3545;
+            color: #ff6b6b;
+        }
+
+        .response.info {
+            background: linear-gradient(135deg, rgba(23, 162, 184, 0.15), rgba(23, 162, 184, 0.05));
+            border-color: #17a2b8;
+            color: #5bc0de;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+
+        .status-online {
+            background: #28a745;
+            box-shadow: 0 0 10px #28a745;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .server-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(26, 26, 26, 0.95);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 10px;
+            padding: 12px 20px;
+            color: white;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #D4AF37;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #B8941D;
+        }
+    </style>
+</head>
+<body>
+    <div class="server-status">
+        <span class="status-indicator status-online"></span>
+        Servidor: http://localhost:8000
+    </div>
+
+    <div class="header">
+        <div class="logo">LOGOS</div>
+        <div class="subtitle">API Testing Interface - Grupo Lisboa</div>
+    </div>
+
+    <div class="container">
+        <!-- Card 1: Registro -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon">👤</div>
+                <div class="card-title">Criar Usuário</div>
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="registerEmail" value="admin@grupolisboa.com.br" placeholder="seu@email.com">
+            </div>
+            <div class="form-group">
+                <label>Senha</label>
+                <input type="password" id="registerPassword" value="Lisboa@2025" placeholder="Senha segura">
+            </div>
+            <div class="form-group">
+                <label>Nome Completo</label>
+                <input type="text" id="registerName" value="Administrador Grupo Lisboa" placeholder="Seu nome completo">
+            </div>
+            <div class="form-group">
+                <label>Telefone</label>
+                <input type="text" id="registerPhone" value="(81) 99999-9999" placeholder="(81) 99999-9999">
+            </div>
+            <button onclick="register()">✨ Criar Conta</button>
+        </div>
+
+        <!-- Card 2: Login -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon">🔐</div>
+                <div class="card-title">Fazer Login</div>
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="loginEmail" value="admin@grupolisboa.com.br" placeholder="seu@email.com">
+            </div>
+            <div class="form-group">
+                <label>Senha</label>
+                <input type="password" id="loginPassword" value="Lisboa@2025" placeholder="Sua senha">
+            </div>
+            <button onclick="login()">🚀 Entrar</button>
+            
+            <div id="tokenInfo" class="token-info" style="display: none;">
+                <div class="token-label">🔑 Token JWT Gerado</div>
+                <div class="token-value" id="tokenValue"></div>
+            </div>
+        </div>
+
+        <!-- Card 3: Meus Dados -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon">📋</div>
+                <div class="card-title">Meus Dados</div>
+            </div>
+            <p style="color: rgba(255,255,255,0.6); margin-bottom: 20px; font-size: 0.9rem;">
+                Busca as informações do usuário autenticado
+            </p>
+            <button onclick="getMe()">📊 Buscar Dados</button>
+        </div>
+
+        <!-- Card 4: Listar Usuários -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon">👥</div>
+                <div class="card-title">Todos os Usuários</div>
+            </div>
+            <p style="color: rgba(255,255,255,0.6); margin-bottom: 20px; font-size: 0.9rem;">
+                Lista todos os usuários cadastrados no sistema
+            </p>
+            <button onclick="listUsers()">📑 Listar Todos</button>
+        </div>
+
+        <!-- Response Area -->
+        <div class="card full-width">
+            <div class="card-header">
+                <div class="card-icon">💬</div>
+                <div class="card-title">Resposta da API</div>
+            </div>
+            <div id="response" style="color: rgba(255,255,255,0.5); font-style: italic;">
+                Aguardando requisição...
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let accessToken = null;
+
+        async function register() {
+            const data = {
+                email: document.getElementById('registerEmail').value,
+                password: document.getElementById('registerPassword').value,
+                full_name: document.getElementById('registerName').value,
+                phone: document.getElementById('registerPhone').value
+            };
+
+            try {
+                const response = await fetch('http://localhost:8000/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showResponse(JSON.stringify(result, null, 2), 'success');
+                } else {
+                    showResponse(`Erro: ${result.detail || JSON.stringify(result)}`, 'error');
+                }
+            } catch (error) {
+                showResponse(`Erro: ${error.message}`, 'error');
+            }
+        }
+
+        async function login() {
+            const formData = new URLSearchParams();
+            formData.append('username', document.getElementById('loginEmail').value);
+            formData.append('password', document.getElementById('loginPassword').value);
+
+            try {
+                const response = await fetch('http://localhost:8000/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: formData
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    accessToken = result.access_token;
+                    document.getElementById('tokenValue').textContent = accessToken.substring(0, 50) + '...';
+                    document.getElementById('tokenInfo').style.display = 'block';
+                    showResponse(JSON.stringify(result, null, 2), 'success');
+                } else {
+                    showResponse(`Erro: ${result.detail || JSON.stringify(result)}`, 'error');
+                }
+            } catch (error) {
+                showResponse(`Erro: ${error.message}`, 'error');
+            }
+        }
+
+        async function getMe() {
+            if (!accessToken) {
+                showResponse('Erro: Faça login primeiro!', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:8000/api/users/me', {
+                    headers: { 'Authorization': `Bearer ${accessToken}` }
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showResponse(JSON.stringify(result, null, 2), 'success');
+                } else {
+                    showResponse(`Erro: ${result.detail || JSON.stringify(result)}`, 'error');
+                }
+            } catch (error) {
+                showResponse(`Erro: ${error.message}`, 'error');
+            }
+        }
+
+        async function listUsers() {
+            if (!accessToken) {
+                showResponse('Erro: Faça login primeiro!', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:8000/api/users', {
+                    headers: { 'Authorization': `Bearer ${accessToken}` }
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showResponse(JSON.stringify(result, null, 2), 'success');
+                } else {
+                    showResponse(`Erro: ${result.detail || JSON.stringify(result)}`, 'error');
+                }
+            } catch (error) {
+                showResponse(`Erro: ${error.message}`, 'error');
+            }
+        }
+
+        function showResponse(message, type) {
+            const responseDiv = document.getElementById('response');
+            responseDiv.textContent = message;
+            responseDiv.className = `response ${type}`;
+        }
+    </script>
+</body>
+</html>

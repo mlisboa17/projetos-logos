@@ -1,93 +1,63 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Grupo Lisboa - Inovação e Tecnologia para o Varejo">
-    <title>LOGUS - Grupo Lisboa | Ecossistema de Inovação</title>
+    <meta name="description" content="Grupo Lisboa - Ecossistema de Inovação Tecnológica para o Varejo">
+    <title>LOGOS - Grupo Lisboa | Ecossistema de Inovação</title>
+    
+    <!-- Bootstrap 5.3 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    
     <style>
         :root {
-            --gold: #C9A960;
-            --gold-dark: #B08D3F;
-            --green: #1B5E4D;
-            --green-dark: #134438;
-            --dark-bg: #0a0a0a;
-            --card-bg: #1a1a1a;
-            --text-primary: #ffffff;
-            --text-secondary: #a0aec0;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            --gold: #D4AF37;
+            --gold-dark: #B8941D;
+            --green: #1B4D3E;
+            --green-dark: #0F2922;
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--dark-bg);
-            color: var(--text-primary);
-            line-height: 1.6;
-            overflow-x: hidden;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, var(--green-dark) 100%);
+            min-height: 100vh;
         }
 
-        /* Header */
-        .header {
-            background: linear-gradient(135deg, var(--green) 0%, var(--green-dark) 100%);
-            padding: 1.5rem 0;
-            box-shadow: 0 4px 30px rgba(27, 94, 77, 0.3);
+        .navbar {
+            background: rgba(10, 10, 10, 0.95) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
         }
 
-        .nav {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .logo-img {
-            width: 60px;
-            height: auto;
-        }
-
-        .brand {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .brand-title {
-            font-size: 2rem;
+        .navbar-brand {
+            font-size: 1.8rem;
             font-weight: 900;
-            letter-spacing: 2px;
-            color: var(--gold);
+            letter-spacing: 3px;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .brand-subtitle {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            opacity: 0.9;
+        .nav-link {
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.8) !important;
+            transition: color 0.3s;
         }
 
-        /* Hero */
+        .nav-link:hover {
+            color: var(--gold) !important;
+        }
+
         .hero {
-            min-height: 90vh;
+            min-height: 100vh;
             display: flex;
             align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 4rem 2rem;
             position: relative;
             overflow: hidden;
         }
@@ -97,450 +67,398 @@
             position: absolute;
             width: 600px;
             height: 600px;
-            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
-            border-radius: 50%;
-            filter: blur(150px);
-            opacity: 0.1;
-            top: -300px;
-            right: -300px;
+            background: radial-gradient(circle, var(--gold) 0%, transparent 70%);
+            opacity: 0.05;
+            top: 10%;
+            right: 10%;
+            animation: pulse 8s infinite;
         }
 
-        .hero-content {
-            max-width: 900px;
-            position: relative;
-            z-index: 1;
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.05; }
+            50% { transform: scale(1.2); opacity: 0.08; }
         }
 
         .hero-logo {
-            width: 150px;
+            max-width: 200px;
             margin-bottom: 2rem;
-            opacity: 0.7;
+            filter: drop-shadow(0 10px 30px rgba(212, 175, 55, 0.3));
         }
 
         .hero-title {
-            font-size: 4.5rem;
+            font-size: 5rem;
             font-weight: 900;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(135deg, var(--gold) 0%, var(--green) 100%);
+            letter-spacing: 10px;
+            background: linear-gradient(135deg, var(--gold) 0%, #FFF 50%, var(--gold) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
+            margin-bottom: 1.5rem;
         }
 
         .hero-subtitle {
             font-size: 1.5rem;
-            color: var(--text-secondary);
-            margin-bottom: 3rem;
+            color: rgba(255, 255, 255, 0.7);
             font-weight: 300;
-        }
-
-        .hero-description {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            line-height: 1.8;
+            letter-spacing: 2px;
             margin-bottom: 3rem;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
         }
 
-        /* About */
-        .about {
-            padding: 6rem 2rem;
-            background: var(--card-bg);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-title {
-            font-size: 3rem;
-            font-weight: 900;
-            text-align: center;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, var(--gold) 0%, var(--green) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .section-subtitle {
-            text-align: center;
-            color: var(--text-secondary);
-            font-size: 1.2rem;
-            margin-bottom: 4rem;
-        }
-
-        .about-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2.5rem;
-            margin-top: 3rem;
-        }
-
-        .about-card {
-            background: var(--dark-bg);
-            padding: 2.5rem;
+        .card-custom {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.9) 0%, rgba(27, 77, 62, 0.5) 100%);
+            border: 1px solid rgba(212, 175, 55, 0.2);
             border-radius: 20px;
-            border: 1px solid rgba(201, 169, 96, 0.2);
-            text-align: center;
-        }
-
-        .about-icon {
-            font-size: 3rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .about-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: var(--gold);
-        }
-
-        .about-card p {
-            color: var(--text-secondary);
-            line-height: 1.7;
-        }
-
-        /* Projects */
-        .projects {
-            padding: 6rem 2rem;
-            background: var(--dark-bg);
-        }
-
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 3rem;
-            margin-top: 3rem;
-        }
-
-        .project-card {
-            background: linear-gradient(135deg, var(--card-bg) 0%, var(--dark-bg) 100%);
-            padding: 3rem;
-            border-radius: 30px;
-            border: 2px solid transparent;
-            transition: all 0.3s ease;
-            position: relative;
+            transition: all 0.4s;
             overflow: hidden;
+            position: relative;
         }
 
-        .project-card::before {
+        .card-custom::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--gold) 0%, var(--green) 100%);
+            height: 3px;
+            background: linear-gradient(90deg, var(--gold) 0%, var(--gold-dark) 100%);
+            transform: scaleX(0);
+            transition: transform 0.4s;
         }
 
-        .project-card:hover {
-            transform: translateY(-10px);
+        .card-custom:hover {
+            transform: translateY(-15px);
             border-color: var(--gold);
-            box-shadow: 0 20px 60px rgba(201, 169, 96, 0.3);
+            box-shadow: 0 20px 60px rgba(212, 175, 55, 0.3);
         }
 
-        .project-status {
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
+        .card-custom:hover::before {
+            transform: scaleX(1);
+        }
+
+        .card-icon {
+            font-size: 3.5rem;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             margin-bottom: 1.5rem;
         }
 
-        .status-active {
-            background: rgba(16, 185, 129, 0.2);
-            color: #10b981;
+        .badge-active {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
         }
 
-        .status-coming {
-            background: rgba(201, 169, 96, 0.2);
-            color: var(--gold);
+        .badge-soon {
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+            color: #000;
         }
 
-        .project-card h3 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            color: var(--gold);
-        }
-
-        .project-card p {
-            color: var(--text-secondary);
-            line-height: 1.8;
-            margin-bottom: 2rem;
-        }
-
-        .project-features {
-            list-style: none;
-            margin-bottom: 2rem;
-        }
-
-        .project-features li {
-            padding: 0.5rem 0;
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-        }
-
-        .project-features li::before {
-            content: "→";
-            color: var(--gold);
-            font-weight: bold;
-            margin-right: 0.8rem;
-        }
-
-        .btn {
-            display: inline-block;
+        .btn-gold {
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+            color: #000;
+            font-weight: 700;
             padding: 1rem 2.5rem;
             border-radius: 50px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
+            border: none;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
-            color: var(--dark-bg);
-            box-shadow: 0 10px 30px rgba(201, 169, 96, 0.3);
-        }
-
-        .btn-primary:hover {
+        .btn-gold:hover {
             transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(201, 169, 96, 0.5);
+            box-shadow: 0 15px 40px rgba(212, 175, 55, 0.5);
+            color: #000;
         }
 
-        .btn-outline {
-            border: 2px solid var(--gold);
-            color: var(--gold);
+        .section-title {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--gold) 0%, #FFF 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .btn-outline:hover {
-            background: rgba(201, 169, 96, 0.1);
+        footer {
+            background: rgba(10, 10, 10, 0.95);
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
         }
 
-        .btn-disabled {
-            background: rgba(160, 174, 192, 0.1);
-            color: var(--text-secondary);
-            cursor: not-allowed;
-            border: 2px solid rgba(160, 174, 192, 0.2);
-        }
-
-        .btn-disabled:hover {
-            transform: none;
-            box-shadow: none;
-        }
-
-        /* Footer */
-        .footer {
-            background: var(--card-bg);
-            padding: 3rem 2rem;
-            text-align: center;
-            border-top: 1px solid rgba(201, 169, 96, 0.2);
-        }
-
-        .footer-logo {
-            width: 100px;
-            margin-bottom: 1.5rem;
-            opacity: 0.5;
-        }
-
-        .footer p {
-            color: var(--text-secondary);
-            margin: 0.5rem 0;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .footer-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        .footer-links a:hover {
-            color: var(--gold);
-        }
-
-        /* Responsive */
         @media (max-width: 768px) {
             .hero-title {
-                font-size: 2.5rem;
+                font-size: 3rem;
+                letter-spacing: 5px;
             }
-
-            .section-title {
-                font-size: 2rem;
-            }
-
-            .projects-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .hero-content,
-        .about-card,
-        .project-card {
-            animation: fadeInUp 0.8s ease-out;
         }
     </style>
 </head>
 <body>
-    <!-- HEADER -->
-    <header class="header">
-        <nav class="nav">
-            <div class="logo-container">
-                <img src="https://i.postimg.cc/Px8cZqLf/postos-lisboa.png" alt="Grupo Lisboa" class="logo-img">
-                <div class="brand">
-                    <h1 class="brand-title">LOGUS</h1>
-                    <span class="brand-subtitle">Grupo Lisboa</span>
-                </div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <img src="assets/images/logos-icon.jpg" alt="LOGOS" height="35">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#sobre">Sobre</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#projetos">Projetos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="verifik/">VerifiK</a>
+                    </li>
+                </ul>
             </div>
-        </nav>
-    </header>
+        </div>
+    </nav>
 
     <!-- HERO -->
     <section class="hero">
-        <div class="hero-content">
-            <img src="https://i.postimg.cc/Px8cZqLf/postos-lisboa.png" alt="Grupo Lisboa" class="hero-logo">
-            <h1 class="hero-title">LOGUS</h1>
-            <p class="hero-subtitle">Ecossistema de Inovação do Grupo Lisboa</p>
-            <p class="hero-description">
-                Desenvolvendo soluções tecnológicas inteligentes para transformar 
-                o futuro do varejo. Do Grupo Lisboa para o mercado.
-            </p>
+        <div class="container">
+            <div class="row justify-content-center text-center">
+                <div class="col-lg-10">
+                    <img src="assets/images/logos-icon.jpg" alt="LOGOS" class="img-fluid mb-4" style="max-width: 200px;">
+                    <h1 class="hero-title">LOGOS</h1>
+                    <p class="hero-subtitle">Ecossistema de Inovação do Grupo Lisboa</p>
+                    <p class="lead text-white-50 mb-5">
+                        Desenvolvendo soluções tecnológicas inteligentes para transformar o futuro do varejo e energia.<br>
+                        De Postos Lisboa, Sertã Conveniências, Restaurante Sertã, Subway, Zé Delivery e ☀️ Usinas Solar para o mercado.
+                    </p>
+                    <a href="#projetos" class="btn btn-gold btn-lg">
+                        <i class="bi bi-rocket-takeoff me-2"></i>
+                        Conheça Nossos Projetos
+                    </a>
+                </div>
+            </div>
         </div>
     </section>
 
-    <!-- ABOUT -->
-    <section class="about">
-        <div class="container">
-            <h2 class="section-title">Quem Somos</h2>
-            <p class="section-subtitle">Tradição que inova</p>
-            
-            <div class="about-grid">
-                <div class="about-card">
-                    <div class="about-icon">🏢</div>
-                    <h3>Grupo Lisboa</h3>
-                    <p>
-                        Atuando há anos no mercado de postos de combustível e lojas de conveniência 
-                        em Recife/PE, conhecemos profundamente os desafios do varejo.
-                    </p>
+    <!-- SOBRE -->
+    <section id="sobre" class="py-5 bg-dark bg-opacity-50">
+        <div class="container py-5">
+            <div class="text-center mb-5">
+                <h2 class="section-title mb-3">Quem Somos</h2>
+                <p class="lead text-white-50">Tradição que inova</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card-custom h-100 p-4 text-center">
+                        <div class="card-icon">
+                            <i class="bi bi-building"></i>
+                        </div>
+                        <h3 class="h4 mb-3 text-warning">Grupo Lisboa</h3>
+                        <p class="text-white-50">
+                            Grupo que reúne empresas como <strong>Postos Lisboa</strong>, <strong>Sertã Conveniências</strong>, <strong>Restaurante Sertã</strong>, franquias <strong>Subway</strong> (3 unidades), <strong>Zé Delivery</strong> (5 unidades) e <strong>☀️ Usinas Solar</strong>.
+                            Atuando há anos no mercado de combustível, varejo, alimentação e energia renovável em Recife/PE, 
+                            conhecemos profundamente os desafios do setor.
+                        </p>
+                    </div>
                 </div>
-                
-                <div class="about-card">
-                    <div class="about-icon">💡</div>
-                    <h3>Inovação</h3>
-                    <p>
-                        Transformamos problemas reais em soluções tecnológicas. 
-                        Cada projeto nasce da nossa experiência prática no dia a dia.
-                    </p>
+
+                <div class="col-md-4">
+                    <div class="card-custom h-100 p-4 text-center">
+                        <div class="card-icon">
+                            <i class="bi bi-lightbulb"></i>
+                        </div>
+                        <h3 class="h4 mb-3 text-warning">Inovação</h3>
+                        <p class="text-white-50">
+                            Transformamos problemas reais em soluções tecnológicas. 
+                            Cada projeto nasce da nossa experiência prática no dia a dia.
+                        </p>
+                    </div>
                 </div>
-                
-                <div class="about-card">
-                    <div class="about-icon">🎯</div>
-                    <h3>Missão</h3>
-                    <p>
-                        Desenvolver tecnologias que resolvem desafios do varejo brasileiro, 
-                        tornando o mercado mais eficiente e lucrativo.
+
+                <div class="col-md-4">
+                    <div class="card-custom h-100 p-4 text-center">
+                        <div class="card-icon">
+                            <i class="bi bi-bullseye"></i>
+                        </div>
+                        <h3 class="h4 mb-3 text-warning">Missão</h3>
+                        <p class="text-white-50">
+                            Desenvolver tecnologias que resolvem desafios do varejo brasileiro, 
+                            tornando o mercado mais eficiente e lucrativo.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Marcas do Grupo -->
+            <div class="row mt-5">
+                <div class="col-12">
+                    <div class="d-flex flex-wrap justify-content-center align-items-center gap-4 opacity-75">
+                        <img src="assets/images/subway.webp" alt="Subway" class="img-fluid" style="max-height: 45px;">
+                        <img src="assets/images/zedelivery.webp" alt="Zé Delivery" class="img-fluid" style="max-height: 45px;">
+                    </div>
+                    <p class="text-center text-white-50 mt-3 opacity-50" style="font-size: 0.8rem;">
+                        Subway (3 unidades) • Zé Delivery (5 unidades)
                     </p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- PROJECTS -->
-    <section class="projects">
-        <div class="container">
-            <h2 class="section-title">Nossos Projetos</h2>
-            <p class="section-subtitle">Soluções desenvolvidas para o futuro do varejo</p>
-            
-            <div class="projects-grid">
+    <!-- PROJETOS -->
+    <section id="projetos" class="py-5">
+        <div class="container py-5">
+            <div class="text-center mb-5">
+                <h2 class="section-title mb-3">Nossos Projetos</h2>
+                <p class="lead text-white-50">Soluções desenvolvidas para o futuro do varejo</p>
+            </div>
+
+            <div class="row g-4">
                 <!-- VerifiK -->
-                <div class="project-card">
-                    <span class="project-status status-active">✓ Ativo - Em Desenvolvimento</span>
-                    <h3>VerifiK</h3>
-                    <p>
-                        Sistema de Inteligência Artificial para prevenção de perdas no checkout. 
-                        Detecta divergências entre produtos no balcão e vendas registradas em tempo real.
-                    </p>
-                    <ul class="project-features">
-                        <li>Reconhecimento de produtos por IA (YOLOv8)</li>
-                        <li>Comparação automática com PDV</li>
-                        <li>Alertas instantâneos via app</li>
-                        <li>Redução de 60-70% nas perdas</li>
-                        <li>ROI em 60-90 dias</li>
-                    </ul>
-                    <a href="verifik/" class="btn btn-primary">Conhecer VerifiK</a>
+                <div class="col-lg-4">
+                    <div class="card-custom h-100 p-4">
+                        <span class="badge badge-active mb-3">
+                            <i class="bi bi-check-circle me-1"></i>
+                            Ativo - Em Desenvolvimento
+                        </span>
+                        <h3 class="h2 mb-3 text-warning">VerifiK</h3>
+                        <p class="text-white-50 mb-4">
+                            Sistema de Inteligência Artificial para prevenção de perdas no checkout. 
+                            Detecta divergências entre produtos no balcão e vendas registradas em tempo real.
+                        </p>
+                        <ul class="list-unstyled mb-4 text-white-50">
+                            <li class="mb-2">
+                                <i class="bi bi-arrow-right text-warning me-2"></i>
+                                Reconhecimento de produtos por IA (YOLOv8)
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-arrow-right text-warning me-2"></i>
+                                Comparação automática com PDV
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-arrow-right text-warning me-2"></i>
+                                Alertas instantâneos via app
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-arrow-right text-warning me-2"></i>
+                                Redução de 60-70% nas perdas
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-arrow-right text-warning me-2"></i>
+                                ROI em 60-90 dias
+                            </li>
+                        </ul>
+                        <a href="verifik/" class="btn btn-gold w-100">
+                            Conhecer VerifiK
+                            <i class="bi bi-arrow-right ms-2"></i>
+                        </a>
+                    </div>
                 </div>
 
-                <!-- Projeto 2 (Futuro) -->
-                <div class="project-card">
-                    <span class="project-status status-coming">Em Breve</span>
-                    <h3>Projeto 2</h3>
-                    <p>
-                        Nossa próxima solução está em fase de concepção. 
-                        Continuamos identificando desafios do varejo que podem ser resolvidos com tecnologia.
-                    </p>
-                    <ul class="project-features">
-                        <li>Em fase de planejamento</li>
-                        <li>Baseado em necessidades reais</li>
-                        <li>Foco em eficiência operacional</li>
-                    </ul>
-                    <button class="btn btn-disabled" disabled>Em Desenvolvimento</button>
+                <!-- Projeto 2 -->
+                <div class="col-lg-4">
+                    <div class="card-custom h-100 p-4">
+                        <span class="badge badge-soon mb-3">
+                            <i class="bi bi-hourglass-split me-1"></i>
+                            Em Breve
+                        </span>
+                        <h3 class="h2 mb-3 text-warning">Projeto 2</h3>
+                        <p class="text-white-50 mb-4">
+                            Nossa próxima solução está em fase de concepção. 
+                            Continuamos identificando desafios do varejo que podem ser resolvidos com tecnologia.
+                        </p>
+                        <ul class="list-unstyled mb-4 text-white-50">
+                            <li class="mb-2">
+                                <i class="bi bi-arrow-right text-warning me-2"></i>
+                                Em fase de planejamento
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-arrow-right text-warning me-2"></i>
+                                Baseado em necessidades reais
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-arrow-right text-warning me-2"></i>
+                                Foco em eficiência operacional
+                            </li>
+                        </ul>
+                        <button class="btn btn-secondary w-100" disabled>
+                            Em Desenvolvimento
+                        </button>
+                    </div>
                 </div>
 
-                <!-- Projeto 3 (Futuro) -->
-                <div class="project-card">
-                    <span class="project-status status-coming">Em Breve</span>
-                    <h3>Projeto 3</h3>
-                    <p>
-                        Espaço reservado para futuras inovações. 
-                        O Logus é um ecossistema em constante expansão.
-                    </p>
-                    <ul class="project-features">
-                        <li>Roadmap em construção</li>
-                        <li>Foco em escalabilidade</li>
-                        <li>Tecnologia de ponta</li>
-                    </ul>
-                    <button class="btn btn-disabled" disabled>Em Breve</button>
+                <!-- Projeto 3 -->
+                <div class="col-lg-4">
+                    <div class="card-custom h-100 p-4">
+                        <span class="badge badge-soon mb-3">
+                            <i class="bi bi-hourglass-split me-1"></i>
+                            Em Breve
+                        </span>
+                        <h3 class="h2 mb-3 text-warning">Projeto 3</h3>
+                        <p class="text-white-50 mb-4">
+                            Espaço reservado para futuras inovações. 
+                            O Logos é um ecossistema em constante expansão.
+                        </p>
+                        <ul class="list-unstyled mb-4 text-white-50">
+                            <li class="mb-2">
+                                <i class="bi bi-arrow-right text-warning me-2"></i>
+                                Roadmap em construção
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-arrow-right text-warning me-2"></i>
+                                Foco em escalabilidade
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-arrow-right text-warning me-2"></i>
+                                Tecnologia de ponta
+                            </li>
+                        </ul>
+                        <button class="btn btn-secondary w-100" disabled>
+                            Em Breve
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- FOOTER -->
-    <footer class="footer">
-        <div class="container">
-            <img src="https://i.postimg.cc/Px8cZqLf/postos-lisboa.png" alt="Grupo Lisboa" class="footer-logo">
-            <p><strong>LOGUS</strong> - Ecossistema de Inovação</p>
-            <p>Grupo Lisboa • Recife, PE</p>
-            <div class="footer-links">
-                <a href="verifik/">VerifiK</a>
-                <a href="#about">Sobre</a>
-                <a href="#projects">Projetos</a>
+    <footer class="py-5">
+        <div class="container text-center">
+            <img src="assets/images/logos-icon.jpg" alt="LOGOS" height="60" class="mb-3 opacity-75">
+            <p class="text-white-50 opacity-75 small mb-4">
+                Grupo Lisboa • Postos Lisboa • Sertã Conveniências • Restaurante Sertã • Subway • Zé Delivery • ☀️ Usinas Solar
+            </p>
+            <p class="text-white-50 opacity-50 small">Recife, PE</p>
+            
+            <div class="d-flex justify-content-center gap-4 mb-4">
+                <a href="verifik/" class="text-white-50 text-decoration-none">VerifiK</a>
+                <a href="#sobre" class="text-white-50 text-decoration-none">Sobre</a>
+                <a href="#projetos" class="text-white-50 text-decoration-none">Projetos</a>
             </div>
-            <p style="margin-top: 2rem; opacity: 0.5;">© 2025 Grupo Lisboa. Todos os direitos reservados.</p>
+            
+            <p class="text-white-50 opacity-50 small mt-4 mb-0">
+                © 2025 Grupo Lisboa. Todos os direitos reservados.
+            </p>
         </div>
     </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Smooth Scroll -->
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>
