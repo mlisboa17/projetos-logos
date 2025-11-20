@@ -1,0 +1,407 @@
+═══════════════════════════════════════════════════════════════════════════
+PROJETO LOGUS - POSICIONAMENTO DE CÂMERA
+Diagrama personalizado baseado no layout real do caixa
+═══════════════════════════════════════════════════════════════════════════
+
+📸 ANÁLISE DA IMAGEM FORNECIDA:
+
+LAYOUT IDENTIFICADO:
+├── Caixas em linha reta (múltiplos caixas lado a lado)
+├── Operador sentado/em pé atrás do balcão
+├── Produtos colocados no balcão à frente do operador
+├── Corredor central para clientes
+├── Câmera atual: Posicionada acima (visão top-down/diagonal)
+├── Altura do balcão: ~1,60m (INFORMADO)
+├── Altura estimada do teto: 3-3,5 metros
+├── ILUMINAÇÃO: Luminária tubular no teto acima do balcão ✅
+└── Boa iluminação ambiente (favorável para IA)
+
+PONTOS POSITIVOS DA CÂMERA ATUAL:
+✅ Ângulo adequado (vê o balcão inteiro)
+✅ Distância aparenta estar entre 2,5-3m
+✅ Visão clara dos produtos no balcão
+✅ Operador não bloqueia visão
+✅ Iluminação excelente (luz direta no balcão)
+
+PONTOS DE MELHORIA POSSÍVEIS:
+⚠️ Câmera um pouco afastada (pode estar a 3-3,5m)
+⚠️ Para reconhecer MARCAS específicas, ideal aproximar para 2-2,5m
+⚠️ Ângulo poderia ser levemente mais fechado nos produtos
+
+⚠️ ATENÇÃO ESPECIAL - LUMINÁRIA:
+├── Luminária tubular está ACIMA do balcão
+├── Pode causar reflexo na superfície do balcão
+├── Pode criar sombra se câmera ficar entre luz e produtos
+└── SOLUÇÃO: Posicionar câmera LATERAL à luminária (não entre luz e balcão)
+
+
+═══════════════════════════════════════════════════════════════════════════
+📐 DIAGRAMA - VISTA SUPERIOR (CAIXAS EM LINHA)
+═══════════════════════════════════════════════════════════════════════════
+
+                    ÁREA DE CLIENTES / CORREDOR
+    ═══════════════════════════════════════════════════════════════════
+
+                    👤        👤        👤
+                 CLIENTE   CLIENTE   CLIENTE
+
+    ╔═══════════════╗  ╔═══════════════╗  ╔═══════════════╗
+    ║   PRODUTOS    ║  ║   PRODUTOS    ║  ║   PRODUTOS    ║  BALCÃO
+    ║   [  🥤🍫  ] ║  ║   [  🥤🍫  ] ║  ║   [  🥤🍫  ] ║  (onde ficam
+    ╚═══════════════╝  ╚═══════════════╝  ╚═══════════════╝   produtos)
+    
+         [💻]            [💻]            [💻]      ← PDV/Computador
+    
+         🧑‍💼             🧑‍💼             🧑‍💼         ← OPERADORES
+       CAIXA 1         CAIXA 2         CAIXA 3
+
+    ─────────────────────────────────────────────────────  PAREDE FUNDOS
+    
+         📹              📹              📹         ← CÂMERAS
+      (2-2,5m)        (2-2,5m)        (2-2,5m)      (distância ao balcão)
+
+
+═══════════════════════════════════════════════════════════════════════════
+📐 DIAGRAMA - VISTA LATERAL (1 CAIXA) - COM LUMINÁRIA
+═══════════════════════════════════════════════════════════════════════════
+
+TETO ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ (3-3,5m altura)
+                         
+       💡════════💡 Luminária tubular (ilumina balcão)
+       │          │
+       │    📹    │  Câmera (LATERAL à luminária)
+       │    │     │  ⚠️ NÃO posicionar entre luz e balcão
+       │    ↓     │
+       │   ╱│╲    │
+       │  ╱ │ ╲   │
+       │ ╱  │  ╲  │  30-45° (ângulo inclinado)
+       │╱   │   ╲ │
+       ╱    │    ╲│
+      ╱     │     ╲
+     ╱      ↓      ╲
+    ┌────────────────────────────────┐
+    │                                │
+    │    🥤 🍫 🚬 🍺                 │  ← BALCÃO (1,60m altura)
+    │         PRODUTOS               │     Produtos bem iluminados ✅
+    └────────────────────────────────┘
+              [💻 PDV]
+    
+              🧑‍💼 Operador
+           (sentado/em pé)
+    
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ CHÃO
+    
+    |←―――――― 2 a 2,5 metros ――――――→|
+    (distância horizontal câmera-balcão)
+
+
+IMPORTANTE - POSICIONAMENTO EM RELAÇÃO À LUMINÁRIA:
+═══════════════════════════════════════════════════════════════════════════
+
+CORRETO ✅:                          ERRADO ❌:
+                                     
+    💡════════💡                         💡════════💡
+         📹 (lateral)                         📹 (no meio)
+         │                                    │ bloqueia luz
+         ↓                                    ↓ cria sombra
+    ┌─────────┐                          ┌─────────┐
+    │ BALCÃO  │ iluminado               │ BALCÃO  │ com sombra
+    └─────────┘                          └─────────┘
+
+
+═══════════════════════════════════════════════════════════════════════════
+🎯 POSICIONAMENTO RECOMENDADO PARA CADA CAIXA
+═══════════════════════════════════════════════════════════════════════════
+
+OPÇÃO 1 - CÂMERA NO TETO (Recomendada)
+───────────────────────────────────────────────────────────────────────────
+
+Posição: Acima e levemente à frente do operador
+Distância horizontal: 2 a 2,5 metros do balcão
+Altura: 2,5 a 3 metros do chão
+Ângulo: 35-45° inclinado para baixo
+Direção: Apontando para área dos produtos no balcão
+
+Fixação:
+├── Suporte de teto
+├── Ou trilho no teto (se tiver forro)
+└── Cabo passa pelo teto até o switch
+
+VANTAGENS:
+✅ Visão completa do balcão
+✅ Operador não bloqueia
+✅ Instalação limpa (discreto)
+✅ Difícil de ser mexida
+
+
+OPÇÃO 2 - CÂMERA NA PAREDE DOS FUNDOS (Alternativa)
+───────────────────────────────────────────────────────────────────────────
+
+Posição: Parede atrás do operador, acima da cabeça
+Distância: 1,5 a 2 metros atrás do operador
+Altura: 2,5 metros do chão
+Ângulo: 25-35° inclinado para frente
+Direção: Por cima do ombro do operador, vendo o balcão
+
+VANTAGENS:
+✅ Fácil de instalar (parede)
+✅ Cabo passa pela parede
+⚠️ ATENÇÃO: Operador pode bloquear visão se ficar em pé
+
+
+OPÇÃO 3 - MÚLTIPLAS CÂMERAS (Futuro - Escala)
+───────────────────────────────────────────────────────────────────────────
+
+Para 3 caixas em linha:
+
+OPÇÃO A - 1 CÂMERA POR CAIXA (R$ 1.800):
+├── 3x Intelbras VIP 3450 D
+├── 1x Switch PoE 8 portas (alimenta as 3)
+└── Cada câmera cobre 1 caixa
+
+OPÇÃO B - 1 CÂMERA PARA 2 CAIXAS (R$ 1.200):
+├── 2x Intelbras VIP 3450 D
+├── Posiciona entre caixas (cobre 2 ao mesmo tempo)
+└── Economia, mas menos precisão
+
+
+═══════════════════════════════════════════════════════════════════════════
+📋 ESPECIFICAÇÕES TÉCNICAS DE INSTALAÇÃO
+═══════════════════════════════════════════════════════════════════════════
+
+PARA 1 CAIXA (PILOTO):
+
+DISTÂNCIAS EXATAS:
+├── Distância horizontal câmera → balcão: 2,0 a 2,5 metros
+├── Altura câmera do chão: 2,5 a 3,0 metros
+├── Ângulo de inclinação: 35° a 45°
+└── Campo de visão cobrindo: 1,5m x 1,0m (balcão completo)
+
+PONTO DE FIXAÇÃO:
+├── No teto: 2m à frente do operador
+├── Na parede: 2,5m de altura, centralizado com o balcão
+└── Usar bucha e parafuso M6 ou M8
+
+CABEAMENTO:
+├── Cabo Cat6 da câmera até switch PoE
+├── Distância estimada: 10-20 metros (depende do local do switch)
+├── Passar pelo teto/forro (escondido)
+└── Deixar 50cm de folga na câmera (ajustes)
+
+ALIMENTAÇÃO:
+├── Via PoE (cabo de rede alimenta a câmera)
+├── Switch PoE fica no escritório/sala técnica
+└── Não precisa tomada próxima da câmera
+
+
+═══════════════════════════════════════════════════════════════════════════
+⚙️ CONFIGURAÇÃO E AJUSTE FINO
+═══════════════════════════════════════════════════════════════════════════
+
+PASSO A PASSO DA INSTALAÇÃO:
+
+1. INSTALAÇÃO PROVISÓRIA (TESTE):
+   ☐ Monte câmera em suporte ajustável
+   ☐ Conecte ao switch PoE
+   ☐ Acesse imagem pelo computador (IP da câmera)
+   ☐ Coloque produtos reais no balcão
+   ☐ Ajuste posição até produtos aparecerem nítidos
+   ☐ Valide que consegue ler marcas na tela
+
+2. AJUSTE DE FOCO:
+   ☐ Configure foco da câmera (via software Intelbras)
+   ☐ Zoom digital: deixe em 1x (sem zoom)
+   ☐ Foco: Ajuste para 2-3 metros
+   ☐ WDR: Ative (compensa luz forte)
+
+3. FIXAÇÃO PERMANENTE:
+   ☐ Marque posição no teto/parede
+   ☐ Fure e coloque buchas
+   ☐ Fixe suporte com parafusos
+   ☐ Monte câmera
+   ☐ Passe cabo de forma organizada
+   ☐ Conecte ao switch
+
+4. VALIDAÇÃO FINAL:
+   ☐ Coloque 10 produtos diferentes no balcão
+   ☐ Verifique se todos aparecem na imagem
+   ☐ Dê zoom na tela - consegue ler marcas?
+   ☐ Teste em diferentes horários (dia/noite)
+   ☐ Teste com/sem operador no caixa
+
+
+═══════════════════════════════════════════════════════════════════════════
+🎯 CHECKLIST DE VALIDAÇÃO
+═══════════════════════════════════════════════════════════════════════════
+
+ANTES DE TREINAR A IA, CONFIRME:
+
+VISIBILIDADE:
+☐ Balcão inteiro aparece na imagem
+☐ Produtos ocupam 30-40 pixels ou mais
+☐ Consegue ler marca de produto médio (ex: lata de Coca)
+☐ Consegue diferenciar tamanhos (2L vs 600ml)
+☐ Não tem ponto cego no balcão
+☐ Operador não bloqueia visão dos produtos
+
+QUALIDADE DE IMAGEM:
+☐ Imagem nítida (não borrada)
+☐ Boa iluminação (não muito escuro/claro)
+☐ Sem reflexo forte no balcão (superfície)
+☐ Cores naturais (não distorcidas)
+☐ Luminária não cria sombra da câmera
+☐ Câmera posicionada lateral à luminária
+
+TÉCNICO:
+☐ Câmera fixa (não balança)
+☐ Cabo bem passado (não vai cair)
+☐ Conexão estável (não perde sinal)
+☐ Acesso remoto funcionando
+
+SE TUDO ✅ → Pronto para produção!
+
+
+═══════════════════════════════════════════════════════════════════════════
+📸 COMPARAÇÃO: CÂMERA ATUAL vs RECOMENDADA
+═══════════════════════════════════════════════════════════════════════════
+
+CÂMERA DA FOTO (atual):
+├── Distância: ~3-3,5 metros (um pouco longe)
+├── Ângulo: Bom (vê balcão inteiro)
+├── Altura: Adequada (3m+)
+├── Qualidade: Boa para visão geral
+└── Para IA: ⚠️ Pode ter dificuldade em produtos pequenos
+
+RECOMENDAÇÃO PARA LOGUS:
+├── Aproximar para: 2-2,5 metros
+├── Manter ângulo similar
+├── Manter altura (2,5-3m)
+├── Usar câmera 4MP (VIP 3450 D)
+└── Resultado: ✅ Reconhece marcas específicas
+
+
+═══════════════════════════════════════════════════════════════════════════
+💡 DICAS ESPECÍFICAS PARA SEU LAYOUT
+═══════════════════════════════════════════════════════════════════════════
+
+1. CAIXAS EM LINHA (múltiplos caixas):
+   └── Instale 1 câmera por caixa (cobertura individual)
+   └── Ou 1 câmera a cada 2 caixas (economia)
+   └── Switch PoE centralizado alimenta todas
+
+2. ILUMINAÇÃO - ATENÇÃO ESPECIAL:
+   ✅ Luminária tubular acima do balcão é ÓTIMA para IA
+   ✅ Ilumina produtos diretamente (sem sombra)
+   ⚠️ Posicione câmera LATERAL à luminária (não no meio)
+   ⚠️ Evite que câmera fique entre luz e produtos (cria sombra)
+   ⚠️ Verifique reflexo do balcão (se superfície brilhante)
+   
+   SOLUÇÃO PARA REFLEXO:
+   └── Ajuste ângulo da câmera (mais inclinado)
+   └── Ou use tapete/base fosca no balcão
+
+3. ALTURA DO BALCÃO (1,60m):
+   ✅ Câmera deve ficar a 2,5-3m do chão
+   ✅ Diferença de ~1m entre balcão e câmera (ângulo bom)
+   ✅ Produtos ficam elevados (mais fácil para IA ver)
+
+4. CORREDOR CENTRAL:
+   └── Clientes passam na frente do caixa
+   └── Câmera posicionada acima evita bloqueio ✅
+
+5. ESCALABILIDADE:
+   └── Comece com 1 caixa (piloto)
+   └── Replica mesma instalação nos demais
+   └── Padroniza altura e distância (facilita)
+   └── Cada caixa tem sua própria luminária (ótimo!)
+
+
+═══════════════════════════════════════════════════════════════════════════
+🛠️ MATERIAL NECESSÁRIO PARA INSTALAÇÃO
+═══════════════════════════════════════════════════════════════════════════
+
+FERRAMENTAS:
+☐ Furadeira
+☐ Broca para concreto (6mm ou 8mm)
+☐ Chave phillips/fenda
+☐ Alicate crimpador RJ45
+☐ Escada (alcançar teto)
+☐ Trena (medir distâncias)
+☐ Nível (deixar câmera reta)
+
+MATERIAIS:
+☐ Bucha S8 ou S10 (4 unidades)
+☐ Parafuso 6mm x 40mm (4 unidades)
+☐ Cabo Cat6 (20-30m por caixa)
+☐ Conectores RJ45 Cat6 (4 unidades)
+☐ Abraçadeira/organizador de cabo
+☐ Fita isolante ou espiral (organizar)
+
+OPCIONAL:
+☐ Eletroduto (proteger cabo se exposto)
+☐ Canaleta (cabo na parede)
+☐ Silicone (vedar furo externo)
+
+
+═══════════════════════════════════════════════════════════════════════════
+📐 DESENHO TÉCNICO SIMPLIFICADO
+═══════════════════════════════════════════════════════════════════════════
+
+                        [TETO] 3m altura
+                           │
+                           │ Fixar suporte aqui
+                           ↓
+                          📹 
+                          │╲
+                          │ ╲ 35-45°
+                          │  ╲
+                          │   ╲
+                2,5-3m    │    ╲
+                altura    │     ╲
+                          │      ╲
+                          │       ↓
+        ┌─────────────────────────────────┐
+        │    🥤 🍫 🚬  (PRODUTOS)        │ BALCÃO
+        └─────────────────────────────────┘ 80-100cm
+                    [💻]
+                    🧑‍💼
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ CHÃO
+        
+        |←―――― 2 a 2,5m ――――→|
+
+
+═══════════════════════════════════════════════════════════════════════════
+✅ RESUMO EXECUTIVO
+═══════════════════════════════════════════════════════════════════════════
+
+PARA SEU CAIXA (layout em linha):
+
+POSICIONAMENTO IDEAL:
+├── Distância: 2 a 2,5 metros do balcão
+├── Altura: 2,5 a 3 metros do chão
+├── Ângulo: 35-45° inclinado para baixo
+├── Local: Teto, acima e à frente do operador
+└── Foco: Centro do balcão (área dos produtos)
+
+INSTALAÇÃO:
+├── 1. Teste posição provisória primeiro
+├── 2. Valide que vê marcas dos produtos
+├── 3. Fixe permanentemente
+└── 4. Passa cabo pelo teto até switch
+
+PARA ESCALAR (3 caixas):
+├── Replica mesmo padrão em cada caixa
+├── 1 switch PoE alimenta todas (8 portas)
+└── Cabos convergem para sala técnica
+
+INVESTIMENTO POR CAIXA:
+├── Câmera: R$ 600
+├── Cabo e conectores: R$ 30
+└── Switch: R$ 200 (divide por 3 caixas) = R$ 67
+    TOTAL: ~R$ 700/caixa
+
+═══════════════════════════════════════════════════════════════════════════
+Documento gerado em: 20/11/2025
+Baseado em: Layout real fornecido (imagem do caixa)
+Projeto: LOGUS - Sistema VerifiK
+═══════════════════════════════════════════════════════════════════════════

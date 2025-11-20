@@ -1,0 +1,594 @@
+═══════════════════════════════════════════════════════════════════════════
+PROJETO LOGUS - CONFIGURAÇÕES DE HARDWARE PARA PILOTO
+Sistema de Monitoramento Inteligente por IA (Loss Prevention)
+═══════════════════════════════════════════════════════════════════════════
+
+📋 ESCOPO: 1 Loja, 1 Caixa (Teste/Piloto Inicial)
+
+═══════════════════════════════════════════════════════════════════════════
+⚠️ CONFIGURAÇÃO TESTE (Validação de Conceito)
+═══════════════════════════════════════════════════════════════════════════
+
+OBJETIVO: Validar viabilidade técnica com menor investimento possível
+
+CÂMERAS:
+├── 1x Intelbras VIP 3230 D (2MP/1080p)
+│   ├── Resolução: 2MP (1920x1080)
+│   ├── FPS: 30fps
+│   ├── PoE: Sim
+│   ├── Lente: 2.8mm
+│   └── Preço: R$ 400
+
+REDE:
+├── 1x Switch PoE 5 portas (básico)
+│   └── Preço: R$ 250
+├── Cabo Cat6 (20m)
+│   └── Preço: R$ 40
+└── Conectores RJ45 (5 unidades)
+    └── Preço: R$ 10
+
+PROCESSAMENTO:
+├── PC Usado/Reaproveitado com:
+│   ├── GPU: NVIDIA GTX 1660 ou superior (mínimo 6GB VRAM)
+│   ├── CPU: i5 8ª geração ou similar
+│   ├── RAM: 8GB DDR4
+│   ├── SSD: 128GB
+│   └── Preço: R$ 2.000-2.500 (usado)
+
+OU Alternativa econômica:
+├── Raspberry Pi 4 8GB + Google Coral TPU
+│   └── Preço: R$ 800-1.000
+│   └── ⚠️ Performance limitada, apenas para POC básico
+
+───────────────────────────────────────────────────────────────────────────
+INVESTIMENTO TOTAL: R$ 2.700 - R$ 3.200
+───────────────────────────────────────────────────────────────────────────
+
+LIMITAÇÕES:
+❌ Reconhece apenas categorias gerais (bebida, cigarro, snack)
+❌ Dificuldade com marcas específicas e tamanhos
+❌ 1 ângulo apenas (pontos cegos)
+❌ Performance limitada
+⚠️ Não recomendado para produção, apenas validação
+
+SERVE PARA:
+✅ Provar que o conceito funciona
+✅ Testar dataset inicial
+✅ Demonstração básica para investidores
+✅ Aprender antes de investir mais
+
+
+═══════════════════════════════════════════════════════════════════════════
+✅ CONFIGURAÇÃO MÍNIMA (Produção Básica)
+═══════════════════════════════════════════════════════════════════════════
+
+OBJETIVO: Menor custo aceitável para operação real
+
+CÂMERAS:
+├── 2x Intelbras VIP 3450 D (4MP)
+│   ├── Resolução: 4MP (2560x1440)
+│   ├── FPS: 30fps
+│   ├── PoE: Sim
+│   ├── Lente: 2.8mm
+│   ├── Preço unitário: R$ 600
+│   └── Total: R$ 1.200
+│   └── Posicionamento: 2 ângulos do caixa (reduz pontos cegos)
+
+REDE:
+├── 1x Switch PoE Intelbras SF 800 Q+ (8 portas)
+│   └── Preço: R$ 400
+│   └── Vantagem: Sobram 6 portas para expansão
+├── Cabo Cat6 (30m)
+│   └── Preço: R$ 60
+└── Conectores RJ45 (10 unidades)
+    └── Preço: R$ 20
+
+PROCESSAMENTO - Opção A (Recomendada):
+├── NVIDIA Jetson Orin Nano Developer Kit
+│   ├── GPU integrada (IA otimizada)
+│   ├── 8GB RAM
+│   ├── Consumo: ~15W
+│   ├── Processa: 2-4 câmeras simultâneas
+│   ├── MicroSD 128GB (sistema)
+│   └── Preço: R$ 2.800
+
+PROCESSAMENTO - Opção B (Alternativa):
+├── PC Compacto montado:
+│   ├── CPU: Intel i5 12400F
+│   ├── GPU: NVIDIA RTX 3050 8GB
+│   ├── RAM: 16GB DDR4
+│   ├── SSD: 256GB NVMe
+│   ├── Placa-mãe: H610M
+│   ├── Fonte: 450W
+│   ├── Gabinete Mini ITX
+│   └── Preço: R$ 3.800
+
+───────────────────────────────────────────────────────────────────────────
+INVESTIMENTO TOTAL: 
+├── Com Jetson: R$ 4.480
+└── Com PC: R$ 5.480
+───────────────────────────────────────────────────────────────────────────
+
+CAPACIDADES:
+✅ Reconhece marcas em produtos médios/grandes
+✅ Diferencia tamanhos principais (2L vs 600ml)
+✅ 2 ângulos (boa cobertura)
+✅ Processamento em tempo real (1-2s de latência)
+✅ Alertas funcionais
+✅ Base para expansão
+
+SERVE PARA:
+✅ Operação produtiva real
+✅ ROI em 3-4 meses
+✅ Expandir para mais caixas depois
+✅ Vender para clientes (modelo comercial)
+
+
+═══════════════════════════════════════════════════════════════════════════
+🎯 CONFIGURAÇÃO ADEQUADA (Recomendada)
+═══════════════════════════════════════════════════════════════════════════
+
+OBJETIVO: Melhor custo-benefício com performance profissional
+
+CÂMERAS:
+├── 3x Intelbras VIP 3450 D (4MP)
+│   ├── Resolução: 4MP (2560x1440)
+│   ├── FPS: 30fps
+│   ├── PoE: Sim
+│   ├── Lente: 2.8mm
+│   ├── Preço unitário: R$ 600
+│   └── Total: R$ 1.800
+│   └── Posicionamento: 
+│       ├── Câmera 1: Visão geral do caixa
+│       ├── Câmera 2: Close no balcão (produtos)
+│       └── Câmera 3: Lateral (backup + ângulo extra)
+
+REDE:
+├── 1x Switch PoE Intelbras SG 1002 MR (10 portas gerenciável)
+│   ├── Gerenciamento remoto
+│   ├── VLAN support
+│   └── Preço: R$ 550
+├── Cabo Cat6 (50m)
+│   └── Preço: R$ 100
+└── Conectores + patch cords
+    └── Preço: R$ 50
+
+PROCESSAMENTO:
+├── PC Desktop montado:
+│   ├── CPU: Intel i5 12400F (6 cores, 12 threads)
+│   ├── GPU: NVIDIA RTX 3060 12GB GDDR6
+│   ├── RAM: 16GB DDR4 3200MHz (2x8GB)
+│   ├── SSD: 512GB NVMe M.2
+│   ├── HD: 1TB SATA (gravação eventos)
+│   ├── Placa-mãe: B660M (suporte futuro)
+│   ├── Fonte: 600W 80+ Bronze
+│   ├── Gabinete com boa ventilação
+│   └── Preço: R$ 5.500
+
+EXTRAS:
+├── Nobreak 1200VA (proteção elétrica)
+│   └── Preço: R$ 500
+└── Suportes ajustáveis para câmeras
+    └── Preço: R$ 150
+
+───────────────────────────────────────────────────────────────────────────
+INVESTIMENTO TOTAL: R$ 8.650
+───────────────────────────────────────────────────────────────────────────
+
+CAPACIDADES:
+✅ Reconhece marcas específicas com alta precisão
+✅ Diferencia todos os tamanhos (lata 350ml vs 473ml)
+✅ Detecta produtos pequenos (cigarros, balas)
+✅ 3 ângulos (cobertura completa, zero ponto cego)
+✅ Processamento instantâneo (<1s)
+✅ Processa até 6-8 câmeras (expansão sem trocar PC)
+✅ Gravação de eventos + backup
+✅ Proteção elétrica (evita perda de equipamento)
+✅ Margem para crescimento
+
+SERVE PARA:
+✅ Operação profissional de longo prazo
+✅ Base sólida para escalar múltiplas lojas
+✅ Demonstração premium para clientes
+✅ ROI em 2-3 meses
+✅ Modelo comercial escalável
+
+
+═══════════════════════════════════════════════════════════════════════════
+🚀 CONFIGURAÇÃO TOP (Máxima Performance)
+═══════════════════════════════════════════════════════════════════════════
+
+OBJETIVO: Zero compromisso, máxima precisão e capacidade
+
+CÂMERAS:
+├── 2x Intelbras VIP 5870 D (8MP/4K)
+│   ├── Resolução: 8MP (3840x2160)
+│   ├── FPS: 30fps
+│   ├── PoE: Sim
+│   ├── WDR real (compensa iluminação)
+│   ├── Lente: 2.8mm
+│   ├── Preço unitário: R$ 1.400
+│   └── Total: R$ 2.800
+│
+├── 2x Intelbras VIP 3450 D (4MP)
+│   ├── Para ângulos secundários
+│   ├── Preço unitário: R$ 600
+│   └── Total: R$ 1.200
+│
+└── TOTAL CÂMERAS: R$ 4.000 (4 câmeras)
+    └── Posicionamento:
+        ├── Câmera 1 (8MP): Close máximo produtos (lê até código de barras)
+        ├── Câmera 2 (8MP): Visão geral caixa alta definição
+        ├── Câmera 3 (4MP): Lateral esquerda
+        └── Câmera 4 (4MP): Lateral direita
+
+REDE:
+├── 1x Switch PoE+ Intelbras SG 1002 MR L2+ (10 portas)
+│   ├── Gerenciamento avançado
+│   ├── QoS (priorização vídeo)
+│   ├── PoE+ (mais potência)
+│   └── Preço: R$ 700
+├── Cabo Cat6A blindado (100m)
+│   └── Preço: R$ 250
+└── Conectores + organização profissional
+    └── Preço: R$ 100
+
+PROCESSAMENTO:
+├── Workstation de IA:
+│   ├── CPU: Intel i7 13700 (16 cores, 24 threads)
+│   ├── GPU: NVIDIA RTX 4060 Ti 16GB GDDR6
+│   ├── RAM: 32GB DDR5 5600MHz (2x16GB)
+│   ├── SSD: 1TB NVMe Gen4 M.2 (sistema + IA)
+│   ├── HD: 4TB SATA (gravação 24/7 de 30 dias)
+│   ├── Placa-mãe: Z790 (máxima expansão)
+│   ├── Fonte: 750W 80+ Gold modular
+│   ├── Gabinete com fluxo otimizado
+│   ├── Cooler tower high-end
+│   └── Preço: R$ 9.500
+
+INFRAESTRUTURA:
+├── Nobreak 2200VA Senoidal (proteção total)
+│   └── Preço: R$ 1.200
+├── Rack de parede 8U (organização)
+│   └── Preço: R$ 400
+├── Suportes motorizados PTZ (ajuste remoto)
+│   └── Preço: R$ 600
+└── Iluminação LED IR adicional (visão noturna extra)
+    └── Preço: R$ 300
+
+SOFTWARE/LICENÇAS:
+├── Windows 11 Pro (gerenciamento remoto)
+│   └── Preço: R$ 800
+└── Software de gerenciamento VMS profissional
+    └── Preço: R$ 500
+
+───────────────────────────────────────────────────────────────────────────
+INVESTIMENTO TOTAL: R$ 18.150
+───────────────────────────────────────────────────────────────────────────
+
+CAPACIDADES:
+✅ Reconhece até códigos de barras e texto pequeno
+✅ Diferencia produtos idênticos (Coca normal vs Zero)
+✅ Detecta fraudes sofisticadas (troca de etiquetas)
+✅ 4 ângulos (impossível ter ponto cego)
+✅ Processamento ultra-rápido (tempo real instantâneo)
+✅ Processa até 12-16 câmeras simultâneas
+✅ Gravação 24/7 de 30 dias (4 câmeras)
+✅ IA avançada (múltiplos modelos simultaneamente)
+✅ Expansão massiva sem limites
+✅ Uptime 99.9% (equipamento enterprise)
+✅ Manutenção remota completa
+
+SERVE PARA:
+✅ Showcase tecnológico (impressionar investidores)
+✅ Base de dados para treinar IA de outras lojas
+✅ Centro de processamento regional (processa várias lojas)
+✅ Venda premium para grandes redes
+✅ Diferenciação competitiva total
+✅ ROI em 1-2 meses (economia massiva)
+
+
+═══════════════════════════════════════════════════════════════════════════
+📊 COMPARATIVO RESUMIDO
+═══════════════════════════════════════════════════════════════════════════
+
+┌─────────────────┬──────────┬──────────┬───────────┬──────────┐
+│ ESPECIFICAÇÃO   │  TESTE   │  MÍNIMA  │ ADEQUADA  │   TOP    │
+├─────────────────┼──────────┼──────────┼───────────┼──────────┤
+│ Investimento    │ R$ 3.000 │ R$ 4.500 │ R$ 8.650  │ R$ 18.150│
+│ Câmeras         │ 1x 2MP   │ 2x 4MP   │ 3x 4MP    │ 2x8MP+2x4│
+│ GPU VRAM        │ 6GB      │ 8GB      │ 12GB      │ 16GB     │
+│ RAM             │ 8GB      │ 16GB     │ 16GB      │ 32GB     │
+│ Armazenamento   │ 128GB    │ 256GB    │ 512GB+1TB │ 1TB+4TB  │
+│ Câmeras suport. │ 1-2      │ 2-4      │ 6-8       │ 12-16    │
+│ Precisão marcas │ Baixa    │ Média    │ Alta      │ Máxima   │
+│ Latência        │ 3-5s     │ 1-2s     │ <1s       │ Instant. │
+│ ROI estimado    │ N/A      │ 3-4 meses│ 2-3 meses │ 1-2 meses│
+│ Expansível      │ ❌       │ ⚠️       │ ✅        │ ✅✅     │
+│ Produção        │ ❌       │ ✅       │ ✅✅      │ ✅✅✅   │
+└─────────────────┴──────────┴──────────┴───────────┴──────────┘
+
+
+═══════════════════════════════════════════════════════════════════════════
+💰 ALTERNATIVAS PARA REDUZIR CUSTOS NO PILOTO
+═══════════════════════════════════════════════════════════════════════════
+
+🔧 OPÇÃO 1: REAPROVEITAR EQUIPAMENTOS EXISTENTES
+───────────────────────────────────────────────────────────────────────────
+
+SE VOCÊ JÁ TEM:
+├── PC com placa de vídeo NVIDIA (GTX 1060 6GB ou superior)
+│   └── Economiza: R$ 3.800-5.500
+├── Switch com PoE
+│   └── Economiza: R$ 400-550
+├── Cabos de rede sobrando
+│   └── Economiza: R$ 60-100
+└── Nobreak
+    └── Economiza: R$ 500
+
+INVESTIMENTO REDUZIDO (comprando só câmeras):
+├── 2x Câmeras 4MP: R$ 1.200
+├── Conectores: R$ 20
+└── TOTAL: R$ 1.220
+
+⚠️ REQUISITOS MÍNIMOS DO PC:
+├── GPU NVIDIA com mínimo 6GB VRAM (GTX 1060, 1660, RTX 2060, 3050+)
+├── CPU i5 8ª geração ou superior (ou Ryzen 5 3600+)
+├── 8GB RAM (ideal 16GB)
+└── SSD de pelo menos 128GB
+
+
+🔧 OPÇÃO 2: COMPRAR PC GAMER USADO
+───────────────────────────────────────────────────────────────────────────
+
+CONFIGURAÇÃO USADA (Mercado Livre, OLX):
+├── PC Gamer completo com:
+│   ├── i5 10ª/11ª geração
+│   ├── RTX 2060 ou GTX 1660 Super (6GB)
+│   ├── 16GB RAM
+│   ├── SSD 256GB
+│   └── Preço: R$ 2.500-3.200 (usado, bom estado)
+
+INVESTIMENTO PILOTO COM PC USADO:
+├── PC Gamer usado: R$ 2.800
+├── 2x Câmeras 4MP: R$ 1.200
+├── Switch PoE: R$ 400
+├── Cabos: R$ 60
+└── TOTAL: R$ 4.460
+
+ECONOMIA: R$ 4.190 vs Configuração Adequada
+
+
+🔧 OPÇÃO 3: PARCELAR COMPONENTES (Comprar Gradualmente)
+───────────────────────────────────────────────────────────────────────────
+
+FASE 1 - Validação Básica (R$ 1.900):
+├── 1x Câmera 4MP: R$ 600
+├── 1x Switch PoE básico 5p: R$ 250
+├── 1x Webcam USB 1080p (teste temporário): R$ 150
+├── Software rodando em notebook pessoal
+└── Valida conceito, testa dataset, ajusta modelo IA
+
+FASE 2 - Adicionar Hardware (R$ 2.800):
+├── Troca webcam por mais 1 câmera 4MP: R$ 600
+├── Compra PC usado ou Jetson: R$ 2.800
+└── Sistema funcional em produção
+
+FASE 3 - Profissionalizar (R$ 1.200):
+├── Adiciona 3ª câmera: R$ 600
+├── Upgrade switch: R$ 400
+├── Nobreak: R$ 500
+└── Setup profissional completo
+
+INVESTIMENTO TOTAL: R$ 5.900 (mesmo resultado, diluído no tempo)
+
+
+🔧 OPÇÃO 4: CONFIGURAÇÃO HÍBRIDA INTELIGENTE
+───────────────────────────────────────────────────────────────────────────
+
+NOVO ONDE IMPORTA, USADO ONDE POSSÍVEL:
+
+NOVOS (Essenciais):
+├── 2x Câmeras 4MP Intelbras: R$ 1.200 (⚠️ não economize aqui)
+├── Switch PoE: R$ 400
+└── Cabos: R$ 60
+
+USADOS/REAPROVEITADOS:
+├── PC Gamer usado (RTX 2060): R$ 2.800
+├── SSD usado 256GB: R$ 100
+├── Gabinete/periféricos reaproveitados: R$ 0
+└── Monitor, teclado, mouse que já tem: R$ 0
+
+TOTAL: R$ 4.560
+
+DIFERENÇAS vs NOVO:
+✅ Câmeras: mesma qualidade (novo)
+✅ Processamento: 80-90% da performance
+✅ Confiabilidade: 6-12 meses de garantia (usado)
+❌ Vida útil: 2-3 anos (vs 5+ novo)
+✅ Economia: R$ 4.090
+
+
+🔧 OPÇÃO 5: ULTRA-ECONÔMICA (Não recomendada, mas possível)
+───────────────────────────────────────────────────────────────────────────
+
+PARA QUEM TEM ORÇAMENTO MUITO LIMITADO:
+
+├── 2x Câmeras IP genéricas 1080p (não Intelbras): R$ 300
+├── Switch PoE genérico 4p: R$ 180
+├── Raspberry Pi 4 8GB + Coral TPU: R$ 900
+├── MicroSD 128GB: R$ 80
+├── Cabos: R$ 40
+└── TOTAL: R$ 1.500
+
+LIMITAÇÕES SEVERAS:
+❌ Precisão baixa (só categorias gerais)
+❌ Lento (3-5s de latência)
+❌ Não escala (máximo 2 câmeras)
+❌ Câmeras genéricas (qualidade inferior)
+⚠️ Apenas para validação de conceito inicial
+
+
+═══════════════════════════════════════════════════════════════════════════
+📊 COMPARATIVO DE ALTERNATIVAS ECONÔMICAS
+═══════════════════════════════════════════════════════════════════════════
+
+┌──────────────────────┬────────────┬─────────────┬──────────────┐
+│ ALTERNATIVA          │ CUSTO      │ PERFORMANCE │ RECOMENDAÇÃO │
+├──────────────────────┼────────────┼─────────────┼──────────────┤
+│ Só Câmeras           │ R$ 1.220   │ 100%*       │ ✅✅✅       │
+│ (reaproveita PC)     │            │             │ Se tiver PC  │
+├──────────────────────┼────────────┼─────────────┼──────────────┤
+│ PC Gamer Usado       │ R$ 4.460   │ 85%         │ ✅✅         │
+│                      │            │             │ Bom custo    │
+├──────────────────────┼────────────┼─────────────┼──────────────┤
+│ Compra Gradual       │ R$ 5.900** │ 100%        │ ✅           │
+│ (3 fases)            │            │             │ Fluxo caixa  │
+├──────────────────────┼────────────┼─────────────┼──────────────┤
+│ Híbrida              │ R$ 4.560   │ 90%         │ ✅✅         │
+│ (novo+usado)         │            │             │ Equilibrado  │
+├──────────────────────┼────────────┼─────────────┼──────────────┤
+│ Ultra-Econômica      │ R$ 1.500   │ 40%         │ ⚠️           │
+│ (Raspberry Pi)       │            │             │ Só teste POC │
+├──────────────────────┼────────────┼─────────────┼──────────────┤
+│ ADEQUADA Original    │ R$ 8.650   │ 100%        │ ✅✅✅       │
+│ (tudo novo)          │            │             │ Profissional │
+└──────────────────────┴────────────┴─────────────┴──────────────┘
+
+* Assume que PC existente tem GPU adequada
+** Mesmo custo final, diluído em 3 meses
+
+
+═══════════════════════════════════════════════════════════════════════════
+🎯 RECOMENDAÇÕES POR CENÁRIO
+═══════════════════════════════════════════════════════════════════════════
+
+CENÁRIO 1: Você JÁ TEM PC com placa de vídeo NVIDIA:
+└── ✅ COMPRE APENAS: 2 câmeras 4MP + Switch PoE (R$ 1.600)
+    └── Melhor ROI possível
+
+CENÁRIO 2: Orçamento limitado, mas quer sistema funcional:
+└── ✅ PC GAMER USADO + Câmeras novas (R$ 4.460)
+    └── Economia de 48% vs novo
+
+CENÁRIO 3: Sem pressa, prefere diluir investimento:
+└── ✅ COMPRA GRADUAL em 3 fases (R$ 5.900 total)
+    └── R$ 1.900 agora, resto depois
+
+CENÁRIO 4: Quer máximo custo-benefício:
+└── ✅ CONFIGURAÇÃO HÍBRIDA (R$ 4.560)
+    └── Câmeras novas + PC usado
+
+CENÁRIO 5: Precisa impressionar investidores/clientes:
+└── ✅ CONFIGURAÇÃO ADEQUADA original (R$ 8.650)
+    └── Profissional, confiável, escalável
+
+
+═══════════════════════════════════════════════════════════════════════════
+💡 DICAS PARA ECONOMIZAR SEM PERDER QUALIDADE
+═══════════════════════════════════════════════════════════════════════════
+
+✅ ECONOMIZE AQUI:
+├── PC/Processamento: Pode ser usado se tiver GPU boa
+├── Periféricos: Teclado, mouse, monitor (use o que tiver)
+├── Gabinete: Estética não importa para servidor
+├── Fonte: 80+ Bronze suficiente (não precisa Gold/Platinum)
+├── HD adicional: Adicione depois se precisar
+
+❌ NÃO ECONOMIZE AQUI:
+├── Câmeras: Qualidade da imagem é crucial para IA
+├── GPU: Precisa de VRAM suficiente (mínimo 6GB)
+├── Switch PoE: Genérico pode dar problema
+├── Cabos: Cat6 é essencial (Cat5e pode gargalo)
+
+⚠️ CUIDADOS AO COMPRAR USADO:
+├── Teste GPU antes (rodar benchmark)
+├── Verifique garantia restante
+├── Prefira vendedores com histórico
+├── Peça comprovante nota fiscal original
+├── Teste 100% antes de instalar em produção
+
+
+═══════════════════════════════════════════════════════════════════════════
+🛒 ONDE BUSCAR EQUIPAMENTOS USADOS
+═══════════════════════════════════════════════════════════════════════════
+
+PCs GAMERS USADOS:
+├── Mercado Livre (filtro: usado, vendedor platinum)
+├── OLX (negociação direta, teste presencial)
+├── Grupos Facebook: "PC Gamer Seminovo", "Hardware Brasil"
+├── Fóruns: Adrenaline, Clube do Hardware
+
+COMPONENTES USADOS:
+├── Terabyte Outlet (peças revisadas com garantia)
+├── Pichau Seminovos
+├── Kabum Marketplace
+
+⚠️ SEMPRE:
+└── Teste antes de pagar
+└── Peça vídeo funcionando
+└── Verifique temperaturas (GPU não pode passar 80°C em carga)
+
+
+═══════════════════════════════════════════════════════════════════════════
+🎯 RECOMENDAÇÃO FINAL
+═══════════════════════════════════════════════════════════════════════════
+
+PARA VOCÊS (Rede de postos com dataset pronto):
+
+┌──────────────────────────────────────────────────────────────────────┐
+│                                                                      │
+│  ✅ CONFIGURAÇÃO ADEQUADA (R$ 8.650)                                │
+│                                                                      │
+│  RAZÕES:                                                             │
+│  • Equipamento profissional (durável 5+ anos)                       │
+│  • Precisão suficiente para marcas específicas                      │
+│  • Escalável (adiciona mais câmeras sem trocar PC)                  │
+│  • ROI rápido (2-3 meses)                                           │
+│  • Serve de modelo para vender aos clientes                         │
+│  • Demonstração convincente                                         │
+│                                                                      │
+│  PULE O TESTE: Com dataset pronto, vá direto para Adequada          │
+│                                                                      │
+└──────────────────────────────────────────────────────────────────────┘
+
+ALTERNATIVA (Se orçamento limitado agora):
+└── Comece com MÍNIMA (R$ 4.500)
+    └── Upgrade incremental depois (adiciona câmera 3, melhora PC)
+
+
+═══════════════════════════════════════════════════════════════════════════
+📦 LISTA DE COMPRAS - CONFIGURAÇÃO ADEQUADA
+═══════════════════════════════════════════════════════════════════════════
+
+CÂMERAS E REDE:
+☐ 3x Intelbras VIP 3450 D (4MP, 2.8mm)
+☐ 1x Switch PoE Intelbras SG 1002 MR (10 portas)
+☐ 1x Rolo cabo Cat6 50m
+☐ 1x Caixa conectores RJ45 + alicate crimpador
+☐ 3x Suportes ajustáveis para câmeras
+
+COMPONENTES PC:
+☐ 1x Processador Intel i5 12400F
+☐ 1x Placa de vídeo NVIDIA RTX 3060 12GB
+☐ 1x Kit RAM 16GB DDR4 3200MHz (2x8GB)
+☐ 1x SSD 512GB NVMe M.2
+☐ 1x HD 1TB SATA
+☐ 1x Placa-mãe B660M
+☐ 1x Fonte 600W 80+ Bronze
+☐ 1x Gabinete ATX com ventilação
+
+PROTEÇÃO:
+☐ 1x Nobreak 1200VA
+
+ONDE COMPRAR:
+• Câmeras/Switch: Mercado Livre, Atak Segurança, distribuidor Intelbras
+• PC: Pichau, Kabum, Terabyte (ou montagem local)
+• Nobreak: Qualquer loja de informática
+
+
+═══════════════════════════════════════════════════════════════════════════
+Documento gerado em: 20/11/2025
+Projeto: LOGUS - Loss Prevention System
+Módulo: VerifiK (Verificação Inteligente por Câmeras)
+═══════════════════════════════════════════════════════════════════════════
