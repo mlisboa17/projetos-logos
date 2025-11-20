@@ -4,6 +4,16 @@ Django Admin para ERP Hub
 from django.contrib import admin
 from .models import ERPIntegration, Store, SyncLog
 
+# Importar admins estendidos
+from .admin_extended import (
+    EmpresaAdmin,
+    PostoCombustivelAdmin,
+    RestauranteAdmin,
+    SistemaEnergiaSolarAdmin,
+    LojaConvenienciaAdmin,
+    CentroLubrificacaoAdmin
+)
+
 
 @admin.register(ERPIntegration)
 class ERPIntegrationAdmin(admin.ModelAdmin):
