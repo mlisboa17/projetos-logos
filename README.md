@@ -1,36 +1,72 @@
-# LOGUS - Sistema Inteligente de Prevenção de Perdas
+# LOGUS - Ecossistema de Inovação Grupo Lisboa
 
-![Logus](https://img.shields.io/badge/Status-Em%20Desenvolvimento-yellow)
+![Logus](https://img.shields.io/badge/Status-Ativo-green)
 ![Versão](https://img.shields.io/badge/Vers%C3%A3o-1.0.0-blue)
 ![Licença](https://img.shields.io/badge/Licen%C3%A7a-Propriet%C3%A1rio-red)
 
 ## 📋 Sobre o Projeto
 
-**Logus** é uma plataforma unificada para lojas de conveniência e postos de combustível que utiliza **Inteligência Artificial** para detectar furtos internos em tempo real. O sistema monitora o que passa pelo caixa através de câmeras IP e compara com o que foi registrado no PDV, gerando alertas instantâneos em caso de divergências.
+**LOGUS** é o ecossistema de inovação tecnológica do **Grupo Lisboa**, desenvolvendo soluções inteligentes para os desafios do varejo. Cada projeto nasce da nossa experiência prática em postos de combustível e lojas de conveniência.
 
-### 🎯 Problema que Resolve
+### 🌳 Estrutura do Ecossistema
 
-- **Furto Interno**: Funcionários "esquecem" de registrar produtos de amigos
-- **Erro de Registro**: Quantidade incorreta ou produto errado
+```
+LOGUS (Grupo Lisboa)
+├── VerifiK - Sistema de Prevenção de Perdas por IA (Ativo)
+├── Projeto 2 - Em planejamento
+└── Projeto 3 - Em breve
+```
+
+### 🎯 Missão
+
+Transformar problemas reais do varejo brasileiro em soluções tecnológicas de ponta, tornando o mercado mais eficiente, lucrativo e sustentável.
+
+---
+
+## 🚀 Projetos Ativos
+
+### 1. VerifiK - Sistema de Prevenção de Perdas por IA
+
+**Status**: ✅ Ativo (Em Desenvolvimento)
+
+Sistema de Inteligência Artificial que detecta furtos internos em tempo real através de câmeras IP.
+
+#### Problema que Resolve
+
+- **Furto Interno**: Funcionários "esquecem" de registrar produtos
+- **Erro de Registro**: Quantidade incorreta ou produto errado  
 - **Falta de Visibilidade**: Impossível revisar todas as vendas manualmente
 
-### 💰 Impacto Financeiro
+### 💰 Impacto Financeiro (VerifiK)
 
-- **Perda média sem Logus**: 3-7% do faturamento
-- **Perda média com Logus**: <1% do faturamento
+- **Perda média sem sistema**: 3-7% do faturamento
+- **Perda média com sistema**: <1% do faturamento
 - **ROI médio**: 60-90 dias
 - **Redução de perdas**: 60-70%
 
 ---
 
+## 🌐 Website Institucional
+
+### Homepage LOGUS
+- **Apresentação**: Grupo Lisboa e ecossistema de projetos
+- **URL**: https://grupolisboa.com.br
+- **Conteúdo**: Sobre o grupo + cards dos projetos
+
+### Landing Page VerifiK
+- **URL**: https://grupolisboa.com.br/verifik
+- **Conteúdo**: Detalhamento completo do sistema de IA
+
+---
+
 ## 🚀 Tecnologias Utilizadas
 
-### Frontend (Landing Page)
+### Frontend (Websites)
 - **HTML5** - Estrutura semântica
-- **CSS3** - Design moderno com gradientes e animações
-- **JavaScript ES6+** - Interatividade e formulários
+- **CSS3** - Design moderno (cores: ouro #C9A960 + verde #1B5E4D)
+- **JavaScript ES6+** - Interatividade
 
-### Backend (Em Desenvolvimento)
+### Backend (VerifiK - Em Desenvolvimento)
 - **Python 3.11+** - Linguagem principal
 - **FastAPI** - Framework web moderno e rápido
 - **PostgreSQL** - Banco de dados relacional
@@ -54,16 +90,18 @@
 
 ```
 ProjetoLogus/
-├── index.html                      # Landing page principal
-├── assets/
-│   ├── css/
-│   │   └── style.css              # Estilos personalizados
-│   └── js/
-│       └── main.js                # Scripts de interatividade
+├── index.html                      # Homepage LOGUS (Grupo Lisboa)
+├── verifik/
+│   ├── index.html                  # Landing page VerifiK
+│   └── assets/
+│       ├── css/
+│       │   └── style.css          # Estilos VerifiK
+│       └── js/
+│           └── main.js            # Scripts VerifiK
 ├── docs/
-│   ├── README.txt                 # Documentação do projeto
-│   ├── CONFIGURACOES_HARDWARE.txt # Guia de hardware
-│   └── POSICIONAMENTO_CAMERA.txt  # Instruções de instalação
+│   ├── README.txt                 # Documentação geral
+│   ├── CONFIGURACOES_HARDWARE.txt # Guia de hardware (VerifiK)
+│   └── POSICIONAMENTO_CAMERA.txt  # Instalação (VerifiK)
 └── README.md                      # Este arquivo
 ```
 

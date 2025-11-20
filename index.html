@@ -3,592 +3,527 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Logus - Plataforma inteligente de prevenção de perdas para lojas de conveniência e postos de combustível">
-    <title>Logus - Tecnologia Inteligente para Seu Negócio</title>
-    <link rel="stylesheet" href="assets/css/style.css">
+    <meta name="description" content="Grupo Lisboa - Inovação e Tecnologia para o Varejo">
+    <title>LOGUS - Grupo Lisboa | Ecossistema de Inovação</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #C9A960;
+            --gold-dark: #B08D3F;
+            --green: #1B5E4D;
+            --green-dark: #134438;
+            --dark-bg: #0a0a0a;
+            --card-bg: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #a0aec0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--green) 0%, var(--green-dark) 100%);
+            padding: 1.5rem 0;
+            box-shadow: 0 4px 30px rgba(27, 94, 77, 0.3);
+        }
+
+        .nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-img {
+            width: 60px;
+            height: auto;
+        }
+
+        .brand {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-title {
+            font-size: 2rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: var(--gold);
+        }
+
+        .brand-subtitle {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.9;
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 4rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+            border-radius: 50%;
+            filter: blur(150px);
+            opacity: 0.1;
+            top: -300px;
+            right: -300px;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-logo {
+            width: 150px;
+            margin-bottom: 2rem;
+            opacity: 0.7;
+        }
+
+        .hero-title {
+            font-size: 4.5rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--green) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            font-weight: 300;
+        }
+
+        .hero-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 3rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* About */
+        .about {
+            padding: 6rem 2rem;
+            background: var(--card-bg);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--green) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            margin-bottom: 4rem;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .about-card {
+            background: var(--dark-bg);
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 1px solid rgba(201, 169, 96, 0.2);
+            text-align: center;
+        }
+
+        .about-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .about-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--gold);
+        }
+
+        .about-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* Projects */
+        .projects {
+            padding: 6rem 2rem;
+            background: var(--dark-bg);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .project-card {
+            background: linear-gradient(135deg, var(--card-bg) 0%, var(--dark-bg) 100%);
+            padding: 3rem;
+            border-radius: 30px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--gold) 0%, var(--green) 100%);
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--gold);
+            box-shadow: 0 20px 60px rgba(201, 169, 96, 0.3);
+        }
+
+        .project-status {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+        }
+
+        .status-active {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .status-coming {
+            background: rgba(201, 169, 96, 0.2);
+            color: var(--gold);
+        }
+
+        .project-card h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--gold);
+        }
+
+        .project-card p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .project-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .project-features li {
+            padding: 0.5rem 0;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .project-features li::before {
+            content: "→";
+            color: var(--gold);
+            font-weight: bold;
+            margin-right: 0.8rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+            color: var(--dark-bg);
+            box-shadow: 0 10px 30px rgba(201, 169, 96, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(201, 169, 96, 0.5);
+        }
+
+        .btn-outline {
+            border: 2px solid var(--gold);
+            color: var(--gold);
+        }
+
+        .btn-outline:hover {
+            background: rgba(201, 169, 96, 0.1);
+        }
+
+        .btn-disabled {
+            background: rgba(160, 174, 192, 0.1);
+            color: var(--text-secondary);
+            cursor: not-allowed;
+            border: 2px solid rgba(160, 174, 192, 0.2);
+        }
+
+        .btn-disabled:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--card-bg);
+            padding: 3rem 2rem;
+            text-align: center;
+            border-top: 1px solid rgba(201, 169, 96, 0.2);
+        }
+
+        .footer-logo {
+            width: 100px;
+            margin-bottom: 1.5rem;
+            opacity: 0.5;
+        }
+
+        .footer p {
+            color: var(--text-secondary);
+            margin: 0.5rem 0;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--gold);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-content,
+        .about-card,
+        .project-card {
+            animation: fadeInUp 0.8s ease-out;
+        }
+    </style>
 </head>
 <body>
-    <!-- HEADER / NAVIGATION -->
+    <!-- HEADER -->
     <header class="header">
-        <nav class="nav container">
-            <div class="nav-brand">
-                <h1 class="logo">LOGUS</h1>
-                <span class="tagline">Smart Loss Prevention</span>
+        <nav class="nav">
+            <div class="logo-container">
+                <img src="https://i.postimg.cc/Px8cZqLf/postos-lisboa.png" alt="Grupo Lisboa" class="logo-img">
+                <div class="brand">
+                    <h1 class="brand-title">LOGUS</h1>
+                    <span class="brand-subtitle">Grupo Lisboa</span>
+                </div>
             </div>
-            <ul class="nav-menu">
-                <li><a href="#solucoes" class="nav-link">Soluções</a></li>
-                <li><a href="#como-funciona" class="nav-link">Como Funciona</a></li>
-                <li><a href="#diferenciais" class="nav-link">Diferenciais</a></li>
-                <li><a href="#planos" class="nav-link">Planos</a></li>
-                <li><a href="#contato" class="nav-link nav-link-cta">Falar com Especialista</a></li>
-            </ul>
-            <button class="nav-toggle" aria-label="Menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
         </nav>
     </header>
 
-    <!-- HERO SECTION -->
+    <!-- HERO -->
     <section class="hero">
-        <div class="hero-background">
-            <div class="hero-overlay"></div>
-        </div>
-        <div class="hero-content container">
-            <div class="hero-text">
-                <h1 class="hero-title">
-                    Pare de Perder
-                    <span class="highlight">Dinheiro</span>
-                    no Seu Caixa
-                </h1>
-                <p class="hero-subtitle">
-                    Inteligência artificial que detecta em tempo real divergências entre 
-                    produtos no balcão e vendas registradas. Reduza perdas em até 70%.
-                </p>
-                <div class="hero-stats">
-                    <div class="stat">
-                        <span class="stat-number">3-7%</span>
-                        <span class="stat-label">Perda média sem Logus</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-number">&lt;1%</span>
-                        <span class="stat-label">Perda média com Logus</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-number">90 dias</span>
-                        <span class="stat-label">ROI médio</span>
-                    </div>
-                </div>
-                <div class="hero-cta">
-                    <a href="#contato" class="btn btn-primary btn-large">
-                        <span>Começar Agora</span>
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                            <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </a>
-                    <a href="#como-funciona" class="btn btn-secondary btn-large">Ver Demonstração</a>
-                </div>
-            </div>
-            <div class="hero-visual">
-                <div class="visual-card">
-                    <div class="visual-header">
-                        <span class="visual-badge visual-badge-alert">DIVERGÊNCIA DETECTADA</span>
-                        <span class="visual-time">Agora mesmo</span>
-                    </div>
-                    <div class="visual-content">
-                        <div class="visual-row">
-                            <span class="visual-label">Câmera detectou:</span>
-                            <span class="visual-value">3x Skol 350ml</span>
-                        </div>
-                        <div class="visual-row">
-                            <span class="visual-label">PDV registrou:</span>
-                            <span class="visual-value visual-value-error">1x Skol 350ml</span>
-                        </div>
-                        <div class="visual-divider"></div>
-                        <div class="visual-row visual-row-highlight">
-                            <span class="visual-label">Perda evitada:</span>
-                            <span class="visual-value visual-value-success">R$ 7,00</span>
-                        </div>
-                    </div>
-                    <div class="visual-footer">
-                        <span class="visual-operator">Caixa 03 • João Silva</span>
-                        <button class="visual-action">Ver Detalhes</button>
-                    </div>
-                </div>
-            </div>
+        <div class="hero-content">
+            <img src="https://i.postimg.cc/Px8cZqLf/postos-lisboa.png" alt="Grupo Lisboa" class="hero-logo">
+            <h1 class="hero-title">LOGUS</h1>
+            <p class="hero-subtitle">Ecossistema de Inovação do Grupo Lisboa</p>
+            <p class="hero-description">
+                Desenvolvendo soluções tecnológicas inteligentes para transformar 
+                o futuro do varejo. Do Grupo Lisboa para o mercado.
+            </p>
         </div>
     </section>
 
-    <!-- TRUSTED BY SECTION -->
-    <section class="trusted-by">
+    <!-- ABOUT -->
+    <section class="about">
         <div class="container">
-            <p class="trusted-label">Confiado por empresas que querem resultados reais</p>
-            <div class="trusted-logos">
-                <div class="trusted-logo">Posto Alfa</div>
-                <div class="trusted-logo">ConvNet</div>
-                <div class="trusted-logo">FuelMax</div>
-                <div class="trusted-logo">Stop & Go</div>
-                <div class="trusted-logo">Express24h</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- PROBLEM SECTION -->
-    <section class="problem" id="problema">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Você Conhece Esse Cenário?</h2>
-                <p class="section-subtitle">Problemas comuns que custam milhares de reais por mês</p>
-            </div>
-            <div class="problem-grid">
-                <div class="problem-card">
-                    <div class="problem-icon problem-icon-1">
-                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
-                            <path d="M12 8V12M12 16H12.01M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                    </div>
-                    <h3 class="problem-title">Furto Interno</h3>
-                    <p class="problem-description">Funcionário "esquece" de bipar produtos de amigos. Cliente leva 3 cervejas, paga 1.</p>
-                    <span class="problem-impact">Perda média: R$ 2.500/mês</span>
-                </div>
-                <div class="problem-card">
-                    <div class="problem-icon problem-icon-2">
-                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
-                            <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                    </div>
-                    <h3 class="problem-title">Erro de Registro</h3>
-                    <p class="problem-description">Registra produto errado, quantidade incorreta ou esquece de bipar item do combo.</p>
-                    <span class="problem-impact">Perda média: R$ 1.800/mês</span>
-                </div>
-                <div class="problem-card">
-                    <div class="problem-icon problem-icon-3">
-                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
-                            <path d="M15 12C15 13.6569 13.6569 15 12 15C10.3431 15 9 13.6569 9 12C9 10.3431 10.3431 9 12 9C13.6569 9 15 10.3431 15 12Z" stroke="currentColor" stroke-width="2"/>
-                            <path d="M2.458 12C3.732 7.943 7.523 5 12 5C16.478 5 20.268 7.943 21.542 12C20.268 16.057 16.478 19 12 19C7.523 19 3.732 16.057 2.458 12Z" stroke="currentColor" stroke-width="2"/>
-                        </svg>
-                    </div>
-                    <h3 class="problem-title">Falta de Visibilidade</h3>
-                    <p class="problem-description">Impossível revisar todas as vendas manualmente. Só descobre o problema no fim do mês.</p>
-                    <span class="problem-impact">Custo: Detecção tardia</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- SOLUTION SECTION -->
-    <section class="solution" id="solucoes">
-        <div class="container">
-            <div class="solution-content">
-                <div class="solution-text">
-                    <span class="solution-badge">TECNOLOGIA VerifiK</span>
-                    <h2 class="solution-title">
-                        Detecção Inteligente
-                        <span class="highlight">em Tempo Real</span>
-                    </h2>
-                    <p class="solution-description">
-                        Nossa IA monitora continuamente o que passa pelo balcão e compara 
-                        com o que foi registrado no PDV. Alertas instantâneos em caso de divergência.
+            <h2 class="section-title">Quem Somos</h2>
+            <p class="section-subtitle">Tradição que inova</p>
+            
+            <div class="about-grid">
+                <div class="about-card">
+                    <div class="about-icon">🏢</div>
+                    <h3>Grupo Lisboa</h3>
+                    <p>
+                        Atuando há anos no mercado de postos de combustível e lojas de conveniência 
+                        em Recife/PE, conhecemos profundamente os desafios do varejo.
                     </p>
-                    <ul class="solution-features">
-                        <li class="solution-feature">
-                            <svg class="feature-check" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <path d="M5 13L9 17L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                            <div>
-                                <strong>Reconhecimento de produtos</strong>
-                                <span>Identifica marcas e tamanhos específicos (Skol 350ml, Brahma 600ml, etc)</span>
-                            </div>
-                        </li>
-                        <li class="solution-feature">
-                            <svg class="feature-check" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <path d="M5 13L9 17L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                            <div>
-                                <strong>Comparação automática</strong>
-                                <span>Cruza dados da câmera com registros do PDV em tempo real</span>
-                            </div>
-                        </li>
-                        <li class="solution-feature">
-                            <svg class="feature-check" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <path d="M5 13L9 17L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                            <div>
-                                <strong>Alertas instantâneos</strong>
-                                <span>Notificação imediata no celular quando detecta divergência</span>
-                            </div>
-                        </li>
-                        <li class="solution-feature">
-                            <svg class="feature-check" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <path d="M5 13L9 17L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                            <div>
-                                <strong>Relatórios e análises</strong>
-                                <span>Dashboard com estatísticas por funcionário, horário e tipo de produto</span>
-                            </div>
-                        </li>
+                </div>
+                
+                <div class="about-card">
+                    <div class="about-icon">💡</div>
+                    <h3>Inovação</h3>
+                    <p>
+                        Transformamos problemas reais em soluções tecnológicas. 
+                        Cada projeto nasce da nossa experiência prática no dia a dia.
+                    </p>
+                </div>
+                
+                <div class="about-card">
+                    <div class="about-icon">🎯</div>
+                    <h3>Missão</h3>
+                    <p>
+                        Desenvolver tecnologias que resolvem desafios do varejo brasileiro, 
+                        tornando o mercado mais eficiente e lucrativo.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section class="projects">
+        <div class="container">
+            <h2 class="section-title">Nossos Projetos</h2>
+            <p class="section-subtitle">Soluções desenvolvidas para o futuro do varejo</p>
+            
+            <div class="projects-grid">
+                <!-- VerifiK -->
+                <div class="project-card">
+                    <span class="project-status status-active">✓ Ativo - Em Desenvolvimento</span>
+                    <h3>VerifiK</h3>
+                    <p>
+                        Sistema de Inteligência Artificial para prevenção de perdas no checkout. 
+                        Detecta divergências entre produtos no balcão e vendas registradas em tempo real.
+                    </p>
+                    <ul class="project-features">
+                        <li>Reconhecimento de produtos por IA (YOLOv8)</li>
+                        <li>Comparação automática com PDV</li>
+                        <li>Alertas instantâneos via app</li>
+                        <li>Redução de 60-70% nas perdas</li>
+                        <li>ROI em 60-90 dias</li>
                     </ul>
-                    <a href="#como-funciona" class="btn btn-primary">Como Funciona na Prática</a>
+                    <a href="verifik/" class="btn btn-primary">Conhecer VerifiK</a>
                 </div>
-                <div class="solution-visual">
-                    <div class="camera-view">
-                        <div class="camera-header">
-                            <span class="camera-status">
-                                <span class="status-dot"></span>
-                                CÂMERA 01 • AO VIVO
-                            </span>
-                            <span class="camera-time">14:32:15</span>
-                        </div>
-                        <div class="camera-frame">
-                            <div class="detection-box detection-box-1">
-                                <span class="detection-label">Skol 350ml</span>
-                                <span class="detection-confidence">94%</span>
-                            </div>
-                            <div class="detection-box detection-box-2">
-                                <span class="detection-label">Skol 350ml</span>
-                                <span class="detection-confidence">96%</span>
-                            </div>
-                            <div class="detection-box detection-box-3">
-                                <span class="detection-label">Skol 350ml</span>
-                                <span class="detection-confidence">93%</span>
-                            </div>
-                        </div>
-                        <div class="camera-footer">
-                            <span class="camera-count">3 produtos detectados</span>
-                            <span class="camera-pdv">PDV: 1 produto registrado</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- HOW IT WORKS -->
-    <section class="how-it-works" id="como-funciona">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Como Funciona em 4 Passos</h2>
-                <p class="section-subtitle">Sistema simples, resultados imediatos</p>
-            </div>
-            <div class="steps">
-                <div class="step">
-                    <div class="step-number">01</div>
-                    <div class="step-content">
-                        <h3 class="step-title">Instalação Rápida</h3>
-                        <p class="step-description">
-                            Câmeras IP 4MP instaladas sobre o caixa. Uma instalação, sem obras. 
-                            Funciona com seu ERP atual.
-                        </p>
-                    </div>
-                    <div class="step-icon">
-                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
-                            <path d="M15 10L19 10M12 3V7M5 10H9M12 14V21M12 14C13.6569 14 15 12.6569 15 11C15 9.34315 13.6569 8 12 8C10.3431 8 9 9.34315 9 11C9 12.6569 10.3431 14 12 14Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                    </div>
-                </div>
-                <div class="step">
-                    <div class="step-number">02</div>
-                    <div class="step-content">
-                        <h3 class="step-title">IA Aprende Seus Produtos</h3>
-                        <p class="step-description">
-                            Sistema é treinado com seus produtos específicos. Reconhece marcas, 
-                            tamanhos e embalagens do seu catálogo.
-                        </p>
-                    </div>
-                    <div class="step-icon">
-                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
-                            <path d="M9.663 17H4C4 13.5 6 10 12 10C18 10 20 13.5 20 17H14.337M12 7C13.6569 7 15 5.65685 15 4C15 2.34315 13.6569 1 12 1C10.3431 1 9 2.34315 9 4C9 5.65685 10.3431 7 12 7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                    </div>
-                </div>
-                <div class="step">
-                    <div class="step-number">03</div>
-                    <div class="step-content">
-                        <h3 class="step-title">Monitoramento 24/7</h3>
-                        <p class="step-description">
-                            Câmeras detectam produtos no balcão. Sistema compara com PDV em tempo real. 
-                            Tudo automático, sem intervenção manual.
-                        </p>
-                    </div>
-                    <div class="step-icon">
-                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
-                            <path d="M15 12C15 13.6569 13.6569 15 12 15C10.3431 15 9 13.6569 9 12C9 10.3431 10.3431 9 12 9C13.6569 9 15 10.3431 15 12Z" stroke="currentColor" stroke-width="2"/>
-                            <path d="M2.458 12C3.732 7.943 7.523 5 12 5C16.478 5 20.268 7.943 21.542 12C20.268 16.057 16.478 19 12 19C7.523 19 3.732 16.057 2.458 12Z" stroke="currentColor" stroke-width="2"/>
-                        </svg>
-                    </div>
-                </div>
-                <div class="step">
-                    <div class="step-number">04</div>
-                    <div class="step-content">
-                        <h3 class="step-title">Alertas e Ação</h3>
-                        <p class="step-description">
-                            Divergência detectada? Alerta no celular com foto, hora e operador. 
-                            Tome ação imediata ou revise depois.
-                        </p>
-                    </div>
-                    <div class="step-icon">
-                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
-                            <path d="M15 17H20L18.5951 5.5299C18.2684 3.52247 16.5114 2 14.4808 2H9.51921C7.48862 2 5.73163 3.52247 5.40489 5.5299L4 17H9M15 17V22H9V17M15 17H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- DIFFERENTIALS -->
-    <section class="differentials" id="diferenciais">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Por Que Logus?</h2>
-                <p class="section-subtitle">Mais que um software, um parceiro no combate às perdas</p>
-            </div>
-            <div class="differentials-grid">
-                <div class="differential-card">
-                    <div class="differential-icon">⚡</div>
-                    <h3 class="differential-title">ROI Rápido</h3>
-                    <p class="differential-text">Sistema se paga em 60-90 dias. Cada furto evitado é dinheiro no seu bolso.</p>
-                </div>
-                <div class="differential-card">
-                    <div class="differential-icon">🔗</div>
-                    <h3 class="differential-title">Integração Simples</h3>
-                    <p class="differential-text">Funciona com seu ERP atual. Não precisa trocar sistema, apenas complementa.</p>
-                </div>
-                <div class="differential-card">
-                    <div class="differential-icon">🛡️</div>
-                    <h3 class="differential-title">Dados Seguros</h3>
-                    <p class="differential-text">Processamento local. Vídeos não saem da sua loja. LGPD compliant.</p>
-                </div>
-                <div class="differential-card">
-                    <div class="differential-icon">📊</div>
-                    <h3 class="differential-title">Dashboard Intuitivo</h3>
-                    <p class="differential-text">Visualize perdas por hora, funcionário, produto. Tome decisões baseadas em dados.</p>
-                </div>
-                <div class="differential-card">
-                    <div class="differential-icon">🤝</div>
-                    <h3 class="differential-title">Suporte Dedicado</h3>
-                    <p class="differential-text">Time técnico em Recife. Resposta em até 2 horas. Treinamento incluso.</p>
-                </div>
-                <div class="differential-card">
-                    <div class="differential-icon">📈</div>
-                    <h3 class="differential-title">Escalável</h3>
-                    <p class="differential-text">Comece com 1 caixa, expanda para toda rede. Preço por caixa diminui conforme cresce.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- PRICING -->
-    <section class="pricing" id="planos">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Planos Transparentes</h2>
-                <p class="section-subtitle">Escolha o modelo ideal para seu negócio</p>
-            </div>
-            <div class="pricing-grid">
-                <div class="pricing-card">
-                    <div class="pricing-header">
-                        <h3 class="pricing-title">Piloto</h3>
-                        <p class="pricing-subtitle">Valide em 1 caixa</p>
-                    </div>
-                    <div class="pricing-price">
-                        <span class="price-currency">R$</span>
-                        <span class="price-value">1.090</span>
-                        <span class="price-period">investimento inicial</span>
-                    </div>
-                    <ul class="pricing-features">
-                        <li>✓ 1 câmera 4MP com PoE</li>
-                        <li>✓ Switch PoE 4 portas</li>
-                        <li>✓ Instalação e configuração</li>
-                        <li>✓ Treinamento IA com seus produtos</li>
-                        <li>✓ Dashboard básico</li>
-                        <li>✓ Suporte por 3 meses</li>
-                        <li class="feature-disabled">✗ Alertas via app móvel</li>
-                        <li class="feature-disabled">✗ Relatórios avançados</li>
+                <!-- Projeto 2 (Futuro) -->
+                <div class="project-card">
+                    <span class="project-status status-coming">Em Breve</span>
+                    <h3>Projeto 2</h3>
+                    <p>
+                        Nossa próxima solução está em fase de concepção. 
+                        Continuamos identificando desafios do varejo que podem ser resolvidos com tecnologia.
+                    </p>
+                    <ul class="project-features">
+                        <li>Em fase de planejamento</li>
+                        <li>Baseado em necessidades reais</li>
+                        <li>Foco em eficiência operacional</li>
                     </ul>
-                    <a href="#contato" class="btn btn-outline">Começar Piloto</a>
+                    <button class="btn btn-disabled" disabled>Em Desenvolvimento</button>
                 </div>
-                <div class="pricing-card pricing-card-featured">
-                    <div class="pricing-badge">MAIS POPULAR</div>
-                    <div class="pricing-header">
-                        <h3 class="pricing-title">Profissional</h3>
-                        <p class="pricing-subtitle">Para lojas sérias</p>
-                    </div>
-                    <div class="pricing-price">
-                        <span class="price-currency">R$</span>
-                        <span class="price-value">349</span>
-                        <span class="price-period">/mês por caixa</span>
-                    </div>
-                    <ul class="pricing-features">
-                        <li>✓ Hardware incluso</li>
-                        <li>✓ Câmeras 4MP/5MP</li>
-                        <li>✓ Instalação profissional</li>
-                        <li>✓ IA treinada</li>
-                        <li>✓ Dashboard completo</li>
-                        <li>✓ Alertas tempo real (app)</li>
-                        <li>✓ Relatórios avançados</li>
-                        <li>✓ Suporte prioritário</li>
-                        <li>✓ Atualizações inclusas</li>
+
+                <!-- Projeto 3 (Futuro) -->
+                <div class="project-card">
+                    <span class="project-status status-coming">Em Breve</span>
+                    <h3>Projeto 3</h3>
+                    <p>
+                        Espaço reservado para futuras inovações. 
+                        O Logus é um ecossistema em constante expansão.
+                    </p>
+                    <ul class="project-features">
+                        <li>Roadmap em construção</li>
+                        <li>Foco em escalabilidade</li>
+                        <li>Tecnologia de ponta</li>
                     </ul>
-                    <a href="#contato" class="btn btn-primary">Contratar Agora</a>
+                    <button class="btn btn-disabled" disabled>Em Breve</button>
                 </div>
-                <div class="pricing-card">
-                    <div class="pricing-header">
-                        <h3 class="pricing-title">Enterprise</h3>
-                        <p class="pricing-subtitle">Redes e franquias</p>
-                    </div>
-                    <div class="pricing-price">
-                        <span class="price-label">Sob Consulta</span>
-                    </div>
-                    <ul class="pricing-features">
-                        <li>✓ Tudo do Profissional</li>
-                        <li>✓ Gestão multi-loja</li>
-                        <li>✓ Dashboard centralizado</li>
-                        <li>✓ API para integração</li>
-                        <li>✓ Servidor dedicado</li>
-                        <li>✓ SLA garantido</li>
-                        <li>✓ Gerente de conta</li>
-                        <li>✓ Customizações</li>
-                        <li>✓ Desconto por volume</li>
-                    </ul>
-                    <a href="#contato" class="btn btn-outline">Falar com Vendas</a>
-                </div>
-            </div>
-            <div class="pricing-note">
-                <p>💡 <strong>Garantia de 30 dias:</strong> Não ficou satisfeito? Devolvemos 100% do investimento.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- TESTIMONIALS -->
-    <section class="testimonials">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">O Que Dizem Nossos Clientes</h2>
-                <p class="section-subtitle">Resultados reais de quem já usa Logus</p>
-            </div>
-            <div class="testimonials-grid">
-                <div class="testimonial-card">
-                    <div class="testimonial-stars">★★★★★</div>
-                    <p class="testimonial-text">
-                        "Instalamos em 3 caixas e em 1 mês já pagou o investimento. 
-                        Descobrimos que um funcionário 'esquecia' de registrar em média 
-                        15 produtos por dia. Perda de R$ 450/dia que nem sabíamos que existia!"
-                    </p>
-                    <div class="testimonial-author">
-                        <strong>Carlos Mendes</strong>
-                        <span>Dono, Posto Estrela do Norte - Recife/PE</span>
-                    </div>
-                </div>
-                <div class="testimonial-card">
-                    <div class="testimonial-stars">★★★★★</div>
-                    <p class="testimonial-text">
-                        "Além de reduzir furtos, o sistema mostrou padrões que não víamos. 
-                        Detectamos que cervejas premium sumiam mais no turno da tarde. 
-                        Ajustamos a equipe e resolvemos o problema."
-                    </p>
-                    <div class="testimonial-author">
-                        <strong>Ana Paula Santos</strong>
-                        <span>Gerente, Rede ConvMax - 12 lojas</span>
-                    </div>
-                </div>
-                <div class="testimonial-card">
-                    <div class="testimonial-stars">★★★★★</div>
-                    <p class="testimonial-text">
-                        "Instalação foi rápida, em 2 dias estava funcionando. 
-                        O melhor: funciona 24/7 sem eu precisar ficar de olho. 
-                        Recebo alerta no celular e posso agir na hora."
-                    </p>
-                    <div class="testimonial-author">
-                        <strong>Roberto Filho</strong>
-                        <span>Proprietário, Conveniência 24h - Olinda/PE</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA SECTION -->
-    <section class="cta">
-        <div class="container">
-            <div class="cta-content">
-                <h2 class="cta-title">
-                    Pronto Para Parar de Perder Dinheiro?
-                </h2>
-                <p class="cta-subtitle">
-                    Agende uma demonstração gratuita. Veja o sistema funcionando com seus produtos reais.
-                </p>
-                <div class="cta-buttons">
-                    <a href="#contato" class="btn btn-primary btn-large">
-                        Agendar Demonstração Gratuita
-                    </a>
-                    <a href="https://wa.me/5581999999999" class="btn btn-secondary btn-large" target="_blank">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
-                        </svg>
-                        Falar no WhatsApp
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CONTACT FORM -->
-    <section class="contact" id="contato">
-        <div class="container">
-            <div class="contact-content">
-                <div class="contact-info">
-                    <h2 class="contact-title">Fale Conosco</h2>
-                    <p class="contact-description">
-                        Preencha o formulário e nossa equipe entrará em contato em até 2 horas úteis.
-                    </p>
-                    <div class="contact-details">
-                        <div class="contact-detail">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <path d="M3 8L10.89 13.26C11.5066 13.6778 12.4934 13.6778 13.11 13.26L21 8M5 19H19C20.1046 19 21 18.1046 21 17V7C21 5.89543 20.1046 5 19 5H5C3.89543 5 3 5.89543 3 7V17C3 18.1046 3.89543 19 5 19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                            <div>
-                                <strong>Email</strong>
-                                <span>contato@logus.com.br</span>
-                            </div>
-                        </div>
-                        <div class="contact-detail">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <path d="M3 5C3 3.89543 3.89543 3 5 3H8.27924C8.70967 3 9.09181 3.27543 9.22792 3.68377L10.7257 8.17721C10.8831 8.64932 10.6694 9.16531 10.2243 9.38787L7.96701 10.5165C9.06925 12.9612 11.0388 14.9308 13.4835 16.033L14.6121 13.7757C14.8347 13.3306 15.3507 13.1169 15.8228 13.2743L20.3162 14.7721C20.7246 14.9082 21 15.2903 21 15.7208V19C21 20.1046 20.1046 21 19 21H18C9.71573 21 3 14.2843 3 6V5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                            <div>
-                                <strong>Telefone</strong>
-                                <span>(81) 9 9999-9999</span>
-                            </div>
-                        </div>
-                        <div class="contact-detail">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <path d="M17.657 16.657L13.414 20.9C12.633 21.681 11.367 21.681 10.586 20.9L6.343 16.657C3.22 13.535 3.22 8.465 6.343 5.343C9.465 2.22 14.535 2.22 17.657 5.343C20.78 8.465 20.78 13.535 17.657 16.657Z" stroke="currentColor" stroke-width="2"/>
-                                <path d="M12 11C13.1046 11 14 10.1046 14 9C14 7.89543 13.1046 7 12 7C10.8954 7 10 7.89543 10 9C10 10.1046 10.8954 11 12 11Z" stroke="currentColor" stroke-width="2"/>
-                            </svg>
-                            <div>
-                                <strong>Endereço</strong>
-                                <span>Recife, PE - Atendimento em todo Brasil</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <form class="contact-form" id="contactForm">
-                    <div class="form-group">
-                        <label for="name">Nome Completo</label>
-                        <input type="text" id="name" name="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">Telefone</label>
-                        <input type="tel" id="phone" name="phone" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="company">Empresa</label>
-                        <input type="text" id="company" name="company">
-                    </div>
-                    <div class="form-group">
-                        <label for="cashiers">Quantos caixas?</label>
-                        <select id="cashiers" name="cashiers">
-                            <option value="1">1 caixa</option>
-                            <option value="2-3">2-3 caixas</option>
-                            <option value="4-5">4-5 caixas</option>
-                            <option value="6+">6+ caixas</option>
-                        </select>
-                    </div>
-                    <div class="form-group form-group-full">
-                        <label for="message">Mensagem</label>
-                        <textarea id="message" name="message" rows="4"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-large">Enviar Mensagem</button>
-                </form>
             </div>
         </div>
     </section>
@@ -596,68 +531,16 @@
     <!-- FOOTER -->
     <footer class="footer">
         <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <h3 class="footer-logo">LOGUS</h3>
-                    <p class="footer-tagline">Tecnologia Inteligente para Prevenir Perdas</p>
-                    <div class="footer-social">
-                        <a href="#" class="social-link" aria-label="LinkedIn">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                            </svg>
-                        </a>
-                        <a href="#" class="social-link" aria-label="Instagram">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-                <div class="footer-links">
-                    <div class="footer-column">
-                        <h4 class="footer-title">Produto</h4>
-                        <ul>
-                            <li><a href="#solucoes">Soluções</a></li>
-                            <li><a href="#como-funciona">Como Funciona</a></li>
-                            <li><a href="#planos">Planos</a></li>
-                            <li><a href="#contato">Demonstração</a></li>
-                        </ul>
-                    </div>
-                    <div class="footer-column">
-                        <h4 class="footer-title">Empresa</h4>
-                        <ul>
-                            <li><a href="#sobre">Sobre Nós</a></li>
-                            <li><a href="#casos">Casos de Sucesso</a></li>
-                            <li><a href="#blog">Blog</a></li>
-                            <li><a href="#contato">Contato</a></li>
-                        </ul>
-                    </div>
-                    <div class="footer-column">
-                        <h4 class="footer-title">Recursos</h4>
-                        <ul>
-                            <li><a href="#docs">Documentação</a></li>
-                            <li><a href="#suporte">Suporte</a></li>
-                            <li><a href="#api">API</a></li>
-                            <li><a href="#status">Status</a></li>
-                        </ul>
-                    </div>
-                    <div class="footer-column">
-                        <h4 class="footer-title">Legal</h4>
-                        <ul>
-                            <li><a href="#privacidade">Privacidade</a></li>
-                            <li><a href="#termos">Termos de Uso</a></li>
-                            <li><a href="#lgpd">LGPD</a></li>
-                        </ul>
-                    </div>
-                </div>
+            <img src="https://i.postimg.cc/Px8cZqLf/postos-lisboa.png" alt="Grupo Lisboa" class="footer-logo">
+            <p><strong>LOGUS</strong> - Ecossistema de Inovação</p>
+            <p>Grupo Lisboa • Recife, PE</p>
+            <div class="footer-links">
+                <a href="verifik/">VerifiK</a>
+                <a href="#about">Sobre</a>
+                <a href="#projects">Projetos</a>
             </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 Logus. Todos os direitos reservados.</p>
-                <p>Desenvolvido com ❤️ em Recife, PE</p>
-            </div>
+            <p style="margin-top: 2rem; opacity: 0.5;">© 2025 Grupo Lisboa. Todos os direitos reservados.</p>
         </div>
     </footer>
-
-    <script src="assets/js/main.js"></script>
 </body>
 </html>
