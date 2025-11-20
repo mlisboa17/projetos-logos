@@ -24,6 +24,10 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from accounts import views as accounts_views
 from accounts.api_views import OrganizationViewSet, UserViewSet, AuthViewSet
 from erp_hub.api_views import ERPIntegrationViewSet, StoreViewSet, SyncLogViewSet
+from cameras.api_views import (
+    CameraViewSet, EventViewSet, AlertViewSet,
+    CameraScheduleViewSet, AIModelViewSet
+)
 
 # Router para APIs REST
 router = DefaultRouter()
@@ -33,6 +37,11 @@ router.register(r'auth', AuthViewSet, basename='auth')
 router.register(r'erp-integrations', ERPIntegrationViewSet, basename='erp-integration')
 router.register(r'stores', StoreViewSet, basename='store')
 router.register(r'sync-logs', SyncLogViewSet, basename='sync-log')
+router.register(r'cameras', CameraViewSet, basename='camera')
+router.register(r'events', EventViewSet, basename='event')
+router.register(r'alerts', AlertViewSet, basename='alert')
+router.register(r'camera-schedules', CameraScheduleViewSet, basename='camera-schedule')
+router.register(r'ai-models', AIModelViewSet, basename='ai-model')
 
 urlpatterns = [
     # Frontend URLs
