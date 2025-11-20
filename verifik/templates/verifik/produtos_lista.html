@@ -1,0 +1,108 @@
+{% extends 'verifik/base.html' %}
+
+{% block title %}Produtos - VerifiK{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>📦 Catálogo de Produtos</h2>
+    
+    <div style="margin-bottom: 1.5rem;">
+        <form method="get" style="display: grid; grid-template-columns: 2fr 1fr 1fr auto auto; gap: 1rem; align-items: end;">
+            <div>
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem;">Buscar:</label>
+                <input type="text" name="q" value="{{ busca|default:'' }}" 
+                       placeholder="Nome, marca ou código de barras..." 
+                       style="width: 100%; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 5px;">
+            </div>
+            
+            <div>
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem;">Tipo:</label>
+                <select name="tipo" style="width: 100%; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 5px;">
+                    <option value="">Todos</option>
+                    <option value="cerveja" {% if tipo_filtro == 'cerveja' %}selected{% endif %}>Cerveja</option>
+                    <option value="refrigerante" {% if tipo_filtro == 'refrigerante' %}selected{% endif %}>Refrigerante</option>
+                    <option value="agua" {% if tipo_filtro == 'agua' %}selected{% endif %}>Água</option>
+                    <option value="suco" {% if tipo_filtro == 'suco' %}selected{% endif %}>Suco</option>
+                    <option value="energetico" {% if tipo_filtro == 'energetico' %}selected{% endif %}>Energético</option>
+                </select>
+            </div>
+            
+            <div>
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem;">Imagens:</label>
+                <select name="imagens" style="width: 100%; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 5px;">
+                    <option value="">Todas</option>
+                    <option value="com" {% if imagens_filtro == 'com' %}selected{% endif %}>Com imagens</option>
+                    <option value="sem" {% if imagens_filtro == 'sem' %}selected{% endif %}>Sem imagens</option>
+                </select>
+            </div>
+            
+            <button type="submit" class="btn" style="padding: 0.75rem 1.5rem;">🔍 Filtrar</button>
+            <a href="{% url 'produtos_lista' %}" class="btn" style="background: #95a5a6; padding: 0.75rem 1.5rem;">Limpar</a>
+        </form>
+        
+        <div style="margin-top: 1rem; padding: 0.75rem; background: #f8f9fa; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;">
+            <span style="color: #7f8c8d;">
+                <strong>{{ produtos.count }}</strong> produto{{ produtos.count|pluralize }} encontrado{{ produtos.count|pluralize }}
+            </span>
+            {% if busca or tipo_filtro or imagens_filtro %}
+            <span style="color: #667eea; font-size: 0.9rem;">
+                Filtros ativos: 
+                {% if busca %}<span class="badge" style="background: #667eea; color: white; margin-left: 0.5rem;">{{ busca }}</span>{% endif %}
+                {% if tipo_filtro %}<span class="badge" style="background: #667eea; color: white; margin-left: 0.5rem;">{{ tipo_filtro }}</span>{% endif %}
+                {% if imagens_filtro %}<span class="badge" style="background: #667eea; color: white; margin-left: 0.5rem;">{{ imagens_filtro }} imagens</span>{% endif %}
+            </span>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;">
+        {% for produto in produtos %}
+        <div style="border: 1px solid #ecf0f1; border-radius: 10px; overflow: hidden; transition: transform 0.3s;">
+            {% if produto.imagem_referencia %}
+            <img src="{{ produto.imagem_referencia.url }}" alt="{{ produto.descricao_produto }}"
+                 style="width: 100%; height: 200px; object-fit: cover; background: #f8f9fa;">
+            {% else %}
+            <div style="width: 100%; height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 4rem;">
+                📦
+            </div>
+            {% endif %}
+            
+            <div style="padding: 1rem;">
+                <h3 style="margin-bottom: 0.5rem; font-size: 1.1rem;">{{ produto.descricao_produto }}</h3>
+                
+                {% if produto.marca %}
+                <p style="color: #7f8c8d; font-size: 0.9rem; margin-bottom: 0.5rem;">
+                    <strong>Marca:</strong> {{ produto.marca }}
+                </p>
+                {% endif %}
+                
+                <p style="color: #27ae60; font-size: 1.25rem; font-weight: bold; margin-bottom: 0.5rem;">
+                    R$ {{ produto.preco }}
+                </p>
+                
+                <p style="color: #95a5a6; font-size: 0.85rem; margin-bottom: 1rem;">
+                    Código: {{ produto.codigo_barras }}
+                </p>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span class="badge badge-info">{{ produto.imagens_treino.count }} imagens</span>
+                    <a href="{% url 'produto_detalhe' produto.pk %}" class="btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                        Ver Detalhes
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p style="grid-column: 1 / -1; text-align: center; color: #7f8c8d; padding: 2rem;">
+            Nenhum produto encontrado.
+        </p>
+        {% endfor %}
+    </div>
+</div>
+
+<div style="text-align: center; margin-top: 2rem;">
+    <a href="/admin/verifik/produto/add/" class="btn" style="background: #27ae60;">
+        ➕ Adicionar Novo Produto
+    </a>
+</div>
+{% endblock %}

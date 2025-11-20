@@ -53,6 +53,9 @@ urlpatterns = [
     path('admin/approve-user/<int:user_id>/', accounts_views.approve_user, name='approve_user'),
     path('admin/reject-user/<int:user_id>/', accounts_views.reject_user, name='reject_user'),
     
+    # Trocar organização
+    path('switch-org/<int:org_id>/', accounts_views.switch_organization, name='switch_organization'),
+    
     # VerifiK URLs
     path('verifik/', include('cameras.urls')),
     

@@ -98,29 +98,26 @@ class Organization(models.Model):
 
 
 class User(AbstractUser):
-    """Usuário do sistema (pertence a uma organização)"""
+    """Usuário do sistema (pode ter acesso a múltiplas organizações)"""
     
-    organization = models.ForeignKey(
-        Organization, 
-        on_delete=models.CASCADE,
-        related_name='users',
-        verbose_name='Organização'
-    )
+    # REMOVIDO: organization ForeignKey (agora usa ManyToMany via UserOrganization)
+    # organizations: acessado via user.organizations_access.all()
     
     phone = models.CharField('Telefone', max_length=20, blank=True)
     avatar = models.ImageField('Avatar', upload_to='users/avatars/', null=True, blank=True)
     
-    # Permissões
-    is_org_admin = models.BooleanField('Admin da Organização', default=False)
-    is_super_admin = models.BooleanField('Super Admin LOGOS', default=False)
+    # Organização ativa no momento (para filtrar dados)
+    active_organization = models.ForeignKey(
+        Organization,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='active_users',
+        verbose_name='Organização Ativa'
+    )
     
-    # Permissões por módulo (definidas pelo admin na aprovação)
-    can_access_verifik = models.BooleanField('Acesso VerifiK', default=False, help_text='Pode acessar módulo de câmeras')
-    can_access_erp_hub = models.BooleanField('Acesso ERP Hub', default=False, help_text='Pode acessar integrações ERP')
-    can_access_fuel_prices = models.BooleanField('Acesso Fuel Prices', default=False, help_text='Pode acessar preços de combustível')
-    can_manage_users = models.BooleanField('Gerenciar Usuários', default=False, help_text='Pode aprovar/rejeitar usuários')
-    can_view_reports = models.BooleanField('Ver Relatórios', default=False, help_text='Pode visualizar relatórios')
-    can_edit_settings = models.BooleanField('Editar Configurações', default=False, help_text='Pode alterar configurações')
+    # Permissões globais
+    is_super_admin = models.BooleanField('Super Admin LOGOS', default=False)
     
     last_login_at = models.DateTimeField('Último Login', null=True, blank=True)
     
@@ -130,5 +127,38 @@ class User(AbstractUser):
         ordering = ['-date_joined']
     
     def __str__(self):
-        return f"{self.get_full_name()} ({self.organization.name})"
+        org_name = self.active_organization.name if self.active_organization else "Sem org"
+        return f"{self.get_full_name()} ({org_name})"
+    
+    def get_organizations(self):
+        """Retorna todas as organizações que o usuário tem acesso"""
+        return Organization.objects.filter(user_organizations__user=self)
+
+
+class UserOrganization(models.Model):
+    """Relacionamento entre usuário e organização com permissões específicas"""
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='organizations_access')
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name='user_organizations')
+    
+    # Permissões específicas para esta organização
+    is_org_admin = models.BooleanField('Admin da Organização', default=False)
+    can_access_verifik = models.BooleanField('Acesso VerifiK', default=False)
+    can_access_erp_hub = models.BooleanField('Acesso ERP Hub', default=False)
+    can_access_fuel_prices = models.BooleanField('Acesso Fuel Prices', default=False)
+    can_manage_users = models.BooleanField('Gerenciar Usuários', default=False)
+    can_view_reports = models.BooleanField('Ver Relatórios', default=False)
+    can_edit_settings = models.BooleanField('Editar Configurações', default=False)
+    
+    created_at = models.DateTimeField('Criado em', auto_now_add=True)
+    updated_at = models.DateTimeField('Atualizado em', auto_now=True)
+    
+    class Meta:
+        verbose_name = 'Acesso à Organização'
+        verbose_name_plural = 'Acessos às Organizações'
+        unique_together = [['user', 'organization']]
+        ordering = ['organization__name']
+    
+    def __str__(self):
+        return f"{self.user.username} @ {self.organization.name}"
 

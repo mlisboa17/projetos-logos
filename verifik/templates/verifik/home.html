@@ -1,0 +1,124 @@
+{% extends 'verifik/base.html' %}
+
+{% block content %}
+<div class="stats-grid">
+    <div class="stat-card">
+        <h3>Produtos Cadastrados</h3>
+        <div class="number">{{ total_produtos }}</div>
+    </div>
+    
+    <div class="stat-card" style="border-left-color: #27ae60;">
+        <h3>Câmeras Ativas</h3>
+        <div class="number" style="color: #27ae60;">{{ total_cameras }}</div>
+    </div>
+    
+    <div class="stat-card" style="border-left-color: #3498db;">
+        <h3>Vendas Hoje</h3>
+        <div class="number" style="color: #3498db;">{{ vendas_hoje }}</div>
+    </div>
+    
+    <div class="stat-card" style="border-left-color: #f39c12;">
+        <h3>Detecções Hoje</h3>
+        <div class="number" style="color: #f39c12;">{{ deteccoes_hoje }}</div>
+    </div>
+    
+    <div class="stat-card" style="border-left-color: #e74c3c;">
+        <h3>Incidentes Abertos</h3>
+        <div class="number" style="color: #e74c3c;">{{ incidentes_abertos }}</div>
+    </div>
+    
+    <div class="stat-card" style="border-left-color: #9b59b6;">
+        <h3>Funcionários Ativos</h3>
+        <div class="number" style="color: #9b59b6;">{{ total_funcionarios }}</div>
+    </div>
+</div>
+
+{% if incidentes_abertos > 0 %}
+<div class="card">
+    <h2>🚨 Últimos Incidentes</h2>
+    {% if ultimos_incidentes %}
+    <table>
+        <thead>
+            <tr>
+                <th>Data/Hora</th>
+                <th>Tipo</th>
+                <th>Produto</th>
+                <th>Câmera</th>
+                <th>Severidade</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for incidente in ultimos_incidentes %}
+            <tr>
+                <td>{{ incidente.created_at|date:"d/m/Y H:i" }}</td>
+                <td>{{ incidente.get_tipo_display }}</td>
+                <td>{{ incidente.deteccao.produto_identificado.descricao_produto|default:"Desconhecido" }}</td>
+                <td>{{ incidente.deteccao.camera.nome|default:"N/A" }}</td>
+                <td>
+                    {% if incidente.severidade == 'ALTA' %}
+                        <span class="badge badge-danger">{{ incidente.get_severidade_display }}</span>
+                    {% elif incidente.severidade == 'MEDIA' %}
+                        <span class="badge badge-warning">{{ incidente.get_severidade_display }}</span>
+                    {% else %}
+                        <span class="badge badge-info">{{ incidente.get_severidade_display }}</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if incidente.status == 'ABERTO' %}
+                        <span class="badge badge-danger">{{ incidente.get_status_display }}</span>
+                    {% elif incidente.status == 'EM_ANALISE' %}
+                        <span class="badge badge-warning">{{ incidente.get_status_display }}</span>
+                    {% else %}
+                        <span class="badge badge-success">{{ incidente.get_status_display }}</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="color: #7f8c8d;">Nenhum incidente registrado ainda.</p>
+    {% endif %}
+</div>
+{% endif %}
+
+<div class="card">
+    <h2>📊 Produtos Mais Detectados (Hoje)</h2>
+    {% if produtos_top %}
+    <table>
+        <thead>
+            <tr>
+                <th>Produto</th>
+                <th>Total de Detecções</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in produtos_top %}
+            <tr>
+                <td>{{ item.produto_identificado__descricao_produto }}</td>
+                <td><strong>{{ item.total }}</strong></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="color: #7f8c8d;">Nenhuma detecção registrada hoje.</p>
+    {% endif %}
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+    <div class="card">
+        <h2>🚀 Ações Rápidas</h2>
+        <a href="{% url 'produtos_lista' %}" class="btn" style="margin-right: 1rem;">Ver Produtos</a>
+        <a href="/admin/verifik/incidente/" class="btn" style="background: #e74c3c;">Gerenciar Incidentes</a>
+    </div>
+    
+    <div class="card">
+        <h2>ℹ️ Informações do Sistema</h2>
+        <p><strong>Sistema:</strong> VerifiK v1.0</p>
+        <p><strong>IA:</strong> YOLOv8 + Transfer Learning</p>
+        <p><strong>Status:</strong> <span class="badge badge-success">Online</span></p>
+    </div>
+</div>
+{% endblock %}

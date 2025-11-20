@@ -1,0 +1,214 @@
+{% extends 'verifik/base.html' %}
+
+{% block title %}{{ produto.descricao_produto }} - VerifiK{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
+        <div>
+            {% if produto.imagem_referencia %}
+            <img src="{{ produto.imagem_referencia.url }}" alt="{{ produto.descricao_produto }}"
+                 style="width: 100%; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+            {% else %}
+            <div style="width: 100%; aspect-ratio: 1; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 6rem;">
+                📦
+            </div>
+            {% endif %}
+            
+            <div style="margin-top: 1.5rem;">
+                <div class="stat-card" style="margin-bottom: 1rem;">
+                    <h3>Detecções IA</h3>
+                    <div class="number">{{ total_deteccoes }}</div>
+                </div>
+                
+                <div class="stat-card" style="border-left-color: #27ae60;">
+                    <h3>Vendas Totais</h3>
+                    <div class="number" style="color: #27ae60;">{{ total_vendas }}</div>
+                </div>
+            </div>
+        </div>
+        
+        <div>
+            <h1 style="margin-bottom: 1rem;">{{ produto.descricao_produto }}</h1>
+            
+            <div style="margin-bottom: 1.5rem;">
+                {% if produto.marca %}
+                <p style="font-size: 1.1rem; color: #7f8c8d; margin-bottom: 0.5rem;">
+                    <strong>Marca:</strong> {{ produto.marca }}
+                </p>
+                {% endif %}
+                
+                {% if produto.tipo %}
+                <p style="font-size: 1.1rem; color: #7f8c8d; margin-bottom: 0.5rem;">
+                    <strong>Tipo:</strong> {{ produto.tipo }}
+                </p>
+                {% endif %}
+                
+                <p style="font-size: 2rem; color: #27ae60; font-weight: bold; margin: 1rem 0;">
+                    R$ {{ produto.preco }}
+                </p>
+                
+                <p style="color: #95a5a6;">
+                    <strong>Código de Barras:</strong> {{ produto.codigo_barras }}
+                </p>
+                
+                <p style="color: #95a5a6;">
+                    <strong>Status:</strong> 
+                    {% if produto.ativo %}
+                        <span class="badge badge-success">Ativo</span>
+                    {% else %}
+                        <span class="badge badge-danger">Inativo</span>
+                    {% endif %}
+                </p>
+            </div>
+            
+            <div style="margin-top: 2rem;">
+                <a href="/admin/verifik/produto/{{ produto.pk }}/change/" class="btn" style="margin-right: 1rem;">
+                    ✏️ Editar Produto
+                </a>
+                <a href="{% url 'produtos_lista' %}" class="btn" style="background: #95a5a6;">
+                    ← Voltar
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h2>🖼️ Imagens para Treinamento da IA ({{ imagens_treino.count }} imagens)</h2>
+    
+    {% if is_admin %}
+    <div style="margin: 1.5rem 0; padding: 1.5rem; background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); border-radius: 10px; border: 2px dashed #667eea;">
+        <h3 style="margin-bottom: 1rem; color: #667eea;">➕ Adicionar Novas Imagens</h3>
+        <form method="POST" action="{% url 'adicionar_imagem' produto.pk %}" enctype="multipart/form-data" id="uploadForm">
+            {% csrf_token %}
+            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; margin-bottom: 1rem;">
+                <div>
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Selecionar Imagens:</label>
+                    <input type="file" name="imagens" accept="image/*" required multiple id="imagensInput"
+                           style="padding: 0.5rem; border: 2px solid #e0e0e0; border-radius: 5px; width: 100%;">
+                    <small style="color: #7f8c8d; display: block; margin-top: 0.25rem;">
+                        <strong>Ctrl/Cmd + clique</strong> para múltiplas ou arraste arquivos aqui<br>
+                        <span id="fileCount" style="color: #27ae60; font-weight: bold;"></span>
+                    </small>
+                </div>
+                <div>
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Descrição (opcional):</label>
+                    <input type="text" name="descricao" placeholder="Ex: Vista frontal, ângulo 45°, etc."
+                           style="padding: 0.5rem; border: 2px solid #e0e0e0; border-radius: 5px; width: 100%;">
+                    <small style="color: #7f8c8d; display: block; margin-top: 0.25rem;">
+                        Será aplicada a todas as imagens selecionadas
+                    </small>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                <button type="button" onclick="document.getElementById('uploadForm').reset(); document.getElementById('fileCount').textContent = '';" 
+                        class="btn" style="background: #95a5a6;">
+                    🔄 Limpar
+                </button>
+                <button type="submit" class="btn" style="background: #27ae60; padding: 0.75rem 2rem;">
+                    💾 Salvar Imagens
+                </button>
+            </div>
+        </form>
+        
+        <script>
+            const input = document.getElementById('imagensInput');
+            const countSpan = document.getElementById('fileCount');
+            
+            input.addEventListener('change', function(e) {
+                const count = e.target.files.length;
+                if (count > 0) {
+                    countSpan.textContent = `✓ ${count} imagem${count > 1 ? 'ns' : ''} selecionada${count > 1 ? 's' : ''}`;
+                } else {
+                    countSpan.textContent = '';
+                }
+            });
+            
+            // Suporte para drag and drop
+            const form = document.getElementById('uploadForm');
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                form.addEventListener(eventName, preventDefaults, false);
+            });
+            
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            
+            ['dragenter', 'dragover'].forEach(eventName => {
+                form.addEventListener(eventName, () => {
+                    form.style.borderColor = '#27ae60';
+                    form.style.background = 'linear-gradient(135deg, #27ae6015 0%, #2ecc7115 100%)';
+                });
+            });
+            
+            ['dragleave', 'drop'].forEach(eventName => {
+                form.addEventListener(eventName, () => {
+                    form.style.borderColor = '#667eea';
+                    form.style.background = 'linear-gradient(135deg, #667eea15 0%, #764ba215 100%)';
+                });
+            });
+            
+            form.addEventListener('drop', function(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                input.files = files;
+                
+                const event = new Event('change');
+                input.dispatchEvent(event);
+            });
+        </script>
+    </div>
+    {% endif %}
+    
+    {% if imagens_treino %}
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin-top: 1.5rem;">
+        {% for imagem in imagens_treino %}
+        <div style="border: 1px solid #ecf0f1; border-radius: 10px; overflow: hidden; position: relative;">
+            <img src="{{ imagem.imagem.url }}" alt="{{ imagem.descricao|default:'Imagem de treino' }}"
+                 style="width: 100%; height: 200px; object-fit: cover;">
+            
+            {% if is_admin %}
+            <form method="POST" action="{% url 'remover_imagem' imagem.pk %}" style="position: absolute; top: 0.5rem; right: 0.5rem;"
+                  onsubmit="return confirm('Tem certeza que deseja remover esta imagem?');">
+                {% csrf_token %}
+                <button type="submit" style="background: #e74c3c; color: white; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-size: 1.2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
+                    ✕
+                </button>
+            </form>
+            {% endif %}
+            
+            {% if imagem.descricao %}
+            <div style="padding: 0.75rem; background: #f8f9fa;">
+                <p style="font-size: 0.85rem; color: #7f8c8d; margin: 0;">{{ imagem.descricao }}</p>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    
+    <div style="margin-top: 1.5rem; padding: 1rem; background: #f8f9fa; border-radius: 5px;">
+        <p style="margin-bottom: 0.5rem;"><strong>💡 Dica:</strong> Para melhor treinamento da IA:</p>
+        <ul style="margin-left: 1.5rem; color: #7f8c8d;">
+            <li>Adicione 10-20 imagens por produto</li>
+            <li>Use diferentes ângulos (frente, verso, laterais)</li>
+            <li>Varie iluminação e distâncias</li>
+            <li>Garanta que o rótulo esteja visível</li>
+        </ul>
+    </div>
+    {% else %}
+    <div style="padding: 2rem; background: #fff3cd; border-left: 4px solid #ffc107; border-radius: 5px; margin-top: 1.5rem;">
+        <p style="margin-bottom: 0.5rem;"><strong>⚠️ Nenhuma imagem de treinamento!</strong></p>
+        <p style="color: #856404;">Este produto não possui imagens para treinar a IA. {% if is_admin %}Use o formulário acima para adicionar imagens.{% else %}Entre em contato com um administrador para adicionar imagens.{% endif %}</p>
+    </div>
+    {% endif %}
+    
+    <div style="margin-top: 1.5rem;">
+        <a href="/admin/verifik/imagemproduto/add/?produto={{ produto.pk }}" class="btn" style="background: #27ae60;">
+            ➕ Adicionar Imagens
+        </a>
+    </div>
+</div>
+{% endblock %}

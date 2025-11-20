@@ -3,7 +3,7 @@ Django Admin para Accounts
 """
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import Organization, User
+from .models import Organization, User, UserOrganization
 
 
 @admin.register(Organization)
@@ -43,39 +43,45 @@ class OrganizationAdmin(admin.ModelAdmin):
 
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
-    list_display = ['username', 'email', 'get_full_name', 'organization', 'is_org_admin', 'is_active']
-    list_filter = ['is_active', 'is_staff', 'is_org_admin', 'is_super_admin', 'organization']
+    list_display = ['username', 'email', 'get_full_name', 'active_organization', 'is_active']
+    list_filter = ['is_active', 'is_staff', 'is_super_admin']
     search_fields = ['username', 'email', 'first_name', 'last_name']
     
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
         ('Informações Pessoais', {'fields': ('first_name', 'last_name', 'email', 'phone', 'avatar')}),
-        ('Organização', {'fields': ('organization', 'is_org_admin', 'is_super_admin')}),
-        ('Permissões por Módulo', {
-            'fields': (
-                'can_access_verifik',
-                'can_access_erp_hub', 
-                'can_access_fuel_prices',
-                'can_manage_users',
-                'can_view_reports',
-                'can_edit_settings'
-            ),
-            'description': 'Defina quais módulos e funcionalidades este usuário pode acessar'
-        }),
-        ('Permissões do Sistema', {
-            'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions'),
-            'classes': ('collapse',)
-        }),
-        ('Datas Importantes', {
-            'fields': ('last_login', 'last_login_at', 'date_joined'),
-            'classes': ('collapse',)
-        }),
+        ('Organização Ativa', {'fields': ('active_organization',)}),
+        ('Permissões Globais', {'fields': ('is_super_admin', 'is_staff', 'is_active')}),
+        ('Datas', {'fields': ('last_login', 'date_joined')}),
     )
     
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 'email', 'password1', 'password2', 'organization'),
+            'fields': ('username', 'email', 'password1', 'password2', 'active_organization'),
         }),
     )
+
+
+@admin.register(UserOrganization)
+class UserOrganizationAdmin(admin.ModelAdmin):
+    list_display = ['user', 'organization', 'is_org_admin', 'can_access_verifik', 'can_access_erp_hub']
+    list_filter = ['organization', 'is_org_admin']
+    search_fields = ['user__username', 'user__email', 'organization__name']
+    
+    fieldsets = (
+        ('Relacionamento', {'fields': ('user', 'organization')}),
+        ('Permissões', {
+            'fields': (
+                'is_org_admin',
+                'can_access_verifik',
+                'can_access_erp_hub',
+                'can_access_fuel_prices',
+                'can_manage_users',
+                'can_view_reports',
+                'can_edit_settings',
+            )
+        }),
+    )
+
 

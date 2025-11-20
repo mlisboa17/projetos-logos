@@ -1,4 +1,12 @@
 # ========================================
+# DJANGO & WEB FRAMEWORK
+# ========================================
+Django==5.1.2
+djangorestframework==3.15.2
+djangorestframework-simplejwt==5.3.1
+django-cors-headers==4.4.0
+
+# ========================================
 # BACKEND - VerifiK
 # ========================================
 fastapi==0.115.0
@@ -31,3 +39,5 @@ passlib[bcrypt]==1.7.4
 
 # Utilities
 python-dotenv==1.0.1
+playwright==1.48.0
+

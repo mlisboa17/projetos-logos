@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings
-from .models import User, Organization
+from .models import User, Organization, UserOrganization
 from .forms import UserRegistrationForm
 
 
@@ -16,6 +16,29 @@ def home(request):
 def api_test(request):
     """API Testing Interface"""
     return render(request, 'api_test.html')
+
+
+@login_required
+def switch_organization(request, org_id):
+    """Troca a organização ativa do usuário"""
+    try:
+        # Verificar se o usuário tem acesso a essa organização
+        user_org = UserOrganization.objects.get(
+            user=request.user,
+            organization_id=org_id
+        )
+        
+        # Atualizar organização ativa
+        request.user.active_organization = user_org.organization
+        request.user.save()
+        
+        messages.success(request, f'Organização alterada para: {user_org.organization.name}')
+        
+    except UserOrganization.DoesNotExist:
+        messages.error(request, 'Você não tem acesso a essa organização.')
+    
+    # Redirecionar de volta para a página anterior
+    return redirect(request.META.get('HTTP_REFERER', '/'))
 
 
 def register(request):

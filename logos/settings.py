@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'erp_hub',
     'cameras',
     'fuel_prices',
+    'verifik',  # Sistema de câmeras IA
 ]
 
 MIDDLEWARE = [
