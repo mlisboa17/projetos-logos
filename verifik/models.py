@@ -1,52 +1,230 @@
+"""
+╔══════════════════════════════════════════════════════════════════╗
+║                      MODELS - VERIFIK APP                        ║
+║         Sistema de IA para Detecção de Produtos por Câmeras     ║
+╚══════════════════════════════════════════════════════════════════╝
+
+📚 O QUE É ESTE ARQUIVO:
+------------------------
+Define todos os modelos (estruturas de dados) do módulo VerifiK:
+
+1. 👤 FUNCIONÁRIOS:
+   - Funcionario: Operadores de caixa
+   - PerfilGestor: Gestores que acessam o sistema
+
+2. 📦 PRODUTOS:
+   - ProdutoMae: Catálogo GLOBAL de produtos
+   - CodigoBarrasProdutoMae: Múltiplos códigos de barras por produto
+   - ImagemProduto: Fotos para treinar IA
+
+3. 📷 CÂMERAS E DETECÇÕES:
+   - Camera: Câmeras físicas instaladas
+   - DeteccaoProduto: Quando IA detecta produto
+   - OperacaoVenda: Vendas registradas no caixa
+
+4. ⚠️ INCIDENTES:
+   - Incidente: Divergências entre detecção e venda
+   - StatusRespostaIncidente: Histórico de resoluções
+
+🔧 CONCEITOS IMPORTANTES:
+-------------------------
+1. **ProdutoMae (Produto Global)**:
+   - SEM FK para Organization
+   - Compartilhado entre TODAS as empresas
+   - Catálogo mestre único
+
+2. **Multi-tenant**:
+   - Funcionario, Camera, OperacaoVenda TÊM FK para Organization
+   - Cada empresa vê apenas seus dados
+
+3. **Relacionamentos**:
+   - ForeignKey (N-para-1): Muitos funcionários para 1 organização
+   - related_name: Nome da relação inversa
+   - on_delete=CASCADE: Se organização deletada, deleta funcionários
+
+4. **Índices (Performance)**:
+   - Index em campos buscados frequentemente
+   - Exemplo: codigo_barras (busca por código)
+
+📖 DOCUMENTAÇÃO:
+----------------
+Django Models: https://docs.djangoproject.com/en/5.2/topics/db/models/
+QuerySets: https://docs.djangoproject.com/en/5.2/ref/models/querysets/
+"""
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.conf import settings
 
 
-# ==============================================
-# 🧑 FUNCIONÁRIOS E USUÁRIOS
-# ==============================================
+# ============================================================
+# 👤 SEÇÃO 1: FUNCIONÁRIOS E USUÁRIOS
+# ============================================================
 
 class Funcionario(models.Model):
-    """Operadores de caixa e outros funcionários"""
-    # Integração com LOGOS
-    organization = models.ForeignKey('accounts.Organization', on_delete=models.CASCADE, related_name='verifik_funcionarios', null=True, blank=True)
+    """
+    Funcionário de uma organização (operador de caixa, vendedor, etc.)
     
-    usuario = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
-    nome_completo = models.CharField(max_length=255)
-    cpf = models.CharField(max_length=14, unique=True)
-    cargo = models.CharField(max_length=100)
-    matricula = models.CharField(max_length=50, unique=True)
-    ativo = models.BooleanField(default=True)
-    data_admissao = models.DateField()
-    data_demissao = models.DateField(null=True, blank=True)
-    foto = models.ImageField(upload_to='funcionarios/', null=True, blank=True)
+    ╔══════════════════════════════════════════════════════════╗
+    ║  RELACIONAMENTOS:                                        ║
+    ║  - Pertence a 1 Organization (multi-tenant)              ║
+    ║  - Pode ter 1 User associado (login no sistema)          ║
+    ║                                                          ║
+    ║  USO PRINCIPAL:                                          ║
+    ║  - Rastrear quem fez vendas                             ║
+    ║  - Associar incidentes a funcionários                    ║
+    ║  - Controlar acesso ao sistema                          ║
+    ╚══════════════════════════════════════════════════════════╝
+    
+    Exemplo:
+    --------
+    Nome: Maria Silva
+    CPF: 123.456.789-00
+    Cargo: Operadora de Caixa
+    Matricula: OP-001
+    Organization: Posto Centro
+    """
+    
+    # ──────────────────────────────────────────────────────────
+    # 🔗 RELACIONAMENTOS (ForeignKeys)
+    # ──────────────────────────────────────────────────────────
+    
+    organization = models.ForeignKey(
+        'accounts.Organization',          # Modelo relacionado
+        on_delete=models.CASCADE,         # Se org deletada, deleta funcionário
+        related_name='verifik_funcionarios',  # org.verifik_funcionarios.all()
+        null=True,
+        blank=True,
+        help_text='Organização à qual o funcionário pertence'
+    )
+    
+    usuario = models.OneToOneField(
+        settings.AUTH_USER_MODEL,  # Aponta para User customizado
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        help_text='Usuário do sistema (se tiver acesso ao painel)'
+        # OneToOneField: 1 Funcionario = 1 User (máximo)
+    )
+    
+    # ──────────────────────────────────────────────────────────
+    # 📝 DADOS PESSOAIS
+    # ──────────────────────────────────────────────────────────
+    
+    nome_completo = models.CharField(
+        max_length=255,
+        help_text='Nome completo do funcionário'
+    )
+    
+    cpf = models.CharField(
+        max_length=14,  # Formato: 000.000.000-00
+        unique=True,    # CPF único no sistema todo
+        help_text='CPF do funcionário'
+    )
+    
+    # ──────────────────────────────────────────────────────────
+    # 💼 DADOS PROFISSIONAIS
+    # ──────────────────────────────────────────────────────────
+    
+    cargo = models.CharField(
+        max_length=100,
+        help_text='Cargo (ex: Operador de Caixa, Gerente)'
+    )
+    
+    matricula = models.CharField(
+        max_length=50,
+        unique=True,
+        help_text='Número de matrícula único'
+    )
+    
+    ativo = models.BooleanField(
+        default=True,
+        help_text='Se False, funcionário foi desligado'
+    )
+    
+    data_admissao = models.DateField(
+        help_text='Data de contratação'
+    )
+    
+    data_demissao = models.DateField(
+        null=True,
+        blank=True,
+        help_text='Data de desligamento (se houver)'
+    )
+    
+    foto = models.ImageField(
+        upload_to='funcionarios/',
+        null=True,
+        blank=True,
+        help_text='Foto do funcionário (opcional)'
+    )
+    
+    # ──────────────────────────────────────────────────────────
+    # 🗂️ METADATA
+    # ──────────────────────────────────────────────────────────
+    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name = 'Funcionário'
         verbose_name_plural = 'Funcionários'
-        ordering = ['nome_completo']
+        ordering = ['nome_completo']  # Ordem alfabética
 
     def __str__(self):
         return f"{self.nome_completo} ({self.matricula})"
 
 
 class PerfilGestor(models.Model):
-    """Usuários gestores que acessam o painel"""
+    """
+    Perfil de gestor/admin que acessa o painel VerifiK
+    
+    Diferença entre Funcionario e PerfilGestor:
+    --------------------------------------------
+    - Funcionario: Trabalha no posto (operador de caixa)
+    - PerfilGestor: Acessa sistema web (supervisor, gerente)
+    
+    Níveis de acesso:
+    -----------------
+    - SUPERVISOR: Vê relatórios da sua loja
+    - GERENTE: Vê relatórios de várias lojas
+    - ADMINISTRADOR: Acesso total, configura sistema
+    """
+    
     NIVEL_CHOICES = [
-        ('SUPERVISOR', 'Supervisor'),
-        ('GERENTE', 'Gerente'),
-        ('ADMINISTRADOR', 'Administrador'),
+        ('SUPERVISOR', 'Supervisor'),        # 👁️ Acesso limitado
+        ('GERENTE', 'Gerente'),              # 👨‍💼 Acesso médio
+        ('ADMINISTRADOR', 'Administrador'),  # 🔑 Acesso total
     ]
     
-    usuario = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    nivel_acesso = models.CharField(max_length=20, choices=NIVEL_CHOICES)
-    telefone = models.CharField(max_length=20)
-    receber_alertas_email = models.BooleanField(default=True)
-    receber_alertas_whatsapp = models.BooleanField(default=False)
+    usuario = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        help_text='User associado (1-para-1)'
+    )
+    
+    nivel_acesso = models.CharField(
+        max_length=20,
+        choices=NIVEL_CHOICES,
+        help_text='Nível de permissões no sistema'
+    )
+    
+    telefone = models.CharField(
+        max_length=20,
+        help_text='Telefone para notificações'
+    )
+    
+    receber_alertas_email = models.BooleanField(
+        default=True,
+        help_text='Enviar alertas por email'
+    )
+    
+    receber_alertas_whatsapp = models.BooleanField(
+        default=False,
+        help_text='Enviar alertas por WhatsApp (futuro)'
+    )
+    
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -57,18 +235,78 @@ class PerfilGestor(models.Model):
         return f"{self.usuario.get_full_name()} - {self.nivel_acesso}"
 
 
-# ==============================================
-# 🛒 OPERAÇÕES E PRODUTOS
-# ==============================================
+# ============================================================
+# 📦 SEÇÃO 2: PRODUTOS (CATÁLOGO GLOBAL)
+# ============================================================
 
 class ProdutoMae(models.Model):
-    """Catálogo MESTRE de produtos (compartilhado por todo o grupo) - Base para treinamento da IA"""
-    descricao_produto = models.CharField(max_length=255)
-    marca = models.CharField(max_length=100, blank=True, null=True)
-    tipo = models.CharField(max_length=100, blank=True, null=True)  # Ex: Refrigerante, Chocolate, Salgadinho
-    preco = models.DecimalField(max_digits=10, decimal_places=2, help_text='Preço de referência')
-    imagem_referencia = models.ImageField(upload_to='produtos_mae/', null=True, blank=True)
-    ativo = models.BooleanField(default=True)
+    """
+    Produto do catálogo MESTRE (compartilhado globalmente)
+    
+    ╔══════════════════════════════════════════════════════════╗
+    ║  ⚠️ IMPORTANTE: SEM FK PARA ORGANIZATION!                ║
+    ║                                                          ║
+    ║  Por quê?                                                ║
+    ║  - Catálogo global compartilhado entre todas empresas    ║
+    ║  - Facilita treinamento da IA (imagens centralizadas)    ║
+    ║  - Evita duplicação de produtos iguais                   ║
+    ║                                                          ║
+    ║  Exemplo:                                                ║
+    ║  "Coca-Cola 350ml" é O MESMO produto em todos postos    ║
+    ║  Mas cada posto pode ter códigos de barras diferentes    ║
+    ╚══════════════════════════════════════════════════════════╝
+    
+    Relacionamentos:
+    ----------------
+    - ProdutoMae.codigos_barras → Lista de CodigoBarrasProdutoMae
+    - ProdutoMae.imagens_treino → Lista de ImagemProduto
+    
+    Uso na IA:
+    ----------
+    1. Admin adiciona produto
+    2. Admin adiciona 5-10 imagens do produto (vários ângulos)
+    3. IA treina com essas imagens
+    4. Câmeras detectam produto em tempo real
+    """
+    
+    descricao_produto = models.CharField(
+        max_length=255,
+        help_text='Nome/descrição do produto (ex: Coca-Cola 350ml)'
+    )
+    
+    marca = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        help_text='Marca do produto (ex: Coca-Cola, Pepsi)'
+    )
+    
+    tipo = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        help_text='Categoria (ex: Refrigerante, Chocolate, Cerveja)'
+    )
+    
+    preco = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        help_text='Preço de referência em reais (R$)'
+        # Cada organização pode ter preço diferente
+    )
+    
+    imagem_referencia = models.ImageField(
+        upload_to='produtos_mae/',
+        null=True,
+        blank=True,
+        help_text='Imagem principal do produto (thumb)'
+    )
+    
+    ativo = models.BooleanField(
+        default=True,
+        help_text='Se False, produto descontinuado'
+    )
+    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -82,19 +320,65 @@ class ProdutoMae(models.Model):
 
 
 class CodigoBarrasProdutoMae(models.Model):
-    """Múltiplos códigos de barras para cada Produto Mãe (compartilhado por todo o grupo)"""
-    produto_mae = models.ForeignKey(ProdutoMae, on_delete=models.CASCADE, related_name='codigos_barras')
-    codigo = models.CharField(max_length=50, unique=True, db_index=True, help_text='Código de barras único globalmente')
-    principal = models.BooleanField(default=False, help_text='Código principal deste produto')
+    """
+    Código de barras associado a um Produto Mãe
+    
+    ╔══════════════════════════════════════════════════════════╗
+    ║  POR QUE MÚLTIPLOS CÓDIGOS?                              ║
+    ║                                                          ║
+    ║  Mesmo produto pode ter códigos diferentes:              ║
+    ║  1. Embalagens diferentes (lata vs garrafa)              ║
+    ║  2. Fornecedores diferentes                              ║
+    ║  3. Promoções com código especial                        ║
+    ║  4. Importação paralela                                  ║
+    ║                                                          ║
+    ║  REGRA: Código ÚNICO globalmente                         ║
+    ║  Mesmo código não pode estar em 2 produtos diferentes    ║
+    ╚══════════════════════════════════════════════════════════╝
+    
+    Exemplo:
+    --------
+    ProdutoMae: Coca-Cola 350ml
+    Códigos:
+    - 7894900011517 (lata) ← principal=True
+    - 7894900532340 (garrafa)
+    - 7894900530018 (pack 6un)
+    """
+    
+    produto_mae = models.ForeignKey(
+        ProdutoMae,
+        on_delete=models.CASCADE,
+        related_name='codigos_barras',
+        help_text='Produto ao qual este código pertence'
+        # produto.codigos_barras.all() retorna todos os códigos
+    )
+    
+    codigo = models.CharField(
+        max_length=50,
+        unique=True,  # ⚠️ UNIQUE! Um código só pertence a UM produto
+        db_index=True,  # Índice para busca rápida
+        help_text='Código de barras (EAN-13, EAN-8, etc.)'
+    )
+    
+    principal = models.BooleanField(
+        default=False,
+        help_text='Código principal do produto (mostrar primeiro)'
+    )
+    
     created_at = models.DateTimeField(auto_now_add=True)
     
     class Meta:
         verbose_name = 'Código de Barras (Produto Mãe)'
         verbose_name_plural = 'Códigos de Barras (Produto Mãe)'
-        ordering = ['-principal', 'codigo']
+        ordering = ['-principal', 'codigo']  # Principal primeiro
+        
+        # ──────────────────────────────────────────────────────
+        # 🚀 ÍNDICES (PERFORMANCE)
+        # ──────────────────────────────────────────────────────
+        # Aceleram buscas no banco de dados
         indexes = [
-            models.Index(fields=['codigo']),
-            models.Index(fields=['produto_mae', 'principal']),
+            models.Index(fields=['codigo']),  # Busca por código
+            models.Index(fields=['produto_mae', 'principal']),  # Busca principal de um produto
         ]
     
     def __str__(self):

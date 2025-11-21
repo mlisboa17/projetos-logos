@@ -226,72 +226,119 @@ def produto_editar(request, pk):
 
 @login_required(login_url='login')
 def adicionar_imagem(request, produto_id):
-    """Adicionar múltiplas imagens de treino para um produto (apenas ADMIN)"""
+    """
+    Adicionar múltiplas imagens de treino para um produto
+    
+    O que essa função faz:
+    - Permite que admin adicione várias imagens de uma vez
+    - Recebe múltiplas imagens via formulário
+    - Salva cada imagem no banco de dados
+    - Define a primeira imagem como referência se produto não tiver
+    """
     permissions = get_user_permissions(request.user)
     
+    # Verificar se usuário tem permissão de admin
     if not permissions['is_admin']:
         messages.error(request, 'Você não tem permissão para adicionar imagens.')
-        return redirect('produto_detalhe', pk=produto_id)
+        return redirect('verifik_produto_detalhe', pk=produto_id)
     
+    # Só aceita POST (quando envia formulário)
     if request.method != 'POST':
         messages.error(request, 'Método inválido.')
-        return redirect('produto_detalhe', pk=produto_id)
+        return redirect('verifik_produto_detalhe', pk=produto_id)
     
-    produto = get_object_or_404(Produto, pk=produto_id)
+    # Buscar o produto (usa ProdutoMae agora, não Produto)
+    produto = get_object_or_404(ProdutoMae, pk=produto_id)
+    
+    # Pegar lista de imagens enviadas (pode ser várias)
     imagens = request.FILES.getlist('imagens')
     
     if not imagens:
         messages.error(request, 'Nenhuma imagem foi enviada.')
-        return redirect('produto_detalhe', pk=produto_id)
+        return redirect('verifik_produto_detalhe', pk=produto_id)
     
+    # Pegar descrição opcional
     descricao = request.POST.get('descricao', '')
     
-    # Processar upload usando utility
-    total_adicionadas, primeira_imagem, erros = processar_upload_multiplo(
-        produto, imagens, descricao
-    )
+    # Contador de imagens adicionadas
+    total_adicionadas = 0
+    erros = []
+    primeira_imagem = None
     
-    # Definir imagem de referência se necessário
-    if primeira_imagem:
-        definir_imagem_referencia(produto, primeira_imagem)
+    # Processar cada imagem enviada
+    for i, imagem_file in enumerate(imagens):
+        try:
+            # Criar registro de imagem no banco
+            imagem = ImagemProduto.objects.create(
+                produto=produto,
+                imagem=imagem_file,
+                descricao=descricao,
+                ordem=i + 1,  # Ordem sequencial
+                ativa=True
+            )
+            
+            # Guardar primeira imagem para definir como referência
+            if i == 0:
+                primeira_imagem = imagem
+            
+            total_adicionadas += 1
+            
+        except Exception as e:
+            erros.append(f'Erro ao processar {imagem_file.name}: {str(e)}')
+    
+    # Definir primeira imagem como referência se produto não tiver
+    if primeira_imagem and not produto.imagem_referencia:
+        produto.imagem_referencia = primeira_imagem.imagem
+        produto.save()
     
     # Mensagens de feedback
     if erros:
         for erro in erros:
-            messages.warning(request, f'Erro: {erro}')
+            messages.warning(request, f'⚠️ {erro}')
     
     if total_adicionadas > 0:
         messages.success(request, 
             f'✅ {total_adicionadas} imagem(ns) adicionada(s) com sucesso! '
-            f'Total: {produto.imagens_treino.count()}'
+            f'Total de imagens: {produto.imagens_treino.count()}'
         )
     else:
         messages.error(request, 'Nenhuma imagem foi adicionada.')
     
-    return redirect('produto_detalhe', pk=produto_id)
+    # Redirecionar de volta para página de detalhes do produto
+    return redirect('verifik_produto_detalhe', pk=produto_id)
 
 
 @login_required(login_url='login')
 def remover_imagem(request, imagem_id):
-    """Remover imagem de treino (apenas ADMIN)"""
+    """
+    Remover imagem de treino
+    
+    O que essa função faz:
+    - Permite que admin remova uma imagem
+    - Deleta o arquivo físico da imagem
+    - Remove o registro do banco de dados
+    """
     permissions = get_user_permissions(request.user)
     
+    # Verificar permissão de admin
     if not permissions['is_admin']:
         messages.error(request, 'Você não tem permissão para remover imagens.')
         return redirect('home')
     
+    # Buscar a imagem
     imagem = get_object_or_404(ImagemProduto, pk=imagem_id)
     produto_id = imagem.produto.id
     
     try:
         # Deletar arquivo físico e registro do banco
-        imagem.imagem.delete(save=False)
-        imagem.delete()
-        messages.success(request, 'Imagem removida com sucesso!')
+        imagem.imagem.delete(save=False)  # Remove arquivo da pasta media
+        imagem.delete()  # Remove registro do banco
+        messages.success(request, '🗑️ Imagem removida com sucesso!')
     except Exception as e:
-        messages.error(request, f'Erro ao remover imagem: {str(e)}')
+        messages.error(request, f'❌ Erro ao remover imagem: {str(e)}')
     
-    return redirect('produto_detalhe', pk=produto_id)
+    # Redirecionar de volta para página do produto
+    return redirect('verifik_produto_detalhe', pk=produto_id)
 
 
 # ==============================================
