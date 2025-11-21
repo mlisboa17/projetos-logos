@@ -1,0 +1,368 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+    .produto-form-container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    
+    .form-section {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .form-section h3 {
+        color: #2563eb;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 2px solid #e5e7eb;
+    }
+    
+    .preview-image {
+        max-width: 200px;
+        max-height: 200px;
+        border-radius: 10px;
+        margin-top: 10px;
+        border: 2px solid #e5e7eb;
+    }
+    
+    .image-upload-box {
+        border: 2px dashed #cbd5e1;
+        border-radius: 10px;
+        padding: 2rem;
+        text-align: center;
+        transition: all 0.3s;
+        cursor: pointer;
+        background: #f8fafc;
+    }
+    
+    .image-upload-box:hover {
+        border-color: #3b82f6;
+        background: #eff6ff;
+    }
+    
+    .image-upload-box i {
+        font-size: 3rem;
+        color: #94a3b8;
+        margin-bottom: 1rem;
+    }
+    
+    .formset-row {
+        background: #f8fafc;
+        border-radius: 10px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        border: 1px solid #e5e7eb;
+    }
+    
+    .formset-row:hover {
+        border-color: #3b82f6;
+    }
+    
+    .btn-add-more {
+        background: #10b981;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s;
+    }
+    
+    .btn-add-more:hover {
+        background: #059669;
+        transform: translateY(-2px);
+    }
+    
+    .btn-remove {
+        background: #ef4444;
+        color: white;
+        border: none;
+        padding: 5px 15px;
+        border-radius: 6px;
+        font-size: 0.9rem;
+    }
+    
+    .btn-remove:hover {
+        background: #dc2626;
+    }
+    
+    .image-preview-container {
+        display: inline-block;
+        position: relative;
+        margin: 10px;
+    }
+    
+    .image-preview-container img {
+        max-width: 150px;
+        max-height: 150px;
+        border-radius: 8px;
+        border: 2px solid #e5e7eb;
+    }
+    
+    .delete-image-btn {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        background: #ef4444;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    
+    .codigo-principal-badge {
+        background: #10b981;
+        color: white;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        margin-left: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="produto-form-container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1><i class="bi bi-box-seam"></i> {{ titulo }}</h1>
+        <a href="{% url 'verifik_produtos_lista' %}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Voltar
+        </a>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" id="produtoForm">
+        {% csrf_token %}
+        
+        <!-- Dados Básicos -->
+        <div class="form-section">
+            <h3><i class="bi bi-info-circle"></i> Dados Básicos</h3>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Descrição do Produto *</label>
+                        {{ form.descricao_produto }}
+                        {% if form.descricao_produto.errors %}
+                            <div class="text-danger">{{ form.descricao_produto.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Preço (R$) *</label>
+                        {{ form.preco }}
+                        {% if form.preco.errors %}
+                            <div class="text-danger">{{ form.preco.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Marca</label>
+                        {{ form.marca }}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Tipo/Categoria</label>
+                        {{ form.tipo }}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Imagem Principal (Thumbnail)</label>
+                        {{ form.imagem_referencia }}
+                        {% if produto.imagem_referencia %}
+                            <div class="mt-2">
+                                <img src="{{ produto.imagem_referencia.url }}" class="preview-image" alt="Imagem atual">
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Status</label>
+                        <div class="form-check form-switch">
+                            {{ form.ativo }}
+                            <label class="form-check-label" for="{{ form.ativo.id_for_label }}">
+                                Produto Ativo
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Códigos de Barras -->
+        <div class="form-section">
+            <h3><i class="bi bi-upc-scan"></i> Códigos de Barras</h3>
+            <div id="codigosFormset">
+                {{ codigos_formset.management_form }}
+                {% for form in codigos_formset %}
+                    <div class="formset-row codigo-form">
+                        {{ form.id }}
+                        <div class="row align-items-center">
+                            <div class="col-md-7">
+                                <label class="form-label fw-bold">Código</label>
+                                {{ form.codigo }}
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-check mt-4">
+                                    {{ form.principal }}
+                                    <label class="form-check-label" for="{{ form.principal.id_for_label }}">
+                                        Código Principal
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                {% if form.instance.pk %}
+                                    <div class="form-check mt-4">
+                                        {{ form.DELETE }}
+                                        <label class="form-check-label text-danger" for="{{ form.DELETE.id_for_label }}">
+                                            Remover
+                                        </label>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <button type="button" class="btn btn-add-more mt-2" onclick="addFormsetRow('codigos')">
+                <i class="bi bi-plus-circle"></i> Adicionar Código
+            </button>
+        </div>
+
+        <!-- Imagens para Treino da IA -->
+        <div class="form-section">
+            <h3><i class="bi bi-images"></i> Imagens para Treinamento da IA</h3>
+            <p class="text-muted mb-3">
+                <i class="bi bi-info-circle"></i> Adicione múltiplas imagens do produto em diferentes ângulos para melhorar a precisão da detecção por IA.
+            </p>
+            
+            <div id="imagensFormset">
+                {{ imagens_formset.management_form }}
+                {% for form in imagens_formset %}
+                    <div class="formset-row imagem-form">
+                        {{ form.id }}
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold">Imagem</label>
+                                {{ form.imagem }}
+                                {% if form.instance.imagem %}
+                                    <div class="image-preview-container mt-2">
+                                        <img src="{{ form.instance.imagem.url }}" alt="Preview">
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold">Descrição</label>
+                                {{ form.descricao }}
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label fw-bold">Ordem</label>
+                                {{ form.ordem }}
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-check mt-4">
+                                    {{ form.ativa }}
+                                    <label class="form-check-label" for="{{ form.ativa.id_for_label }}">
+                                        Ativa
+                                    </label>
+                                </div>
+                                {% if form.instance.pk %}
+                                    <div class="form-check mt-2">
+                                        {{ form.DELETE }}
+                                        <label class="form-check-label text-danger" for="{{ form.DELETE.id_for_label }}">
+                                            Remover
+                                        </label>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <button type="button" class="btn btn-add-more mt-2" onclick="addFormsetRow('imagens')">
+                <i class="bi bi-plus-circle"></i> Adicionar Imagem
+            </button>
+        </div>
+
+        <!-- Botões de Ação -->
+        <div class="d-flex gap-3 justify-content-end">
+            <a href="{% url 'verifik_produtos_lista' %}" class="btn btn-outline-secondary btn-lg">
+                <i class="bi bi-x-circle"></i> Cancelar
+            </a>
+            <button type="submit" class="btn btn-primary btn-lg">
+                <i class="bi bi-check-circle"></i> Salvar Produto
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+function addFormsetRow(prefix) {
+    const formset = document.getElementById(prefix + 'Formset');
+    const totalForms = document.getElementById('id_' + prefix + '-TOTAL_FORMS');
+    const currentFormCount = parseInt(totalForms.value);
+    
+    const emptyForm = formset.querySelector('.' + prefix.slice(0, -1) + '-form:last-child').cloneNode(true);
+    
+    // Atualizar IDs e nomes
+    const regex = new RegExp(prefix + '-\\d+-', 'g');
+    emptyForm.innerHTML = emptyForm.innerHTML.replace(regex, prefix + '-' + currentFormCount + '-');
+    
+    // Limpar valores
+    emptyForm.querySelectorAll('input, select, textarea').forEach(input => {
+        if (input.type !== 'checkbox') {
+            input.value = '';
+        } else {
+            input.checked = false;
+        }
+    });
+    
+    // Remover previews de imagem
+    emptyForm.querySelectorAll('.image-preview-container').forEach(preview => preview.remove());
+    
+    formset.appendChild(emptyForm);
+    totalForms.value = currentFormCount + 1;
+}
+
+// Preview de imagem ao selecionar
+document.addEventListener('change', function(e) {
+    if (e.target.type === 'file' && e.target.accept.includes('image')) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const preview = e.target.parentElement.querySelector('.preview-image, .image-preview-container img');
+                if (preview) {
+                    preview.src = event.target.result;
+                } else {
+                    const img = document.createElement('img');
+                    img.src = event.target.result;
+                    img.className = 'preview-image';
+                    e.target.parentElement.appendChild(img);
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+});
+</script>
+{% endblock %}

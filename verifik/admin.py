@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import (
-    Funcionario, PerfilGestor, Produto, OperacaoVenda, ItemVenda,
+    Funcionario, PerfilGestor, ProdutoMae, CodigoBarrasProdutoMae, OperacaoVenda, ItemVenda,
     DeteccaoProduto, Incidente, EvidenciaIncidente, Alerta,
     Camera, CameraStatus, ImagemProduto
 )
@@ -35,16 +35,33 @@ class ImagemProdutoInline(admin.TabularInline):
     fields = ['imagem', 'descricao', 'ordem', 'ativa']
 
 
-@admin.register(Produto)
-class ProdutoAdmin(admin.ModelAdmin):
-    list_display = ['codigo_barras', 'descricao_produto', 'marca', 'tipo', 'preco', 'ativo', 'total_imagens']
+class CodigoBarrasInline(admin.TabularInline):
+    model = CodigoBarrasProdutoMae
+    extra = 2
+    fields = ['codigo', 'principal']
+
+
+@admin.register(ProdutoMae)
+class ProdutoMaeAdmin(admin.ModelAdmin):
+    list_display = ['descricao_produto', 'marca', 'tipo', 'preco', 'ativo', 'total_imagens', 'total_codigos']
     list_filter = ['ativo', 'tipo', 'marca']
-    search_fields = ['descricao_produto', 'codigo_barras', 'marca']
-    inlines = [ImagemProdutoInline]
+    search_fields = ['descricao_produto', 'marca', 'codigos_barras__codigo']
+    inlines = [CodigoBarrasInline, ImagemProdutoInline]
     
     def total_imagens(self, obj):
         return obj.imagens_treino.count()
     total_imagens.short_description = 'Imagens Treino'
+    
+    def total_codigos(self, obj):
+        return obj.codigos_barras.count()
+    total_codigos.short_description = 'Códigos'
+
+
+@admin.register(CodigoBarrasProdutoMae)
+class CodigoBarrasProdutoMaeAdmin(admin.ModelAdmin):
+    list_display = ['codigo', 'produto_mae', 'principal', 'created_at']
+    list_filter = ['principal', 'created_at']
+    search_fields = ['codigo', 'produto_mae__descricao_produto']
 
 
 @admin.register(ImagemProduto)

@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from django.core.mail import send_mail
@@ -9,8 +9,33 @@ from .forms import UserRegistrationForm
 
 
 def home(request):
-    """Homepage view"""
-    return render(request, 'home.html')
+    """Homepage view - Landing page do LOGOS"""
+    context = {
+        'user_authenticated': request.user.is_authenticated,
+    }
+    
+    if request.user.is_authenticated:
+        # Usuário logado - mostrar funcionalidades
+        context['active_organization'] = request.user.active_organization
+        context['organizations'] = request.user.organizations_access.all()
+        
+        # Verificar permissões
+        if request.user.active_organization:
+            try:
+                user_org = UserOrganization.objects.get(
+                    user=request.user,
+                    organization=request.user.active_organization
+                )
+                context['permissions'] = {
+                    'can_access_verifik': user_org.can_access_verifik,
+                    'can_access_erp_hub': user_org.can_access_erp_hub,
+                    'can_access_fuel_prices': user_org.can_access_fuel_prices,
+                    'is_org_admin': user_org.is_org_admin,
+                }
+            except UserOrganization.DoesNotExist:
+                context['permissions'] = {}
+    
+    return render(request, 'home.html', context)
 
 
 def api_test(request):
@@ -165,3 +190,33 @@ Equipe Grupo Lisboa
         )
     except Exception as e:
         print(f"Erro ao enviar email de aprovação: {e}")
+
+
+def user_login(request):
+    """View de login"""
+    if request.user.is_authenticated:
+        return redirect('home')
+    
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        user = authenticate(request, username=email, password=password)
+        
+        if user is not None:
+            if user.is_approved:
+                login(request, user)
+                next_url = request.GET.get('next', 'home')
+                return redirect(next_url)
+            else:
+                messages.error(request, 'Seu cadastro ainda não foi aprovado.')
+        else:
+            messages.error(request, 'Email ou senha incorretos.')
+    
+    return render(request, 'accounts/login.html')
+
+
+def user_logout(request):
+    """View de logout"""
+    logout(request)
+    messages.success(request, 'Você saiu com sucesso.')
+    return redirect('home')

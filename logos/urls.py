@@ -46,6 +46,8 @@ router.register(r'ai-models', AIModelViewSet, basename='ai-model')
 urlpatterns = [
     # Frontend URLs
     path('', accounts_views.home, name='home'),
+    path('login/', accounts_views.user_login, name='login'),
+    path('logout/', accounts_views.user_logout, name='logout'),
     path('api-test/', accounts_views.api_test, name='api_test'),
     path('cadastro/', accounts_views.register, name='register'),
     path('cadastro/pendente/', accounts_views.registration_pending, name='registration_pending'),

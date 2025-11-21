@@ -4,7 +4,12 @@
 
 {% block content %}
 <div class="card">
-    <h2>📦 Catálogo de Produtos</h2>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>📦 Catálogo de Produtos</h2>
+        <a href="{% url 'verifik_produto_criar' %}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Novo Produto
+        </a>
+    </div>
     
     <div style="margin-bottom: 1.5rem;">
         <form method="get" style="display: grid; grid-template-columns: 2fr 1fr 1fr auto auto; gap: 1rem; align-items: end;">
@@ -37,7 +42,7 @@
             </div>
             
             <button type="submit" class="btn" style="padding: 0.75rem 1.5rem;">🔍 Filtrar</button>
-            <a href="{% url 'produtos_lista' %}" class="btn" style="background: #95a5a6; padding: 0.75rem 1.5rem;">Limpar</a>
+            <a href="{% url 'verifik_produtos_lista' %}" class="btn" style="background: #95a5a6; padding: 0.75rem 1.5rem;">Limpar</a>
         </form>
         
         <div style="margin-top: 1rem; padding: 0.75rem; background: #f8f9fa; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;">
@@ -86,7 +91,7 @@
                 
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <span class="badge badge-info">{{ produto.imagens_treino.count }} imagens</span>
-                    <a href="{% url 'produto_detalhe' produto.pk %}" class="btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                    <a href="{% url 'verifik_produto_detalhe' produto.pk %}" class="btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
                         Ver Detalhes
                     </a>
                 </div>

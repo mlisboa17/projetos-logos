@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import (
-    Funcionario, PerfilGestor, Produto, OperacaoVenda, ItemVenda,
+    Funcionario, PerfilGestor, ProdutoMae, CodigoBarrasProdutoMae, OperacaoVenda, ItemVenda,
     DeteccaoProduto, Incidente, EvidenciaIncidente, Alerta,
     Camera, CameraStatus
 )
@@ -29,14 +29,22 @@ class PerfilGestorSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ProdutoSerializer(serializers.ModelSerializer):
+class CodigoBarrasProdutoMaeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Produto
+        model = CodigoBarrasProdutoMae
+        fields = '__all__'
+
+
+class ProdutoMaeSerializer(serializers.ModelSerializer):
+    codigos_barras = CodigoBarrasProdutoMaeSerializer(many=True, read_only=True)
+    
+    class Meta:
+        model = ProdutoMae
         fields = '__all__'
 
 
 class ItemVendaSerializer(serializers.ModelSerializer):
-    produto_info = ProdutoSerializer(source='produto', read_only=True)
+    produto_info = ProdutoMaeSerializer(source='produto', read_only=True)
     
     class Meta:
         model = ItemVenda
@@ -54,7 +62,7 @@ class OperacaoVendaSerializer(serializers.ModelSerializer):
 
 class DeteccaoProdutoSerializer(serializers.ModelSerializer):
     camera_info = serializers.StringRelatedField(source='camera', read_only=True)
-    produto_info = ProdutoSerializer(source='produto_identificado', read_only=True)
+    produto_info = ProdutoMaeSerializer(source='produto_identificado', read_only=True)
     
     class Meta:
         model = DeteccaoProduto

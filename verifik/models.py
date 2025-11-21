@@ -61,34 +61,50 @@ class PerfilGestor(models.Model):
 # 🛒 OPERAÇÕES E PRODUTOS
 # ==============================================
 
-class Produto(models.Model):
-    """Catálogo de produtos da loja"""
-    # Integração com LOGOS
-    organization = models.ForeignKey('accounts.Organization', on_delete=models.CASCADE, related_name='verifik_produtos', null=True, blank=True)
-    
-    codigo_barras = models.CharField(max_length=50)
+class ProdutoMae(models.Model):
+    """Catálogo MESTRE de produtos (compartilhado por todo o grupo) - Base para treinamento da IA"""
     descricao_produto = models.CharField(max_length=255)
     marca = models.CharField(max_length=100, blank=True, null=True)
     tipo = models.CharField(max_length=100, blank=True, null=True)  # Ex: Refrigerante, Chocolate, Salgadinho
-    preco = models.DecimalField(max_digits=10, decimal_places=2)
-    imagem_referencia = models.ImageField(upload_to='produtos/', null=True, blank=True)
+    preco = models.DecimalField(max_digits=10, decimal_places=2, help_text='Preço de referência')
+    imagem_referencia = models.ImageField(upload_to='produtos_mae/', null=True, blank=True)
     ativo = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        verbose_name = 'Produto'
-        verbose_name_plural = 'Produtos'
+        verbose_name = 'Produto Mãe'
+        verbose_name_plural = 'Produtos Mãe'
         ordering = ['descricao_produto']
-        unique_together = [['organization', 'codigo_barras']]  # Código único por empresa
 
     def __str__(self):
-        return f"{self.descricao_produto}"
+        return f"{self.descricao_produto} - {self.marca or 'Sem marca'}"
+
+
+class CodigoBarrasProdutoMae(models.Model):
+    """Múltiplos códigos de barras para cada Produto Mãe (compartilhado por todo o grupo)"""
+    produto_mae = models.ForeignKey(ProdutoMae, on_delete=models.CASCADE, related_name='codigos_barras')
+    codigo = models.CharField(max_length=50, unique=True, db_index=True, help_text='Código de barras único globalmente')
+    principal = models.BooleanField(default=False, help_text='Código principal deste produto')
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        verbose_name = 'Código de Barras (Produto Mãe)'
+        verbose_name_plural = 'Códigos de Barras (Produto Mãe)'
+        ordering = ['-principal', 'codigo']
+        indexes = [
+            models.Index(fields=['codigo']),
+            models.Index(fields=['produto_mae', 'principal']),
+        ]
+    
+    def __str__(self):
+        principal_str = " ⭐" if self.principal else ""
+        return f"{self.codigo}{principal_str} → {self.produto_mae.descricao_produto}"
 
 
 class ImagemProduto(models.Model):
     """Múltiplas imagens para treinamento da IA"""
-    produto = models.ForeignKey(Produto, on_delete=models.CASCADE, related_name='imagens_treino')
+    produto = models.ForeignKey(ProdutoMae, on_delete=models.CASCADE, related_name='imagens_treino')
     imagem = models.ImageField(upload_to='produtos/treino/')
     descricao = models.CharField(max_length=255, blank=True, null=True)
     ordem = models.IntegerField(default=0)
@@ -135,7 +151,7 @@ class OperacaoVenda(models.Model):
 class ItemVenda(models.Model):
     """Itens de uma operação de venda"""
     operacao = models.ForeignKey(OperacaoVenda, on_delete=models.CASCADE, related_name='itens')
-    produto = models.ForeignKey(Produto, on_delete=models.SET_NULL, null=True)
+    produto = models.ForeignKey(ProdutoMae, on_delete=models.SET_NULL, null=True)
     quantidade = models.IntegerField(default=1)
     preco_unitario = models.DecimalField(max_digits=10, decimal_places=2)
     subtotal = models.DecimalField(max_digits=10, decimal_places=2)
@@ -159,7 +175,7 @@ class DeteccaoProduto(models.Model):
     camera = models.ForeignKey('Camera', on_delete=models.SET_NULL, null=True)
     data_hora_deteccao = models.DateTimeField(default=timezone.now)
     metodo_deteccao = models.CharField(max_length=20, choices=METODO_DETECCAO_CHOICES)
-    produto_identificado = models.ForeignKey(Produto, on_delete=models.SET_NULL, null=True, blank=True)
+    produto_identificado = models.ForeignKey(ProdutoMae, on_delete=models.SET_NULL, null=True, blank=True)
     confianca = models.FloatField(help_text="Nível de confiança da IA (0-100%)")
     
     # Resultado da leitura

@@ -11,12 +11,13 @@ from django.contrib import messages
 from datetime import timedelta
 
 from .models import (
-    Funcionario, PerfilGestor, Produto, OperacaoVenda, ItemVenda,
+    Funcionario, PerfilGestor, ProdutoMae, CodigoBarrasProdutoMae, OperacaoVenda, ItemVenda,
     DeteccaoProduto, Incidente, EvidenciaIncidente, Alerta,
     Camera, CameraStatus, ImagemProduto
 )
+from .forms import ProdutoMaeForm, CodigoBarrasFormSet, ImagemProdutoFormSet
 from .serializers import (
-    FuncionarioSerializer, PerfilGestorSerializer, ProdutoSerializer,
+    FuncionarioSerializer, PerfilGestorSerializer, ProdutoMaeSerializer, CodigoBarrasProdutoMaeSerializer,
     OperacaoVendaSerializer, ItemVendaSerializer, DeteccaoProdutoSerializer,
     IncidenteSerializer, EvidenciaIncidenteSerializer, AlertaSerializer,
     CameraSerializer, CameraStatusSerializer
@@ -49,7 +50,7 @@ def home(request):
     
     # Estatísticas gerais da organização
     estatisticas = {
-        'total_produtos': Produto.objects.filter(organization=org, ativo=True).count(),
+        'total_produtos': ProdutoMae.objects.filter(ativo=True).count(),
         'total_cameras': Camera.objects.filter(organization=org, ativa=True).count(),
         'total_funcionarios': Funcionario.objects.filter(organization=org, ativo=True).count(),
         'vendas_hoje': OperacaoVenda.objects.filter(
@@ -94,7 +95,7 @@ def home(request):
 @login_required(login_url='login')
 def produtos_lista(request):
     """Lista de produtos com imagens e filtros"""
-    produtos = Produto.objects.prefetch_related('imagens_treino').filter(ativo=True)
+    produtos = ProdutoMae.objects.prefetch_related('imagens_treino').filter(ativo=True)
     
     # Filtros
     tipo_filtro = request.GET.get('tipo')
@@ -133,7 +134,7 @@ def produtos_lista(request):
 @login_required(login_url='login')
 def produto_detalhe(request, pk):
     """Detalhes completos do produto com estatísticas e imagens"""
-    produto = get_object_or_404(Produto, pk=pk)
+    produto = get_object_or_404(ProdutoMae, pk=pk)
     imagens_treino = produto.imagens_treino.filter(ativa=True).order_by('ordem', 'id')
     
     # Estatísticas
@@ -154,6 +155,73 @@ def produto_detalhe(request, pk):
     }
     
     return render(request, 'verifik/produto_detalhe.html', context)
+
+
+@login_required
+def produto_criar(request):
+    """Criar novo produto com códigos e imagens"""
+    if request.method == 'POST':
+        form = ProdutoMaeForm(request.POST, request.FILES)
+        codigos_formset = CodigoBarrasFormSet(request.POST, prefix='codigos')
+        imagens_formset = ImagemProdutoFormSet(request.POST, request.FILES, prefix='imagens')
+        
+        if form.is_valid() and codigos_formset.is_valid() and imagens_formset.is_valid():
+            produto = form.save()
+            
+            # Salvar códigos de barras
+            codigos_formset.instance = produto
+            codigos_formset.save()
+            
+            # Salvar imagens
+            imagens_formset.instance = produto
+            imagens_formset.save()
+            
+            messages.success(request, f'Produto "{produto.descricao_produto}" criado com sucesso!')
+            return redirect('verifik_produto_editar', pk=produto.pk)
+    else:
+        form = ProdutoMaeForm()
+        codigos_formset = CodigoBarrasFormSet(prefix='codigos')
+        imagens_formset = ImagemProdutoFormSet(prefix='imagens')
+    
+    context = {
+        'form': form,
+        'codigos_formset': codigos_formset,
+        'imagens_formset': imagens_formset,
+        'titulo': 'Novo Produto'
+    }
+    return render(request, 'verifik/produto_form.html', context)
+
+
+@login_required
+def produto_editar(request, pk):
+    """Editar produto existente com códigos e imagens"""
+    produto = get_object_or_404(ProdutoMae, pk=pk)
+    
+    if request.method == 'POST':
+        form = ProdutoMaeForm(request.POST, request.FILES, instance=produto)
+        codigos_formset = CodigoBarrasFormSet(request.POST, instance=produto, prefix='codigos')
+        imagens_formset = ImagemProdutoFormSet(request.POST, request.FILES, instance=produto, prefix='imagens')
+        
+        if form.is_valid() and codigos_formset.is_valid() and imagens_formset.is_valid():
+            form.save()
+            codigos_formset.save()
+            imagens_formset.save()
+            
+            messages.success(request, f'Produto "{produto.descricao_produto}" atualizado com sucesso!')
+            return redirect('verifik_produto_editar', pk=produto.pk)
+    else:
+        form = ProdutoMaeForm(instance=produto)
+        codigos_formset = CodigoBarrasFormSet(instance=produto, prefix='codigos')
+        imagens_formset = ImagemProdutoFormSet(instance=produto, prefix='imagens')
+    
+    context = {
+        'form': form,
+        'codigos_formset': codigos_formset,
+        'imagens_formset': imagens_formset,
+        'produto': produto,
+        'titulo': f'Editar: {produto.descricao_produto}'
+    }
+    return render(request, 'verifik/produto_form.html', context)
 
 
 @login_required(login_url='login')
@@ -268,12 +336,12 @@ class PerfilGestorViewSet(viewsets.ModelViewSet):
     filterset_fields = ['nivel_acesso']
 
 
-class ProdutoViewSet(viewsets.ModelViewSet):
-    queryset = Produto.objects.all()
-    serializer_class = ProdutoSerializer
+class ProdutoMaeViewSet(viewsets.ModelViewSet):
+    queryset = ProdutoMae.objects.all()
+    serializer_class = ProdutoMaeSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = ['ativo', 'tipo', 'marca']
-    search_fields = ['nome', 'codigo_barras']
+    search_fields = ['descricao_produto', 'marca', 'codigos_barras__codigo']
     
     @action(detail=True, methods=['get'])
     def analise(self, request, pk=None):
