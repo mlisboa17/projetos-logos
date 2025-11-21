@@ -2,10 +2,20 @@
 Scraper para portal Vibra Energia
 Extrai preços de combustíveis dos postos
 """
+import os
+import sys
+import django
 import time
 import json
 from datetime import datetime
 from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeout
+
+# Configurar Django
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'logos.settings')
+django.setup()
+
+from fuel_prices.models import PostoVibra, PrecoVibra
 
 
 class VibraScraper:
@@ -198,15 +208,36 @@ class VibraScraper:
         
         print("✓ Login realizado com sucesso - Todos os modais fechados")
     
-    def trocar_posto(self, page, nome_posto=None):
-        """Troca o posto selecionado no dropdown"""
-        print(f"\n🏢 Trocando posto: {nome_posto or 'próximo'}...")
+    def trocar_posto(self, page, cnpj_posto):
+        """Troca o posto selecionado usando o CNPJ
+        
+        Args:
+            page: Página do Playwright
+            cnpj_posto: CNPJ do posto a selecionar (string)
+        """
+        print(f"\n🏢 Trocando para posto CNPJ: {cnpj_posto}...")
         try:
-            # Clicar no dropdown de posto
-            # TODO: Você precisa me passar o seletor do Codegen para o dropdown de postos
-            # Por enquanto, deixando preparado
+            # Clicar no botão de trocar empresa (ícone import_export)
+            page.get_by_text("import_export").click()
             time.sleep(1)
-            print("  ✓ Posto trocado")
+            
+            # Clicar e preencher o campo de busca com o CNPJ
+            page.get_by_role("textbox", name="Buscar empresa").click()
+            time.sleep(0.5)
+            page.get_by_role("textbox", name="Buscar empresa").fill(cnpj_posto)
+            time.sleep(1)
+            
+            # Selecionar o posto (clicar no radio button)
+            page.locator(".mat-radio-outer-circle").click()
+            time.sleep(0.5)
+            
+            # Confirmar seleção
+            page.get_by_role("button", name="Confirmar").click()
+            time.sleep(2)  # Aguardar página atualizar
+            
+            print(f"  ✓ Posto trocado para CNPJ: {cnpj_posto}")
+            return True
+                
         except Exception as e:
             print(f"  ⚠️ Erro ao trocar posto: {e}")
             raise
@@ -496,10 +527,72 @@ class VibraScraper:
         page.screenshot(path=filename, full_page=True)
         print(f"📸 Screenshot salvo: {filename}")
     
-    def run_scraping(self, output_file='vibra_precos.json'):
+    def salvar_no_banco(self, dados, posto_info):
+        """
+        Salva os dados coletados no banco Django
+        
+        Args:
+            dados: Dicionário com produtos extraídos
+            posto_info: Dicionário com informações do posto (codigo, nome, razao, cnpj)
+        """
+        try:
+            from django.utils import timezone as django_tz
+            
+            # Criar ou atualizar posto
+            posto, created = PostoVibra.objects.get_or_create(
+                cnpj=posto_info['cnpj'],
+                defaults={
+                    'codigo_vibra': posto_info['codigo'],
+                    'razao_social': posto_info['razao'],
+                    'nome_fantasia': posto_info['nome'],
+                }
+            )
+            
+            if not created:
+                # Atualizar informações se já existe
+                posto.codigo_vibra = posto_info['codigo']
+                posto.razao_social = posto_info['razao']
+                posto.nome_fantasia = posto_info['nome']
+                posto.save()
+            
+            # Salvar preços
+            precos_salvos = 0
+            for produto in dados['produtos']:
+                # Converter preço de string para decimal
+                preco_str = produto.get('preco', '').replace('R$', '').replace('.', '').replace(',', '.').strip()
+                try:
+                    preco_decimal = float(preco_str)
+                except:
+                    continue
+                
+                PrecoVibra.objects.create(
+                    posto=posto,
+                    produto_nome=produto['nome'],
+                    produto_codigo=produto.get('codigo', ''),
+                    preco=preco_decimal,
+                    prazo_pagamento=produto.get('prazo', ''),
+                    base_distribuicao=produto.get('base', ''),
+                    modalidade=dados.get('modalidade', ''),
+                    data_coleta=django_tz.now(),
+                    disponivel=True
+                )
+                precos_salvos += 1
+            
+            print(f"  💾 Salvo no banco: {precos_salvos} preços")
+            return True
+            
+        except Exception as e:
+            print(f"  ⚠️ Erro ao salvar no banco: {e}")
+            return False
+    
+    def run_scraping(self, output_file='vibra_precos.json', cnpj_posto=None, posto_info=None):
         """
         Executa scraping completo do portal
         Extrai preços de todos os produtos disponíveis
+        
+        Args:
+            output_file: Nome do arquivo JSON de saída
+            cnpj_posto: CNPJ do posto a selecionar (None = usa o posto padrão)
         """
         with sync_playwright() as p:
             # Iniciar navegador
@@ -514,8 +607,16 @@ class VibraScraper:
                 # Navegar para Pedidos
                 self.navegar_pedidos(page)
                 
+                # Trocar para o posto desejado (se CNPJ foi fornecido)
+                if cnpj_posto:
+                    self.trocar_posto(page, cnpj_posto)
+                
                 # Extrair produtos
                 dados = self.extrair_produtos_pedidos(page)
+                
+                # Salvar no banco Django (se posto_info foi fornecido)
+                if posto_info:
+                    self.salvar_no_banco(dados, posto_info)
                 
                 # Salvar em JSON
                 with open(output_file, 'w', encoding='utf-8') as f:
@@ -553,11 +654,111 @@ def main():
     scraper = VibraScraper(
         username='95406',
         password='Apcc2350',
-        headless=False  # Mudar para True quando quiser rodar sem ver navegador
+        headless=True  # True = roda sem abrir navegador
     )
     
-    # Executar scraping
-    dados = scraper.run_scraping('vibra_precos.json')
+    # Lista dos 11 postos do Grupo Lisboa
+    postos_completo = [
+        {'codigo': '95406', 'razao': 'AUTO POSTO CASA CAIADA LTDA', 'nome': 'AP CASA CAIADA', 'cnpj': '04284939000186'},  # SEMPRE PRIMEIRO - Posto da senha mestre
+        {'codigo': '107469', 'razao': 'POSTO ENSEADA DO NORTE LTDA', 'nome': 'POSTO ENSEADA DO NOR', 'cnpj': '00338804000103'},
+        {'codigo': '11236', 'razao': 'REAL RECIFE LTDA', 'nome': 'POSTO REAL', 'cnpj': '24156978000105'},
+        {'codigo': '1153963', 'razao': 'POSTO CIDADE PATRIMONIO LTDA', 'nome': 'POSTO AVENIDA', 'cnpj': '05428059000280'},
+        {'codigo': '124282', 'razao': 'R.J. COMBUSTIVEIS E LUBRIFICANTES L', 'nome': 'R J', 'cnpj': '08726064000186'},
+        {'codigo': '14219', 'razao': 'AUTO POSTO GLOBO LTDA', 'nome': 'GLOBO105', 'cnpj': '41043647000188'},
+        {'codigo': '156075', 'razao': 'DISTRIBUIDORA R S DERIVADO DE PETRO', 'nome': 'POSTO BR SHOPPING', 'cnpj': '07018760000175'},
+        {'codigo': '1775869', 'razao': 'POSTO DOZE COMERCIO DE COMBUSTIVEIS', 'nome': 'POSTO DOZE', 'cnpj': '52308604000101'},
+        {'codigo': '5039', 'razao': 'RIO DOCE COMERCIO E SERVICOS LTDA', 'nome': 'POSTO VIP', 'cnpj': '03008754000186'},
+        {'codigo': '61003', 'razao': 'AUTO POSTO IGARASSU LTDA.', 'nome': 'P IGARASSU', 'cnpj': '04274378000134'},
+        {'codigo': '94762', 'razao': 'POSTO CIDADE PATRIMONIO LTDA', 'nome': 'CIDADE PATRIMONIO', 'cnpj': '05428059000107'},
+    ]
+    
+    # TESTE: Processar apenas 3 postos (Casa Caiada + 2 primeiros)
+    postos_teste = postos_completo[:3]  # Casa Caiada sempre incluído
+    
+    # Processar postos de teste
+    todos_dados = []
+    produtos_consolidados = {}  # Dicionário para evitar duplicação: {nome_produto: {postos: [...]}}
+    
+    for i, posto in enumerate(postos_teste):
+        print(f"\n{'='*60}")
+        print(f"🏢 PROCESSANDO POSTO {i+1}/{len(postos_teste)}")
+        print(f"   Código: {posto['codigo']}")
+        print(f"   Nome: {posto['nome']}")
+        print(f"   CNPJ: {posto['cnpj']}")
+        print(f"{'='*60}")
+        
+        try:
+            # Executar scraping para este posto
+            output_file = f"vibra_precos_{posto['codigo']}_{posto['nome'].replace(' ', '_')}.json"
+            dados = scraper.run_scraping(
+                output_file, 
+                cnpj_posto=posto['cnpj'],
+                posto_info=posto  # Passa informações para salvar no banco
+            )
+            
+            # Adicionar informações do posto aos dados
+            dados['codigo_vibra'] = posto['codigo']
+            dados['razao_social'] = posto['razao']
+            dados['cnpj'] = posto['cnpj']
+            
+            todos_dados.append(dados)
+            
+            # Consolidar produtos (sem duplicação)
+            for produto in dados['produtos']:
+                nome_produto = produto['nome']
+                
+                if nome_produto not in produtos_consolidados:
+                    # Primeira vez vendo este produto
+                    produtos_consolidados[nome_produto] = {
+                        'nome': nome_produto,
+                        'codigo': produto.get('codigo', ''),
+                        'postos': []
+                    }
+                
+                # Adicionar informações deste posto
+                produtos_consolidados[nome_produto]['postos'].append({
+                    'codigo_vibra': posto['codigo'],
+                    'nome_posto': posto['nome'],
+                    'razao_social': posto['razao'],
+                    'cnpj': posto['cnpj'],
+                    'preco': produto.get('preco', ''),
+                    'prazo': produto.get('prazo', ''),
+                    'base': produto.get('base', ''),
+                    'data_coleta': dados['data_coleta']
+                })
+            
+            print(f"\n✅ Posto {i+1}/{len(postos_teste)} concluído!")
+            
+        except Exception as e:
+            print(f"\n❌ Erro no posto {posto['nome']}: {e}")
+            continue
+    
+    # Converter para lista final
+    produtos_final = list(produtos_consolidados.values())
+    
+    # Salvar dados consolidados (formato para exibição na tela)
+    dados_para_tela = {
+        'data_atualizacao': datetime.now().strftime("%H:%M %d/%m/%Y"),
+        'total_postos': len(todos_dados),
+        'total_produtos': len(produtos_final),
+        'produtos': produtos_final
+    }
+    
+    with open('vibra_precos_CONSOLIDADO.json', 'w', encoding='utf-8') as f:
+        json.dump(dados_para_tela, f, ensure_ascii=False, indent=2)
+    
+    # Salvar também arquivo com dados brutos por posto
+    with open('vibra_precos_TESTE.json', 'w', encoding='utf-8') as f:
+        json.dump(todos_dados, f, ensure_ascii=False, indent=2)
+    
+    print("\n" + "="*60)
+    print("✅ SCRAPING DE TESTE CONCLUÍDO!")
+    print(f"   Total de postos processados: {len(todos_dados)}/{len(postos_teste)}")
+    print(f"   Total de produtos únicos: {len(produtos_final)}")
+    print(f"\n📁 Arquivos gerados:")
+    print(f"   - vibra_precos_CONSOLIDADO.json (para exibir na tela)")
+    print(f"   - vibra_precos_TESTE.json (dados brutos por posto)")
+    print("="*60)
     
     print("\n" + "="*60)
     print("✅ SCRAPING CONCLUÍDO!")
