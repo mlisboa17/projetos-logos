@@ -37,10 +37,12 @@ class VibraScraper:
         """
         Fecha todos os popups/banners que aparecem após login
         Baseado exatamente no código gerado pelo Playwright Codegen
+        OTIMIZADO: Sleeps reduzidos e parada após 2 tentativas vazias
         """
-        print("🔍 Fechando modais...")
+        print("[INFO] Fechando modais...")
         
         modals_fechados = 0
+        tentativas_vazias = 0
         
         # Tentar múltiplas vezes pois modais aparecem em sequência
         for attempt in range(max_attempts):
@@ -51,11 +53,11 @@ class VibraScraper:
                 continuar = page.get_by_role("button", name="Continuar")
                 if continuar.count() > 0:
                     # Verificar se está visível
-                    if continuar.first.is_visible(timeout=1000):
+                    if continuar.first.is_visible(timeout=500):
                         print(f"  ✓ Modal {modals_fechados + 1} - Botão Continuar encontrado")
                         continuar.first.click()
                         modals_fechados += 1
-                        time.sleep(2)  # Aguardar modal fechar/trocar
+                        time.sleep(0.8)  # OTIMIZADO: reduzido de 2s para 0.8s
                         modal_encontrado = True
                         print(f"  ✓ Modal {modals_fechados} fechado")
                         continue
@@ -65,16 +67,16 @@ class VibraScraper:
             try:
                 # Tentar clicar em checkbox se houver (antes de Continuar)
                 checkbox = page.locator('input[name*="j_idt"]')
-                if checkbox.count() > 0 and checkbox.first.is_visible(timeout=500):
+                if checkbox.count() > 0 and checkbox.first.is_visible(timeout=300):
                     print(f"  ℹ️ Checkbox encontrado, clicando...")
                     checkbox.first.click()
-                    time.sleep(0.5)
+                    time.sleep(0.3)  # OTIMIZADO: reduzido de 0.5s para 0.3s
                     # Depois clicar em Continuar
                     continuar2 = page.get_by_role("button", name="Continuar")
-                    if continuar2.count() > 0 and continuar2.first.is_visible(timeout=500):
+                    if continuar2.count() > 0 and continuar2.first.is_visible(timeout=300):
                         continuar2.first.click()
                         modals_fechados += 1
-                        time.sleep(2)
+                        time.sleep(0.8)  # OTIMIZADO: reduzido de 2s para 0.8s
                         modal_encontrado = True
                         print(f"  ✓ Modal {modals_fechados} fechado (com checkbox)")
             except:
@@ -83,21 +85,24 @@ class VibraScraper:
             # Pressionar ESC como fallback
             try:
                 page.keyboard.press('Escape')
-                time.sleep(0.3)
+                time.sleep(0.2)  # OTIMIZADO: reduzido de 0.3s para 0.2s
             except:
                 pass
             
             # Se não encontrou modal, contar tentativas vazias
             if not modal_encontrado:
-                if attempt >= 3:  # Parar após 3 tentativas sem achar nada
+                tentativas_vazias += 1
+                if tentativas_vazias >= 2:  # OTIMIZADO: Parar após 2 tentativas vazias (antes era 3)
                     break
+            else:
+                tentativas_vazias = 0  # Reset contador se encontrou modal
         
         print(f"✓ {modals_fechados} modal(is) fechado(s)")
 
     
     def login(self, page):
         """Faz login no portal"""
-        print(f"🔐 Fazendo login com usuário {self.username}...")
+        print(f"[LOGIN] Fazendo login com usuário {self.username}...")
         
         # Ir para página de login
         page.goto(self.login_url)
@@ -181,14 +186,14 @@ class VibraScraper:
         
         if not button_clicked:
             # Tentar pressionar Enter no campo de senha
-            print("  ⚠️ Botão não encontrado, tentando Enter...")
+            print("  [WARN] Botão não encontrado, tentando Enter...")
             page.press(pass_selectors[0], 'Enter')
         
         # Aguardar redirecionamento (usar timeout maior)
         try:
             page.wait_for_load_state('networkidle', timeout=60000)  # 60 segundos
         except:
-            print("  ⚠️ Timeout na networkidle, mas continuando...")
+            print("  [WARN] Timeout na networkidle, mas continuando...")
             pass
         
         time.sleep(2)  # Aguardar popups carregarem
@@ -196,14 +201,14 @@ class VibraScraper:
         # Fechar popups que aparecem após login (múltiplas tentativas)
         # Às vezes aparecem 3 ou 4 modais sequenciais
         # IMPORTANTE: Precisa fechar TODOS antes de acessar o menu
-        print("\n🎯 Fechando TODOS os modais antes de navegar...")
+        print("\n[TARGET] Fechando TODOS os modais antes de navegar...")
         self.close_popups(page, max_attempts=25)  # 25 tentativas
         
         # Aguardar um pouco mais para garantir que não apareça outro modal
         time.sleep(2)
         
         # Verificação final de modais
-        print("🔍 Verificação final de modais...")
+        print("[INFO] Verificação final de modais...")
         self.close_popups(page, max_attempts=10)  # 10 tentativas extras
         
         print("✓ Login realizado com sucesso - Todos os modais fechados")
@@ -225,7 +230,8 @@ class VibraScraper:
             page.get_by_role("textbox", name="Buscar empresa").click()
             time.sleep(0.5)
             page.get_by_role("textbox", name="Buscar empresa").fill(cnpj_posto)
-            time.sleep(1)
+            page.get_by_role("textbox", name="Buscar empresa").press("Enter")  # CRÍTICO: Filtra lista antes de clicar
+            time.sleep(0.5)
             
             # Selecionar o posto (clicar no radio button)
             page.locator(".mat-radio-outer-circle").click()
@@ -233,13 +239,24 @@ class VibraScraper:
             
             # Confirmar seleção
             page.get_by_role("button", name="Confirmar").click()
-            time.sleep(2)  # Aguardar página atualizar
+            
+            print(f"  ⏳ Aguardando produtos carregarem...")
+            # Aguardar página atualizar e produtos carregarem
+            time.sleep(3)  # Aguardar transição
+            
+            # Aguardar networkidle para garantir que carregou
+            try:
+                page.wait_for_load_state('networkidle', timeout=30000)
+            except:
+                print("  [WARN] Timeout networkidle, continuando...")
+            
+            time.sleep(2)  # Aguardar adicional para renderizar produtos
             
             print(f"  ✓ Posto trocado para CNPJ: {cnpj_posto}")
             return True
                 
         except Exception as e:
-            print(f"  ⚠️ Erro ao trocar posto: {e}")
+            print(f"  [WARN] Erro ao trocar posto: {e}")
             raise
     
     def navegar_pedidos(self, page):
@@ -258,7 +275,7 @@ class VibraScraper:
                 pedidos_btn.first.click()
             else:
                 # Fallback: tentar outros seletores
-                print("  ⚠️ Botão Pedidos não visível, tentando alternativas...")
+                print("  [WARN] Botão Pedidos não visível, tentando alternativas...")
                 time.sleep(1)
                 
                 # Tentar novamente
@@ -269,14 +286,14 @@ class VibraScraper:
                     page.locator('a:has-text("Pedidos")').first.click()
                 
         except Exception as e:
-            print(f"  ⚠️ Erro ao navegar: {e}")
+            print(f"  [WARN] Erro ao navegar: {e}")
             raise
         
         # Aguardar carregamento
         try:
             page.wait_for_load_state('networkidle', timeout=60000)
         except:
-            print("  ⚠️ Timeout na networkidle, continuando...")
+            print("  [WARN] Timeout na networkidle, continuando...")
             pass
         
         time.sleep(1.5)
@@ -306,10 +323,10 @@ class VibraScraper:
                     print("  ✓ Modalidade FOB selecionada (alternativa)")
                     time.sleep(1)
             else:
-                print("  ⚠️ Dropdown de modalidade não encontrado")
+                print("  [WARN] Dropdown de modalidade não encontrado")
         except Exception as e:
-            print(f"  ⚠️ Erro ao selecionar modalidade: {e}")
-            print("  ⚠️ Continuando sem selecionar modalidade...")
+            print(f"  [WARN] Erro ao selecionar modalidade: {e}")
+            print("  [WARN] Continuando sem selecionar modalidade...")
     
     def scroll_to_load_all(self, page):
         """Faz scroll down para carregar todos os produtos"""
@@ -375,7 +392,7 @@ class VibraScraper:
             print(f"  🏢 Posto: {nome_posto}")
         except Exception as e:
             nome_posto = "Não identificado"
-            print(f"  ⚠️ Não foi possível identificar o posto: {e}")
+            print(f"  [WARN] Não foi possível identificar o posto: {e}")
         
         # 2. Extrair modalidade (usando seletor do Codegen)
         try:
@@ -401,13 +418,24 @@ class VibraScraper:
             
             print(f"  📋 Modalidade: {modalidade or 'Não identificada'}")
         except Exception as e:
-            print(f"  ⚠️ Erro ao extrair modalidade: {e}")
+            print(f"  [WARN] Erro ao extrair modalidade: {e}")
             modalidade = None
         
-        # 3. Scroll para carregar todos os produtos
+        # 3. Aguardar produtos aparecerem
+        print("  ⏳ Aguardando produtos carregarem...")
+        try:
+            # Aguardar pelo menos 1 produto aparecer
+            page.wait_for_selector("app-item-vitrine", timeout=15000)
+            time.sleep(2)  # Aguardar renderização completa
+            print("  ✓ Produtos carregados")
+        except Exception as e:
+            print(f"  [WARN] Timeout aguardando produtos: {e}")
+            # Continuar mesmo assim
+        
+        # 4. Scroll para carregar todos os produtos
         self.scroll_to_load_all(page)
         
-        # 4. Extrair cards de produtos
+        # 5. Extrair cards de produtos
         produtos = []
         
         # Usar seletor correto do Codegen: app-item-vitrine
@@ -415,7 +443,7 @@ class VibraScraper:
             cards = page.locator("app-item-vitrine").all()
             print(f"  ✓ Encontrados {len(cards)} produtos")
         except:
-            print("  ⚠️ Nenhum produto encontrado")
+            print("  [WARN] Nenhum produto encontrado")
             return {
                 'posto': nome_posto,
                 'modalidade': modalidade,
@@ -424,7 +452,7 @@ class VibraScraper:
             }
         
         if not cards or len(cards) == 0:
-            print("  ⚠️ Nenhum card encontrado")
+            print("  [WARN] Nenhum card encontrado")
             return {
                 'posto': nome_posto,
                 'modalidade': modalidade,
@@ -433,7 +461,7 @@ class VibraScraper:
             }
         
         # 5. Processar cada card
-        print(f"  🔍 Processando {len(cards)} produtos...")
+        print(f"  [INFO] Processando {len(cards)} produtos...")
         
         # Dicionário para evitar duplicatas (chave: nome do produto)
         produtos_unicos = {}
@@ -457,7 +485,7 @@ class VibraScraper:
                 
                 # Verificar se está indisponível
                 if 'indisponível' in texto_card.lower() or 'indisponivel' in texto_card.lower():
-                    print(f"    ⚠️ Indisponível - pulando")
+                    print(f"    [WARN] Indisponível - pulando")
                     continue
                 
                 # Extrair dados linha por linha
@@ -496,20 +524,20 @@ class VibraScraper:
                         if produto_info['preco']:
                             print(f"      💰 {produto_info['preco']}")
                         if produto_info['prazo']:
-                            print(f"      ⏱️ {produto_info['prazo']}")
+                            print(f"      [TIME] {produto_info['prazo']}")
                     else:
-                        print(f"    ⚠️ Duplicado - ignorando")
+                        print(f"    [WARN] Duplicado - ignorando")
                 else:
-                    print(f"    ⚠️ Não conseguiu extrair nome do produto")
+                    print(f"    [WARN] Não conseguiu extrair nome do produto")
                 
             except Exception as e:
-                print(f"    ❌ Erro ao processar card {i}: {e}")
+                print(f"    [ERROR] Erro ao processar card {i}: {e}")
                 continue
         
         # Converter dicionário de volta para lista
         produtos = list(produtos_unicos.values())
         
-        print(f"\n  ✅ Total extraído: {len(produtos)} produtos disponíveis")
+        print(f"\n  [OK] Total extraído: {len(produtos)} produtos disponíveis")
         
         # Formatar data/hora: HH:MM dd/mm/AAAA
         agora = datetime.now()
@@ -578,14 +606,14 @@ class VibraScraper:
                 )
                 precos_salvos += 1
             
-            print(f"  💾 Salvo no banco: {precos_salvos} preços")
+            print(f"  [SAVE] Salvo no banco: {precos_salvos} preços")
             return True
             
         except Exception as e:
-            print(f"  ⚠️ Erro ao salvar no banco: {e}")
+            print(f"  [WARN] Erro ao salvar no banco: {e}")
             return False
     
-    def run_scraping(self, output_file='vibra_precos.json', cnpj_posto=None, posto_info=None):
+    def run_scraping(self, output_file='vibra_precos.json', cnpj_posto=None, posto_info=None, page=None, primeira_vez=False):
         """
         Executa scraping completo do portal
         Extrai preços de todos os produtos disponíveis
@@ -593,7 +621,15 @@ class VibraScraper:
         Args:
             output_file: Nome do arquivo JSON de saída
             cnpj_posto: CNPJ do posto a selecionar (None = usa o posto padrão)
+            posto_info: Dicionário com informações do posto
+            page: Página do Playwright (se None, cria nova sessão)
+            primeira_vez: Se True, faz login. Se False, apenas troca posto
         """
+        # Sessão única: usar page externa
+        if page is not None:
+            return self._scraping_sessao_unica(output_file, cnpj_posto, posto_info, page, primeira_vez)
+        
+        # Sessão individual: criar navegador próprio (modo antigo)
         with sync_playwright() as p:
             # Iniciar navegador
             browser = p.chromium.launch(headless=self.headless)
@@ -622,8 +658,8 @@ class VibraScraper:
                 with open(output_file, 'w', encoding='utf-8') as f:
                     json.dump(dados, f, ensure_ascii=False, indent=2)
                 
-                print(f"\n💾 Dados salvos em: {output_file}")
-                print(f"📊 Resumo:")
+                print(f"\n[SAVE] Dados salvos em: {output_file}")
+                print(f"[STATS] Resumo:")
                 print(f"   Posto: {dados['posto']}")
                 print(f"   Modalidade: {dados['modalidade']}")
                 print(f"   Produtos extraídos: {len(dados['produtos'])}")
@@ -640,12 +676,58 @@ class VibraScraper:
                 return dados
                 
             except Exception as e:
-                print(f"\n❌ Erro: {e}")
+                print(f"\n[ERROR] Erro: {e}")
                 self.take_screenshot(page, 'vibra_erro.png')
                 raise
             
             finally:
                 browser.close()
+
+    def _scraping_sessao_unica(self, output_file, cnpj_posto, posto_info, page, primeira_vez):
+        """
+        Executa scraping usando uma página existente (sessão única)
+        
+        Args:
+            output_file: Nome do arquivo JSON
+            cnpj_posto: CNPJ do posto
+            posto_info: Info do posto
+            page: Página do Playwright (já aberta)
+            primeira_vez: Se True, faz login. Se False, apenas troca posto
+        """
+        try:
+            # Primeira vez: fazer login completo e navegar
+            if primeira_vez:
+                self.login(page)
+                self.navegar_pedidos(page)
+            else:
+                # NÃO é primeira vez: apenas trocar posto
+                # Sistema já vai direto para tela de Pedidos
+                if cnpj_posto:
+                    self.trocar_posto(page, cnpj_posto)
+            
+            # Extrair produtos (aguardar carregamento)
+            dados = self.extrair_produtos_pedidos(page)
+            
+            # Salvar no banco Django
+            if posto_info:
+                self.salvar_no_banco(dados, posto_info)
+            
+            # Salvar em JSON
+            with open(output_file, 'w', encoding='utf-8') as f:
+                json.dump(dados, f, ensure_ascii=False, indent=2)
+            
+            print(f"\n[SAVE] Dados salvos em: {output_file}")
+            print(f"[STATS] Resumo:")
+            print(f"   Posto: {dados['posto']}")
+            print(f"   Modalidade: {dados['modalidade']}")
+            print(f"   Produtos extraídos: {len(dados['produtos'])}")
+            
+            return dados
+            
+        except Exception as e:
+            print(f"\n[ERROR] Erro: {e}")
+            self.take_screenshot(page, 'vibra_erro.png')
+            raise
 
 
 def main():
@@ -654,7 +736,7 @@ def main():
     scraper = VibraScraper(
         username='95406',
         password='Apcc2350',
-        headless=True  # True = roda sem abrir navegador
+        headless=False  # False = abre navegador visível para debug
     )
     
     # Lista dos 11 postos do Grupo Lisboa
@@ -679,59 +761,82 @@ def main():
     todos_dados = []
     produtos_consolidados = {}  # Dicionário para evitar duplicação: {nome_produto: {postos: [...]}}
     
-    for i, posto in enumerate(postos_teste):
-        print(f"\n{'='*60}")
-        print(f"🏢 PROCESSANDO POSTO {i+1}/{len(postos_teste)}")
-        print(f"   Código: {posto['codigo']}")
-        print(f"   Nome: {posto['nome']}")
-        print(f"   CNPJ: {posto['cnpj']}")
-        print(f"{'='*60}")
+    # SESSÃO ÚNICA: Abrir browser UMA VEZ para todos os postos
+    print("\n" + "="*60)
+    print("[BROWSER] Abrindo navegador (SESSÃO ÚNICA para todos os postos)...")
+    print("="*60)
+    
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=scraper.headless)
+        context = browser.new_context(viewport={'width': 1920, 'height': 1080})
+        page = context.new_page()
         
         try:
-            # Executar scraping para este posto
-            output_file = f"vibra_precos_{posto['codigo']}_{posto['nome'].replace(' ', '_')}.json"
-            dados = scraper.run_scraping(
-                output_file, 
-                cnpj_posto=posto['cnpj'],
-                posto_info=posto  # Passa informações para salvar no banco
-            )
-            
-            # Adicionar informações do posto aos dados
-            dados['codigo_vibra'] = posto['codigo']
-            dados['razao_social'] = posto['razao']
-            dados['cnpj'] = posto['cnpj']
-            
-            todos_dados.append(dados)
-            
-            # Consolidar produtos (sem duplicação)
-            for produto in dados['produtos']:
-                nome_produto = produto['nome']
+            for i, posto in enumerate(postos_teste):
+                print(f"\n{'='*60}")
+                print(f"🏢 PROCESSANDO POSTO {i+1}/{len(postos_teste)}")
+                print(f"   Código: {posto['codigo']}")
+                print(f"   Nome: {posto['nome']}")
+                print(f"   CNPJ: {posto['cnpj']}")
+                print(f"{'='*60}")
                 
-                if nome_produto not in produtos_consolidados:
-                    # Primeira vez vendo este produto
-                    produtos_consolidados[nome_produto] = {
-                        'nome': nome_produto,
-                        'codigo': produto.get('codigo', ''),
-                        'postos': []
-                    }
-                
-                # Adicionar informações deste posto
-                produtos_consolidados[nome_produto]['postos'].append({
-                    'codigo_vibra': posto['codigo'],
-                    'nome_posto': posto['nome'],
-                    'razao_social': posto['razao'],
-                    'cnpj': posto['cnpj'],
-                    'preco': produto.get('preco', ''),
-                    'prazo': produto.get('prazo', ''),
-                    'base': produto.get('base', ''),
-                    'data_coleta': dados['data_coleta']
-                })
+                try:
+                    # Executar scraping para este posto (sessão única)
+                    output_file = f"vibra_precos_{posto['codigo']}_{posto['nome'].replace(' ', '_')}.json"
+                    dados = scraper.run_scraping(
+                        output_file, 
+                        cnpj_posto=posto['cnpj'],
+                        posto_info=posto,
+                        page=page,  # REUTILIZAR mesma página
+                        primeira_vez=(i == 0)  # Login apenas no primeiro posto
+                    )
+                    
+                    # Adicionar informações do posto aos dados
+                    dados['codigo_vibra'] = posto['codigo']
+                    dados['razao_social'] = posto['razao']
+                    dados['cnpj'] = posto['cnpj']
+                    
+                    todos_dados.append(dados)
+                    
+                    # Consolidar produtos (sem duplicação)
+                    for produto in dados['produtos']:
+                        nome_produto = produto['nome']
+                        
+                        if nome_produto not in produtos_consolidados:
+                            # Primeira vez vendo este produto
+                            produtos_consolidados[nome_produto] = {
+                                'nome': nome_produto,
+                                'codigo': produto.get('codigo', ''),
+                                'postos': []
+                            }
+                        
+                        # Adicionar informações deste posto
+                        produtos_consolidados[nome_produto]['postos'].append({
+                            'codigo_vibra': posto['codigo'],
+                            'nome_posto': posto['nome'],
+                            'razao_social': posto['razao'],
+                            'cnpj': posto['cnpj'],
+                            'preco': produto.get('preco', ''),
+                            'prazo': produto.get('prazo', ''),
+                            'base': produto.get('base', ''),
+                            'data_coleta': dados['data_coleta']
+                        })
+                    
+                    print(f"\n[OK] Posto {i+1}/{len(postos_teste)} concluído!")
+                    
+                except Exception as e:
+                    print(f"\n[ERROR] Erro no posto {posto['nome']}: {e}")
+                    continue
             
-            print(f"\n✅ Posto {i+1}/{len(postos_teste)} concluído!")
-            
-        except Exception as e:
-            print(f"\n❌ Erro no posto {posto['nome']}: {e}")
-            continue
+            # Manter navegador aberto se não for headless
+            if not scraper.headless:
+                print("\n⏸️  Navegador aberto para conferir")
+                print("   Pressione ENTER quando terminar...")
+                input()
+        
+        finally:
+            browser.close()
+            print("\n[BROWSER] Navegador fechado.")
     
     # Converter para lista final
     produtos_final = list(produtos_consolidados.values())
@@ -752,16 +857,16 @@ def main():
         json.dump(todos_dados, f, ensure_ascii=False, indent=2)
     
     print("\n" + "="*60)
-    print("✅ SCRAPING DE TESTE CONCLUÍDO!")
+    print("[OK] SCRAPING DE TESTE CONCLUÍDO!")
     print(f"   Total de postos processados: {len(todos_dados)}/{len(postos_teste)}")
     print(f"   Total de produtos únicos: {len(produtos_final)}")
-    print(f"\n📁 Arquivos gerados:")
+    print(f"\n[FOLDER] Arquivos gerados:")
     print(f"   - vibra_precos_CONSOLIDADO.json (para exibir na tela)")
     print(f"   - vibra_precos_TESTE.json (dados brutos por posto)")
     print("="*60)
     
     print("\n" + "="*60)
-    print("✅ SCRAPING CONCLUÍDO!")
+    print("[OK] SCRAPING CONCLUÍDO!")
     print("="*60)
 
 

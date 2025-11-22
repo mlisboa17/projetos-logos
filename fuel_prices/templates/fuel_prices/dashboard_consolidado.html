@@ -1,0 +1,488 @@
+{% load fuel_filters %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Preços - Vibra Energia</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --vibra-orange: #FF6B00;
+            --vibra-dark: #1a1a1a;
+            --vibra-light: #f8f9fa;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .dashboard-container {
+            padding: 2rem 0;
+        }
+        
+        .header-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .header-card h1 {
+            color: var(--vibra-orange);
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stats-row {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .stat-box {
+            flex: 1;
+            background: linear-gradient(135deg, var(--vibra-orange) 0%, #ff8c42 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-box .number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            display: block;
+        }
+        
+        .stat-box .label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .main-table-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .table-header {
+            background: linear-gradient(135deg, var(--vibra-dark) 0%, #333 100%);
+            color: white;
+            padding: 1.5rem 2rem;
+        }
+        
+        .table-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        
+        .filters {
+            background: #f8f9fa;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .price-table {
+            margin: 0;
+        }
+        
+        .price-table thead th {
+            background: #f8f9fa;
+            color: var(--vibra-dark);
+            font-weight: 600;
+            border-bottom: 2px solid var(--vibra-orange);
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .price-table tbody tr:hover {
+            background: #fff8f0;
+            cursor: pointer;
+        }
+        
+        .price-table td {
+            padding: 1rem;
+            vertical-align: middle;
+        }
+        
+        .product-name {
+            font-weight: 600;
+            color: var(--vibra-dark);
+        }
+        
+        .price-cell {
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+        
+        .price-best {
+            color: #28a745;
+        }
+        
+        .price-worst {
+            color: #dc3545;
+        }
+        
+        .price-neutral {
+            color: #6c757d;
+        }
+        
+        .badge-posto {
+            background: var(--vibra-orange);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+        
+        .refresh-btn {
+            background: var(--vibra-orange);
+            border: none;
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .refresh-btn:hover {
+            background: #ff8c42;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 0, 0.3);
+        }
+        
+        .last-update {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        .comparison-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        
+        .indicator-best {
+            background: #28a745;
+        }
+        
+        .indicator-worst {
+            background: #dc3545;
+        }
+        
+        .indicator-neutral {
+            background: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container dashboard-container">
+        <!-- Header Card -->
+        <div class="header-card">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1><i class="bi bi-fuel-pump-fill"></i> Dashboard de Preços Vibra Energia</h1>
+                    <p class="last-update mb-0">
+                        <i class="bi bi-clock"></i> Última atualização: {{ ultima_atualizacao|default:"Aguardando dados" }}
+                    </p>
+                </div>
+                <div>
+                    <button class="refresh-btn me-2" onclick="location.reload()">
+                        <i class="bi bi-arrow-clockwise"></i> Atualizar Página
+                    </button>
+                    <button class="refresh-btn" data-bs-toggle="modal" data-bs-target="#scraperModal">
+                        <i class="bi bi-cloud-download"></i> Coletar Preços Agora
+                    </button>
+                </div>
+            </div>
+            
+            <div class="stats-row">
+                <div class="stat-box">
+                    <span class="number">{{ total_postos }}</span>
+                    <span class="label">Postos Ativos</span>
+                </div>
+                <div class="stat-box">
+                    <span class="number">{{ total_produtos }}</span>
+                    <span class="label">Produtos Cadastrados</span>
+                </div>
+                <div class="stat-box">
+                    <span class="number">{{ total_precos }}</span>
+                    <span class="label">Preços Coletados</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Table Card -->
+        <div class="main-table-card">
+            <div class="table-header">
+                <h2><i class="bi bi-table"></i> Comparativo de Preços por Produto e Posto</h2>
+            </div>
+            
+            <div class="filters">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <input type="text" id="searchInput" class="form-control" placeholder="🔍 Buscar produto...">
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <small class="text-muted">
+                            <span class="comparison-indicator indicator-best"></span> Melhor preço
+                            <span class="comparison-indicator indicator-worst ms-3"></span> Pior preço
+                        </small>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="overflow-x: auto; max-height: 70vh;">
+                <table class="table price-table table-hover">
+                    <thead>
+                        <tr>
+                            <th style="width: 30%">Produto</th>
+                            {% for posto in postos %}
+                            <th class="text-center">
+                                <div>{{ posto.nome_fantasia }}</div>
+                            </th>
+                            {% endfor %}
+                            <th class="text-center">Variação</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        {% for produto_nome, dados in produtos_comparacao.items %}
+                        <tr>
+                            <td class="product-name">
+                                <i class="bi bi-droplet-fill text-warning me-2"></i>
+                                {{ produto_nome }}
+                            </td>
+                            {% for posto in postos %}
+                                {% if dados.precos_por_posto|get_item:posto.cnpj %}
+                                    {% with preco_info=dados.precos_por_posto|get_item:posto.cnpj %}
+                                    <td class="text-center price-cell 
+                                        {% if preco_info.preco == dados.preco_min %}price-best
+                                        {% elif preco_info.preco == dados.preco_max %}price-worst
+                                        {% else %}price-neutral{% endif %}">
+                                        <span class="comparison-indicator 
+                                            {% if preco_info.preco == dados.preco_min %}indicator-best
+                                            {% elif preco_info.preco == dados.preco_max %}indicator-worst
+                                            {% else %}indicator-neutral{% endif %}"></span>
+                                        R$ {{ preco_info.preco|floatformat:4 }}
+                                        <br>
+                                        <small class="text-muted">{{ preco_info.prazo }}</small>
+                                    </td>
+                                    {% endwith %}
+                                {% else %}
+                                <td class="text-center text-muted">
+                                    <small>-</small>
+                                </td>
+                                {% endif %}
+                            {% endfor %}
+                            <td class="text-center">
+                                {% if dados.variacao > 0 %}
+                                <span class="badge bg-danger">
+                                    <i class="bi bi-arrow-up"></i> {{ dados.variacao|floatformat:2 }}%
+                                </span>
+                                {% else %}
+                                <span class="badge bg-success">
+                                    <i class="bi bi-dash"></i> 0%
+                                </span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="100" class="text-center text-muted py-5">
+                                <i class="bi bi-inbox" style="font-size: 3rem;"></i>
+                                <p class="mt-3">Nenhum dado disponível</p>
+                                <small>Execute o scraper para coletar preços</small>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Scraper -->
+    <div class="modal fade" id="scraperModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                    <h5 class="modal-title"><i class="bi bi-cloud-download me-2"></i>Coletar Preços em Tempo Real</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle me-2"></i>
+                        <strong>Tempo estimado:</strong> ~2 minutos por posto selecionado
+                    </div>
+                    
+                    <form id="scraperForm" action="{% url 'executar_scraper' %}" method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Selecione os postos para coletar preços:</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="selectAll">
+                                <label class="form-check-label fw-bold" for="selectAll">
+                                    Selecionar Todos
+                                </label>
+                            </div>
+                            <hr>
+                            {% for posto in todos_postos %}
+                            <div class="form-check">
+                                <input class="form-check-input posto-checkbox" type="checkbox" name="postos" value="{{ posto.cnpj }}" id="posto{{ forloop.counter }}">
+                                <label class="form-check-label" for="posto{{ forloop.counter }}">
+                                    {{ posto.nome_fantasia }} - CNPJ: {{ posto.cnpj }}
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div id="tempoEstimado" class="alert alert-warning d-none">
+                            <i class="bi bi-clock me-2"></i>
+                            Tempo estimado: <strong><span id="tempoTexto">0</span> minutos</strong>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="iniciarScraper()">
+                        <i class="bi bi-play-fill me-1"></i>Iniciar Coleta
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Progresso -->
+    <div class="modal fade" id="progressModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body text-center py-5">
+                    <div class="spinner-border text-primary mb-3" role="status" style="width: 4rem; height: 4rem;">
+                        <span class="visually-hidden">Carregando...</span>
+                    </div>
+                    <h5>Coletando preços...</h5>
+                    <p class="text-muted mb-0">Aguarde, isso pode levar alguns minutos.</p>
+                    <div class="progress mt-3" style="height: 25px;">
+                        <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%">0%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Filtro de busca
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            const searchValue = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#tableBody tr');
+            
+            rows.forEach(row => {
+                const productName = row.querySelector('.product-name').textContent.toLowerCase();
+                if (productName.includes(searchValue)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+
+        // Selecionar todos
+        document.getElementById('selectAll').addEventListener('change', function() {
+            const checkboxes = document.querySelectorAll('.posto-checkbox');
+            checkboxes.forEach(cb => cb.checked = this.checked);
+            calcularTempo();
+        });
+
+        // Calcular tempo estimado
+        document.querySelectorAll('.posto-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', calcularTempo);
+        });
+
+        function calcularTempo() {
+            const selecionados = document.querySelectorAll('.posto-checkbox:checked').length;
+            const tempoMinutos = selecionados * 2;
+            
+            if (selecionados > 0) {
+                document.getElementById('tempoEstimado').classList.remove('d-none');
+                document.getElementById('tempoTexto').textContent = tempoMinutos;
+            } else {
+                document.getElementById('tempoEstimado').classList.add('d-none');
+            }
+        }
+
+        function iniciarScraper() {
+            const selecionados = document.querySelectorAll('.posto-checkbox:checked');
+            
+            if (selecionados.length === 0) {
+                alert('Selecione pelo menos um posto!');
+                return;
+            }
+
+            // Fechar modal de seleção
+            bootstrap.Modal.getInstance(document.getElementById('scraperModal')).hide();
+            
+            // Mostrar modal de progresso
+            const progressModal = new bootstrap.Modal(document.getElementById('progressModal'));
+            progressModal.show();
+
+            // Submeter formulário
+            const form = document.getElementById('scraperForm');
+            const formData = new FormData(form);
+
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                progressModal.hide();
+                
+                if (data.status === 'started') {
+                    const tempoMinutos = data.tempo_estimado;
+                    alert(`✅ Coleta iniciada em background!\n\n` +
+                          `📊 Postos selecionados: ${data.postos_selecionados}\n` +
+                          `⏱️ Tempo estimado: ${tempoMinutos} minutos\n\n` +
+                          `Você pode continuar usando o sistema.\n` +
+                          `A página será atualizada automaticamente quando concluir.\n\n` +
+                          `⚠️ Se houver algum erro, verifique o console do servidor.`);
+                    
+                    // Aguardar e recarregar após o tempo estimado
+                    const reloadTime = tempoMinutos * 60 * 1000 + 15000; // tempo + 15s buffer
+                    setTimeout(() => {
+                        location.reload();
+                    }, reloadTime);
+                    
+                } else if (data.status === 'success') {
+                    alert(`✅ Coleta concluída!\n\nPostos processados: ${data.postos_processados}\nProdutos coletados: ${data.produtos_coletados}`);
+                    location.reload();
+                } else {
+                    alert('❌ Erro ao iniciar coleta: ' + data.message + '\n\nVerifique o console do servidor para mais detalhes.');
+                }
+            })
+            .catch(error => {
+                progressModal.hide();
+                alert('❌ Erro de comunicação com o servidor:\n\n' + error + 
+                      '\n\nPossíveis causas:\n' +
+                      '• Servidor Django não está rodando\n' +
+                      '• Problema de conexão\n' +
+                      '• Erro no código do scraper\n\n' +
+                      'Verifique o terminal do servidor para mais detalhes.');
+            });
+        }
+    </script>
+</body>
+</html>
