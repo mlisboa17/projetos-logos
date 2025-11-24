@@ -53,6 +53,14 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-*7*d2c1a3b00b#-qijwx#
 # DEBUG: Modo de depuração
 # ✅ True = Mostra erros detalhados na tela (APENAS DESENVOLVIMENTO!)
 # ❌ False = Esconde erros, mostra página 500 genérica (PRODUÇÃO)
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
+
+# ALLOWED_HOSTS: Lista de domínios permitidos
+# 🏠 Desenvolvimento: Aceita localhost
+# 🚀 Produção: Domínios específicos via variável de ambiente
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+
+
 # ============================================================
 # 📦 APLICAÇÕES INSTALADAS
 # ============================================================

@@ -95,7 +95,7 @@ def home(request):
 @login_required(login_url='login')
 def produtos_lista(request):
     """Lista de produtos com imagens e filtros"""
-    produtos = ProdutoMae.objects.prefetch_related('imagens_treino').filter(ativo=True)
+    produtos = ProdutoMae.objects.prefetch_related('imagens_treino', 'codigos_barras').filter(ativo=True)
     
     # Filtros
     tipo_filtro = request.GET.get('tipo')
@@ -109,8 +109,8 @@ def produtos_lista(request):
         produtos = produtos.filter(
             Q(descricao_produto__icontains=busca) |
             Q(marca__icontains=busca) |
-            Q(codigo_barras__icontains=busca)
-        )
+            Q(codigos_barras__codigo__icontains=busca)
+        ).distinct()
     
     # Filtro por imagens
     if imagens_filtro == 'com':

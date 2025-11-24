@@ -1,0 +1,34 @@
+{
+  "posto": "Seus produtos mais consumidos",
+  "modalidade": "Combustíveis Claros",
+  "produtos": [
+    {
+      "nome": "ETANOL HIDRATADO ADITIV. PETROBRAS GRID",
+      "base": "Base:",
+      "preco": "Preço: R$ 3,6377",
+      "prazo": "3 Dias"
+    },
+    {
+      "nome": "GASOLINA COMUM C ADIT PETROBRAS GRID",
+      "base": "Base:",
+      "preco": "Preço: R$ 5,3724",
+      "prazo": "3 Dias"
+    },
+    {
+      "nome": "GASOLINA COMUM C",
+      "base": "Base:",
+      "preco": "Preço: R$ 5,2320",
+      "prazo": "3 Dias"
+    },
+    {
+      "nome": "ÓLEO DIESEL B S10 ADIT PETROBRAS GRID",
+      "base": "Base:",
+      "preco": "Preço: R$ 5,4349",
+      "prazo": "3 Dias"
+    }
+  ],
+  "data_coleta": "00:35 22/11/2025",
+  "codigo_vibra": "1153963",
+  "razao_social": "POSTO CIDADE PATRIMONIO LTDA",
+  "cnpj": "05428059000280"
+}

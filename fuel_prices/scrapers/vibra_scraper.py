@@ -587,10 +587,13 @@ class VibraScraper:
             precos_salvos = 0
             for produto in dados['produtos']:
                 # Converter preço de string para decimal
-                preco_str = produto.get('preco', '').replace('R$', '').replace('.', '').replace(',', '.').strip()
+                # Formato: "Preço: R$ 3,6377" -> 3.6377
+                preco_str = produto.get('preco', '')
+                preco_str = preco_str.replace('Preço:', '').replace('R$', '').replace('.', '').replace(',', '.').strip()
                 try:
                     preco_decimal = float(preco_str)
                 except:
+                    print(f"  [WARN] Não foi possível converter preço: {produto.get('preco', '')}")
                     continue
                 
                 PrecoVibra.objects.create(
@@ -730,8 +733,14 @@ class VibraScraper:
             raise
 
 
-def main():
-    """Função principal para teste"""
+def main(codigos_selecionados=None):
+    """
+    Função principal para scraping
+    
+    Args:
+        codigos_selecionados: Lista de códigos dos postos a processar (ex: ['95406', '107469'])
+                            Se None, processa todos os 11 postos
+    """
     # Credenciais do Grupo Lisboa
     scraper = VibraScraper(
         username='95406',
@@ -739,31 +748,77 @@ def main():
         headless=False  # False = abre navegador visível para debug
     )
     
-    # Lista dos 11 postos do Grupo Lisboa
-    postos_completo = [
-        {'codigo': '95406', 'razao': 'AUTO POSTO CASA CAIADA LTDA', 'nome': 'AP CASA CAIADA', 'cnpj': '04284939000186'},  # SEMPRE PRIMEIRO - Posto da senha mestre
-        {'codigo': '107469', 'razao': 'POSTO ENSEADA DO NORTE LTDA', 'nome': 'POSTO ENSEADA DO NOR', 'cnpj': '00338804000103'},
-        {'codigo': '11236', 'razao': 'REAL RECIFE LTDA', 'nome': 'POSTO REAL', 'cnpj': '24156978000105'},
-        {'codigo': '1153963', 'razao': 'POSTO CIDADE PATRIMONIO LTDA', 'nome': 'POSTO AVENIDA', 'cnpj': '05428059000280'},
-        {'codigo': '124282', 'razao': 'R.J. COMBUSTIVEIS E LUBRIFICANTES L', 'nome': 'R J', 'cnpj': '08726064000186'},
-        {'codigo': '14219', 'razao': 'AUTO POSTO GLOBO LTDA', 'nome': 'GLOBO105', 'cnpj': '41043647000188'},
-        {'codigo': '156075', 'razao': 'DISTRIBUIDORA R S DERIVADO DE PETRO', 'nome': 'POSTO BR SHOPPING', 'cnpj': '07018760000175'},
-        {'codigo': '1775869', 'razao': 'POSTO DOZE COMERCIO DE COMBUSTIVEIS', 'nome': 'POSTO DOZE', 'cnpj': '52308604000101'},
-        {'codigo': '5039', 'razao': 'RIO DOCE COMERCIO E SERVICOS LTDA', 'nome': 'POSTO VIP', 'cnpj': '03008754000186'},
-        {'codigo': '61003', 'razao': 'AUTO POSTO IGARASSU LTDA.', 'nome': 'P IGARASSU', 'cnpj': '04274378000134'},
-        {'codigo': '94762', 'razao': 'POSTO CIDADE PATRIMONIO LTDA', 'nome': 'CIDADE PATRIMONIO', 'cnpj': '05428059000107'},
-    ]
+    # POSTO MASTER (Casa Caiada) - SEMPRE O PRIMEIRO
+    # Este é o posto da senha mestre (95406), então sempre começamos por ele
+    CODIGO_MASTER = '95406'
+    posto_master = {'codigo': '95406', 'razao': 'AUTO POSTO CASA CAIADA LTDA', 'nome': 'AP CASA CAIADA', 'cnpj': '04284939000186'}
     
-    # TESTE: Processar apenas 3 postos (Casa Caiada + 2 primeiros)
-    postos_teste = postos_completo[:3]  # Casa Caiada sempre incluído
+    # Lista completa dos 11 postos do Grupo Lisboa
+    todos_postos_dict = {
+        '95406': {'codigo': '95406', 'razao': 'AUTO POSTO CASA CAIADA LTDA', 'nome': 'AP CASA CAIADA', 'cnpj': '04284939000186'},
+        '107469': {'codigo': '107469', 'razao': 'POSTO ENSEADA DO NORTE LTDA', 'nome': 'POSTO ENSEADA DO NOR', 'cnpj': '00338804000103'},
+        '11236': {'codigo': '11236', 'razao': 'REAL RECIFE LTDA', 'nome': 'POSTO REAL', 'cnpj': '24156978000105'},
+        '1153963': {'codigo': '1153963', 'razao': 'POSTO CIDADE PATRIMONIO LTDA', 'nome': 'POSTO AVENIDA', 'cnpj': '05428059000280'},
+        '124282': {'codigo': '124282', 'razao': 'R.J. COMBUSTIVEIS E LUBRIFICANTES L', 'nome': 'R J', 'cnpj': '08726064000186'},
+        '14219': {'codigo': '14219', 'razao': 'AUTO POSTO GLOBO LTDA', 'nome': 'GLOBO105', 'cnpj': '41043647000188'},
+        '156075': {'codigo': '156075', 'razao': 'DISTRIBUIDORA R S DERIVADO DE PETRO', 'nome': 'POSTO BR SHOPPING', 'cnpj': '07018760000175'},
+        '1775869': {'codigo': '1775869', 'razao': 'POSTO DOZE COMERCIO DE COMBUSTIVEIS', 'nome': 'POSTO DOZE', 'cnpj': '52308604000101'},
+        '5039': {'codigo': '5039', 'razao': 'RIO DOCE COMERCIO E SERVICOS LTDA', 'nome': 'POSTO VIP', 'cnpj': '03008754000186'},
+        '61003': {'codigo': '61003', 'razao': 'AUTO POSTO IGARASSU LTDA.', 'nome': 'P IGARASSU', 'cnpj': '04274378000134'},
+        '94762': {'codigo': '94762', 'razao': 'POSTO CIDADE PATRIMONIO LTDA', 'nome': 'CIDADE PATRIMONIO', 'cnpj': '05428059000107'},
+    }
     
-    # Processar postos de teste
+    # Determinar quais postos processar
+    if codigos_selecionados:
+        # Modo seletivo: usuário escolheu postos específicos
+        print("\n" + "="*60)
+        print(f"🎯 MODO SELETIVO: {len(codigos_selecionados)} posto(s) solicitado(s)")
+        print(f"   Códigos: {', '.join(codigos_selecionados)}")
+        print("="*60)
+        
+        # Verificar se Casa Caiada está na lista
+        casa_caiada_solicitado = CODIGO_MASTER in codigos_selecionados
+        
+        # LÓGICA DO POSTO MASTER:
+        # - Casa Caiada sempre é processado PRIMEIRO (para fazer login)
+        # - Se não foi solicitado, processamos mas NÃO salvamos seus dados
+        postos_para_processar = [posto_master]  # Sempre começa com Casa Caiada
+        
+        # Adicionar outros postos solicitados
+        for codigo in codigos_selecionados:
+            if codigo != CODIGO_MASTER and codigo in todos_postos_dict:
+                postos_para_processar.append(todos_postos_dict[codigo])
+        
+        # Marcar quais devem ser salvos
+        codigos_para_salvar = set(codigos_selecionados)
+        
+        print("\n" + "="*60)
+        print("🔑 LÓGICA DO POSTO MASTER:")
+        print(f"   ✓ Casa Caiada será processado PRIMEIRO (login)")
+        if casa_caiada_solicitado:
+            print(f"   ✓ Casa Caiada FOI solicitado → Preços serão salvos")
+        else:
+            print(f"   ⚠ Casa Caiada NÃO foi solicitado → Preços NÃO serão salvos")
+        print("="*60)
+        
+    else:
+        # Modo completo: processar todos os 11 postos
+        postos_para_processar = [posto_master] + [p for codigo, p in todos_postos_dict.items() if codigo != CODIGO_MASTER]
+        codigos_para_salvar = set(todos_postos_dict.keys())  # Salvar todos
+        
+        print("\n" + "="*60)
+        print("📋 MODO COMPLETO: Processando TODOS os 11 postos")
+        print("🔑 POSTO MASTER (Senha Mestre): Casa Caiada #95406")
+        print("   Lógica: Login com Casa Caiada → Coletar preços → Alternar para outros postos")
+        print("="*60)
+    
+    # Processar postos
     todos_dados = []
     produtos_consolidados = {}  # Dicionário para evitar duplicação: {nome_produto: {postos: [...]}}
     
     # SESSÃO ÚNICA: Abrir browser UMA VEZ para todos os postos
     print("\n" + "="*60)
-    print("[BROWSER] Abrindo navegador (SESSÃO ÚNICA para todos os postos)...")
+    print(f"[BROWSER] Abrindo navegador (SESSÃO ÚNICA para {len(postos_para_processar)} posto(s))...")
     print("="*60)
     
     with sync_playwright() as p:
@@ -772,57 +827,75 @@ def main():
         page = context.new_page()
         
         try:
-            for i, posto in enumerate(postos_teste):
+            for i, posto in enumerate(postos_para_processar):
                 print(f"\n{'='*60}")
-                print(f"🏢 PROCESSANDO POSTO {i+1}/{len(postos_teste)}")
+                print(f"🏢 PROCESSANDO POSTO {i+1}/{len(postos_para_processar)}")
                 print(f"   Código: {posto['codigo']}")
                 print(f"   Nome: {posto['nome']}")
                 print(f"   CNPJ: {posto['cnpj']}")
+                
+                # LÓGICA DO POSTO MASTER
+                if i == 0:
+                    print(f"   🔑 POSTO MASTER - Login com credenciais Casa Caiada")
+                else:
+                    print(f"   🔄 Alternando do Casa Caiada para este posto")
+                
+                # Verificar se este posto deve ter seus dados salvos
+                deve_salvar = posto['codigo'] in codigos_para_salvar
+                if not deve_salvar:
+                    print(f"   ⚠ Posto NÃO solicitado - Dados NÃO serão salvos (apenas login)")
+                
                 print(f"{'='*60}")
                 
                 try:
                     # Executar scraping para este posto (sessão única)
+                    # - No primeiro posto (Casa Caiada): faz login e coleta
+                    # - Nos outros postos: reutiliza sessão e apenas alterna de posto
                     output_file = f"vibra_precos_{posto['codigo']}_{posto['nome'].replace(' ', '_')}.json"
                     dados = scraper.run_scraping(
                         output_file, 
                         cnpj_posto=posto['cnpj'],
                         posto_info=posto,
                         page=page,  # REUTILIZAR mesma página
-                        primeira_vez=(i == 0)  # Login apenas no primeiro posto
+                        primeira_vez=(i == 0)  # Login apenas no primeiro posto (Casa Caiada)
                     )
                     
-                    # Adicionar informações do posto aos dados
-                    dados['codigo_vibra'] = posto['codigo']
-                    dados['razao_social'] = posto['razao']
-                    dados['cnpj'] = posto['cnpj']
-                    
-                    todos_dados.append(dados)
-                    
-                    # Consolidar produtos (sem duplicação)
-                    for produto in dados['produtos']:
-                        nome_produto = produto['nome']
+                    # SALVAR DADOS apenas se foi solicitado
+                    if deve_salvar:
+                        # Adicionar informações do posto aos dados
+                        dados['codigo_vibra'] = posto['codigo']
+                        dados['razao_social'] = posto['razao']
+                        dados['cnpj'] = posto['cnpj']
                         
-                        if nome_produto not in produtos_consolidados:
-                            # Primeira vez vendo este produto
-                            produtos_consolidados[nome_produto] = {
-                                'nome': nome_produto,
-                                'codigo': produto.get('codigo', ''),
-                                'postos': []
-                            }
+                        todos_dados.append(dados)
                         
-                        # Adicionar informações deste posto
-                        produtos_consolidados[nome_produto]['postos'].append({
-                            'codigo_vibra': posto['codigo'],
-                            'nome_posto': posto['nome'],
-                            'razao_social': posto['razao'],
-                            'cnpj': posto['cnpj'],
-                            'preco': produto.get('preco', ''),
-                            'prazo': produto.get('prazo', ''),
-                            'base': produto.get('base', ''),
-                            'data_coleta': dados['data_coleta']
-                        })
-                    
-                    print(f"\n[OK] Posto {i+1}/{len(postos_teste)} concluído!")
+                        # Consolidar produtos (sem duplicação)
+                        for produto in dados['produtos']:
+                            nome_produto = produto['nome']
+                            
+                            if nome_produto not in produtos_consolidados:
+                                # Primeira vez vendo este produto
+                                produtos_consolidados[nome_produto] = {
+                                    'nome': nome_produto,
+                                    'codigo': produto.get('codigo', ''),
+                                    'postos': []
+                                }
+                            
+                            # Adicionar informações deste posto
+                            produtos_consolidados[nome_produto]['postos'].append({
+                                'codigo_vibra': posto['codigo'],
+                                'nome_posto': posto['nome'],
+                                'razao_social': posto['razao'],
+                                'cnpj': posto['cnpj'],
+                                'preco': produto.get('preco', ''),
+                                'prazo': produto.get('prazo', ''),
+                                'base': produto.get('base', ''),
+                                'data_coleta': dados['data_coleta']
+                            })
+                        
+                        print(f"\n✅ Posto {i+1}/{len(postos_para_processar)} - DADOS SALVOS")
+                    else:
+                        print(f"\n⚠️  Posto {i+1}/{len(postos_para_processar)} - Pulado (não solicitado)")
                     
                 except Exception as e:
                     print(f"\n[ERROR] Erro no posto {posto['nome']}: {e}")
@@ -853,23 +926,51 @@ def main():
         json.dump(dados_para_tela, f, ensure_ascii=False, indent=2)
     
     # Salvar também arquivo com dados brutos por posto
-    with open('vibra_precos_TESTE.json', 'w', encoding='utf-8') as f:
+    with open('vibra_precos_TODOS_POSTOS.json', 'w', encoding='utf-8') as f:
         json.dump(todos_dados, f, ensure_ascii=False, indent=2)
     
     print("\n" + "="*60)
-    print("[OK] SCRAPING DE TESTE CONCLUÍDO!")
-    print(f"   Total de postos processados: {len(todos_dados)}/{len(postos_teste)}")
+    print("[OK] SCRAPING CONCLUÍDO!")
+    print(f"   Total de postos processados: {len(postos_para_processar)}")
+    print(f"   Total de postos com dados salvos: {len(todos_dados)}")
     print(f"   Total de produtos únicos: {len(produtos_final)}")
     print(f"\n[FOLDER] Arquivos gerados:")
     print(f"   - vibra_precos_CONSOLIDADO.json (para exibir na tela)")
-    print(f"   - vibra_precos_TESTE.json (dados brutos por posto)")
+    print(f"   - vibra_precos_TODOS_POSTOS.json (dados brutos por posto)")
     print("="*60)
     
     print("\n" + "="*60)
     print("[OK] SCRAPING CONCLUÍDO!")
     print("="*60)
+    
+    # IMPORTAR AUTOMATICAMENTE PARA O BANCO DE DADOS
+    print("\n" + "="*60)
+    print("[AUTO-IMPORT] Importando dados para o banco de dados...")
+    print("="*60)
+    
+    try:
+        from importar_precos_vibra import importar_arquivo_consolidado
+        importar_arquivo_consolidado()
+        print("\n✅ DASHBOARD FUEL PRICES ATUALIZADO AUTOMATICAMENTE!")
+    except Exception as e:
+        print(f"\n⚠️  Erro ao importar: {e}")
+        print("Execute manualmente: python importar_precos_vibra.py")
 
 
 if __name__ == '__main__':
-    main()
+    import argparse
+    
+    # Parser para argumentos de linha de comando
+    parser = argparse.ArgumentParser(description='Scraper Vibra Energia - Grupo Lisboa')
+    parser.add_argument('--postos', nargs='+', help='Códigos dos postos a processar (ex: 95406 107469)')
+    args = parser.parse_args()
+    
+    # Se foram passados códigos específicos via linha de comando, usar esses
+    if args.postos:
+        print(f"\n🎯 Modo seletivo: {len(args.postos)} posto(s) solicitado(s)")
+        main(codigos_selecionados=args.postos)
+    else:
+        # Modo padrão: processar todos os 11 postos
+        print("\n📋 Modo completo: Processando todos os 11 postos")
+        main()
 

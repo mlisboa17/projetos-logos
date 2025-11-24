@@ -1,0 +1,43 @@
+{
+  "posto": "menu",
+  "modalidade": "",
+  "produtos": [
+    {
+      "nome": "GASOLINA COMUM C ADIT PETROBRAS GRID",
+      "base": "Base:",
+      "preco": "Preço:",
+      "prazo": null
+    },
+    {
+      "nome": "GASOLINA COMUM C",
+      "base": "Base:",
+      "preco": "Preço:",
+      "prazo": null
+    },
+    {
+      "nome": "ÓLEO DIESEL B S10",
+      "base": "Base:",
+      "preco": "Preço:",
+      "prazo": null
+    },
+    {
+      "nome": "ETANOL HIDRATADO COMBUSTIVEL",
+      "base": "Base:",
+      "preco": "Preço:",
+      "prazo": null
+    },
+    {
+      "nome": "ÓLEO DIESEL B S10 ADIT PETROBRAS GRID",
+      "base": "Base:",
+      "preco": "Preço:",
+      "prazo": null
+    },
+    {
+      "nome": "ETANOL HIDRATADO ADITIV. PETROBRAS GRID",
+      "base": "Base:",
+      "preco": "Preço:",
+      "prazo": null
+    }
+  ],
+  "data_coleta": "11:11 24/11/2025"
+}

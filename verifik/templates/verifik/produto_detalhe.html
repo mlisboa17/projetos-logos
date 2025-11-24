@@ -206,7 +206,7 @@
     {% endif %}
     
     <div style="margin-top: 1.5rem;">
-        <a href="/admin/verifik/imagemproduto/add/?produto={{ produto.pk }}" class="btn" style="background: #27ae60;">
+        <a href="{% url 'verifik_adicionar_imagem' produto.pk %}" class="btn" style="background: #27ae60;">
             ➕ Adicionar Imagens
         </a>
     </div>

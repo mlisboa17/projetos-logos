@@ -1,0 +1,445 @@
+{
+  "data_atualizacao": "11:14 24/11/2025",
+  "total_postos": 11,
+  "total_produtos": 8,
+  "produtos": [
+    {
+      "nome": "ETANOL HIDRATADO ADITIV. PETROBRAS GRID",
+      "codigo": "",
+      "postos": [
+        {
+          "codigo_vibra": "95406",
+          "nome_posto": "AP CASA CAIADA",
+          "razao_social": "AUTO POSTO CASA CAIADA LTDA",
+          "cnpj": "04284939000186",
+          "preco": "Preço: R$ 3,6377",
+          "prazo": "3 Dias",
+          "base": "Base:",
+          "data_coleta": "11:08 24/11/2025"
+        },
+        {
+          "codigo_vibra": "107469",
+          "nome_posto": "POSTO ENSEADA DO NOR",
+          "razao_social": "POSTO ENSEADA DO NORTE LTDA",
+          "cnpj": "00338804000103",
+          "preco": "Preço: R$ 3,6377",
+          "prazo": "3 Dias",
+          "base": "Base:",
+          "data_coleta": "11:08 24/11/2025"
+        },
+        {
+          "codigo_vibra": "11236",
+          "nome_posto": "POSTO REAL",
+          "razao_social": "REAL RECIFE LTDA",
+          "cnpj": "24156978000105",
+          "preco": "Preço: R$ 3,6377",
+          "prazo": "3 Dias",
+          "base": "Base:",
+          "data_coleta": "11:09 24/11/2025"
+        },
+        {
+          "codigo_vibra": "1153963",
+          "nome_posto": "POSTO AVENIDA",
+          "razao_social": "POSTO CIDADE PATRIMONIO LTDA",
+          "cnpj": "05428059000280",
+          "preco": "Preço: R$ 3,6377",
+          "prazo": "3 Dias",
+          "base": "Base:",
+          "data_coleta": "11:09 24/11/2025"
+        },
+        {
+          "codigo_vibra": "156075",
+          "nome_posto": "POSTO BR SHOPPING",
+          "razao_social": "DISTRIBUIDORA R S DERIVADO DE PETRO",
+          "cnpj": "07018760000175",
+          "preco": "Preço:",
+          "prazo": null,
+          "base": "Base:",
+          "data_coleta": "11:10 24/11/2025"
+        },
+        {
+          "codigo_vibra": "1775869",
+          "nome_posto": "POSTO DOZE",
+          "razao_social": "POSTO DOZE COMERCIO DE COMBUSTIVEIS",
+          "cnpj": "52308604000101",
+          "preco": "Preço:",
+          "prazo": null,
+          "base": "Base:",
+          "data_coleta": "11:11 24/11/2025"
+        },
+        {
+          "codigo_vibra": "5039",
+          "nome_posto": "POSTO VIP",
+          "razao_social": "RIO DOCE COMERCIO E SERVICOS LTDA",
+          "cnpj": "03008754000186",
+          "preco": "Preço: R$ 3,6377",
+          "prazo": "3 Dias",
+          "base": "Base:",
+          "data_coleta": "11:11 24/11/2025"
+        },
+        {
+          "codigo_vibra": "94762",
+          "nome_posto": "CIDADE PATRIMONIO",
+          "razao_social": "POSTO CIDADE PATRIMONIO LTDA",
+          "cnpj": "05428059000107",
+          "preco": "Preço: R$ 3,6377",
+          "prazo": "3 Dias",
+          "base": "Base:",
+          "data_coleta": "11:12 24/11/2025"
+        }
+      ]
+    },
+    {
+      "nome": "GASOLINA COMUM C",
+      "codigo": "",
+      "postos": [
+        {
+          "codigo_vibra": "95406",
+          "nome_posto": "AP CASA CAIADA",
+          "razao_social": "AUTO POSTO CASA CAIADA LTDA",
+          "cnpj": "04284939000186",
+          "preco": "Preço: R$ 5,2320",
+          "prazo": "3 Dias",
+          "base": "Base:",
+          "data_coleta": "11:08 24/11/2025"
+        },
+        {
+          "codigo_vibra": "107469",
+          "nome_posto": "POSTO ENSEADA DO NOR",
+          "razao_social": "POSTO ENSEADA DO NORTE LTDA",
+          "cnpj": "00338804000103",
+          "preco": "Preço: R$ 5,2320",
+          "prazo": "3 Dias",
+          "base": "Base:",
+          "data_coleta": "11:08 24/11/2025"
+        },
+        {
+          "codigo_vibra": "11236",
+          "nome_posto": "POSTO REAL",
+          "razao_social": "REAL RECIFE LTDA",
+          "cnpj": "24156978000105",
+          "preco": "Preço: R$ 5,2320",
+          "prazo": "3 Dias",
+          "base": "Base:",
+          "data_coleta": "11:09 24/11/2025"
+        },
+        {
+          "codigo_vibra": "1153963",
+          "nome_posto": "POSTO AVENIDA",
+          "razao_social": "POSTO CIDADE PATRIMONIO LTDA",
+          "cnpj": "05428059000280",
+          "preco": "Preço: R$ 5,2320",
+          "prazo": "3 Dias",
+          "base": "Base:",
+          "data_coleta": "11:09 24/11/2025"
+        },
+        {
+          "codigo_vibra": "124282",
+          "nome_posto": "R J",
+          "razao_social": "R.J. COMBUSTIVEIS E LUBRIFICANTES L",
+          "cnpj": "08726064000186",
+          "preco": "Preço: R$ 5,2320",
+          "prazo": "3 Dias",
+          "base": "Base:",
+          "data_coleta": "11:10 24/11/2025"
+        },
+        {
+          "codigo_vibra": "156075",
+          "nome_posto": "POSTO BR SHOPPING",
+          "razao_social": "DISTRIBUIDORA R S DERIVADO DE PETRO",
+          "cnpj": "07018760000175",
+          "preco": "Preço:",
+          "prazo": null,
+          "base": "Base:",
+          "data_coleta": "11:10 24/11/2025"
+        },
+        {
+          "codigo_vibra": "1775869",
+          "nome_posto": "POSTO DOZE",
+          "razao_social": "POSTO DOZE COMERCIO DE COMBUSTIVEIS",
+          "cnpj": "52308604000101",
+          "preco": "Preço:",
+          "prazo": null,
+          "base": "Base:",
+          "data_coleta": "11:11 24/11/2025"
+        },
+        {
+          "codigo_vibra": "5039",
+          "nome_posto": "POSTO VIP",
+          "razao_social": "RIO DOCE COMERCIO E SERVICOS LTDA",
+          "cnpj": "03008754000186",
+          "preco": "Preço: R$ 5,2320",
+          "prazo": "3 Dias",
+          "base": "Base:",
+          "data_coleta": "11:11 24/11/2025"
+        },
+        {
+          "codigo_vibra": "61003",
+          "nome_posto": "P IGARASSU",
+          "razao_social": "AUTO POSTO IGARASSU LTDA.",
+          "cnpj": "04274378000134",
+          "preco": "Preço: R$ 5,2414",
+          "prazo": "5 Dias",
+          "base": "Base:",
+          "data_coleta": "11:12 24/11/2025"
+        },
+        {
+          "codigo_vibra": "94762",
+          "nome_posto": "CIDADE PATRIMONIO",
+          "razao_social": "POSTO CIDADE PATRIMONIO LTDA",
+          "cnpj": "05428059000107",
+          "preco": "Preço: R$ 5,2320",
+          "prazo": "3 Dias",
+          "base": "Base:",
+          "data_coleta": "11:12 24/11/2025"
+        }
+      ]
+    },
+    {
+      "nome": "GASOLINA PREMIUM C ADIT PETROBRAS PODIUM",
+      "codigo": "",
+      "postos": [
+        {
+          "codigo_vibra": "107469",
+          "nome_posto": "POSTO ENSEADA DO NOR",
+          "razao_social": "POSTO ENSEADA DO NORTE LTDA",
+          "cnpj": "00338804000103",
+          "preco": "Preço: R$ 6,9831",
+          "prazo": "15 Dias",
+          "base": "Base:",
+          "data_coleta": "11:08 24/11/2025"
+        }
+      ]
+    },
+    {
+      "nome": "GASOLINA COMUM C ADIT PETROBRAS GRID",
+      "codigo": "",
+      "postos": [
+        {
+          "codigo_vibra": "107469",
+          "nome_posto": "POSTO ENSEADA DO NOR",
+          "razao_social": "POSTO ENSEADA DO NORTE LTDA",
+          "cnpj": "00338804000103",
+          "preco": "Preço: R$ 5,3724",
+          "prazo": "3 Dias",
+          "base": "Base:",
+          "data_coleta": "11:08 24/11/2025"
+        },
+        {
+          "codigo_vibra": "11236",
+          "nome_posto": "POSTO REAL",
+          "razao_social": "REAL RECIFE LTDA",
+          "cnpj": "24156978000105",
+          "preco": "Preço: R$ 5,3724",
+          "prazo": "3 Dias",
+          "base": "Base:",
+          "data_coleta": "11:09 24/11/2025"
+        },
+        {
+          "codigo_vibra": "1153963",
+          "nome_posto": "POSTO AVENIDA",
+          "razao_social": "POSTO CIDADE PATRIMONIO LTDA",
+          "cnpj": "05428059000280",
+          "preco": "Preço: R$ 5,3724",
+          "prazo": "3 Dias",
+          "base": "Base:",
+          "data_coleta": "11:09 24/11/2025"
+        },
+        {
+          "codigo_vibra": "124282",
+          "nome_posto": "R J",
+          "razao_social": "R.J. COMBUSTIVEIS E LUBRIFICANTES L",
+          "cnpj": "08726064000186",
+          "preco": "Preço: R$ 5,3724",
+          "prazo": "3 Dias",
+          "base": "Base:",
+          "data_coleta": "11:10 24/11/2025"
+        },
+        {
+          "codigo_vibra": "156075",
+          "nome_posto": "POSTO BR SHOPPING",
+          "razao_social": "DISTRIBUIDORA R S DERIVADO DE PETRO",
+          "cnpj": "07018760000175",
+          "preco": "Preço:",
+          "prazo": null,
+          "base": "Base:",
+          "data_coleta": "11:10 24/11/2025"
+        },
+        {
+          "codigo_vibra": "1775869",
+          "nome_posto": "POSTO DOZE",
+          "razao_social": "POSTO DOZE COMERCIO DE COMBUSTIVEIS",
+          "cnpj": "52308604000101",
+          "preco": "Preço:",
+          "prazo": null,
+          "base": "Base:",
+          "data_coleta": "11:11 24/11/2025"
+        },
+        {
+          "codigo_vibra": "5039",
+          "nome_posto": "POSTO VIP",
+          "razao_social": "RIO DOCE COMERCIO E SERVICOS LTDA",
+          "cnpj": "03008754000186",
+          "preco": "Preço: R$ 5,3724",
+          "prazo": "3 Dias",
+          "base": "Base:",
+          "data_coleta": "11:11 24/11/2025"
+        },
+        {
+          "codigo_vibra": "61003",
+          "nome_posto": "P IGARASSU",
+          "razao_social": "AUTO POSTO IGARASSU LTDA.",
+          "cnpj": "04274378000134",
+          "preco": "Preço:",
+          "prazo": null,
+          "base": "Base:",
+          "data_coleta": "11:12 24/11/2025"
+        }
+      ]
+    },
+    {
+      "nome": "ÓLEO DIESEL B S10",
+      "codigo": "",
+      "postos": [
+        {
+          "codigo_vibra": "107469",
+          "nome_posto": "POSTO ENSEADA DO NOR",
+          "razao_social": "POSTO ENSEADA DO NORTE LTDA",
+          "cnpj": "00338804000103",
+          "preco": "Preço:",
+          "prazo": null,
+          "base": "Base:",
+          "data_coleta": "11:08 24/11/2025"
+        },
+        {
+          "codigo_vibra": "156075",
+          "nome_posto": "POSTO BR SHOPPING",
+          "razao_social": "DISTRIBUIDORA R S DERIVADO DE PETRO",
+          "cnpj": "07018760000175",
+          "preco": "Preço:",
+          "prazo": null,
+          "base": "Base:",
+          "data_coleta": "11:10 24/11/2025"
+        },
+        {
+          "codigo_vibra": "1775869",
+          "nome_posto": "POSTO DOZE",
+          "razao_social": "POSTO DOZE COMERCIO DE COMBUSTIVEIS",
+          "cnpj": "52308604000101",
+          "preco": "Preço:",
+          "prazo": null,
+          "base": "Base:",
+          "data_coleta": "11:11 24/11/2025"
+        },
+        {
+          "codigo_vibra": "5039",
+          "nome_posto": "POSTO VIP",
+          "razao_social": "RIO DOCE COMERCIO E SERVICOS LTDA",
+          "cnpj": "03008754000186",
+          "preco": "Preço: R$ 5,4349",
+          "prazo": "3 Dias",
+          "base": "Base:",
+          "data_coleta": "11:11 24/11/2025"
+        },
+        {
+          "codigo_vibra": "61003",
+          "nome_posto": "P IGARASSU",
+          "razao_social": "AUTO POSTO IGARASSU LTDA.",
+          "cnpj": "04274378000134",
+          "preco": "Preço:",
+          "prazo": null,
+          "base": "Base:",
+          "data_coleta": "11:12 24/11/2025"
+        }
+      ]
+    },
+    {
+      "nome": "ÓLEO DIESEL B S10 ADIT PETROBRAS GRID",
+      "codigo": "",
+      "postos": [
+        {
+          "codigo_vibra": "11236",
+          "nome_posto": "POSTO REAL",
+          "razao_social": "REAL RECIFE LTDA",
+          "cnpj": "24156978000105",
+          "preco": "Preço: R$ 5,4349",
+          "prazo": "3 Dias",
+          "base": "Base:",
+          "data_coleta": "11:09 24/11/2025"
+        },
+        {
+          "codigo_vibra": "1153963",
+          "nome_posto": "POSTO AVENIDA",
+          "razao_social": "POSTO CIDADE PATRIMONIO LTDA",
+          "cnpj": "05428059000280",
+          "preco": "Preço:",
+          "prazo": null,
+          "base": "Base:",
+          "data_coleta": "11:09 24/11/2025"
+        },
+        {
+          "codigo_vibra": "1775869",
+          "nome_posto": "POSTO DOZE",
+          "razao_social": "POSTO DOZE COMERCIO DE COMBUSTIVEIS",
+          "cnpj": "52308604000101",
+          "preco": "Preço:",
+          "prazo": null,
+          "base": "Base:",
+          "data_coleta": "11:11 24/11/2025"
+        }
+      ]
+    },
+    {
+      "nome": "ETANOL HIDRATADO COMBUSTIVEL",
+      "codigo": "",
+      "postos": [
+        {
+          "codigo_vibra": "124282",
+          "nome_posto": "R J",
+          "razao_social": "R.J. COMBUSTIVEIS E LUBRIFICANTES L",
+          "cnpj": "08726064000186",
+          "preco": "Preço: R$ 3,6377",
+          "prazo": "3 Dias",
+          "base": "Base:",
+          "data_coleta": "11:10 24/11/2025"
+        },
+        {
+          "codigo_vibra": "1775869",
+          "nome_posto": "POSTO DOZE",
+          "razao_social": "POSTO DOZE COMERCIO DE COMBUSTIVEIS",
+          "cnpj": "52308604000101",
+          "preco": "Preço:",
+          "prazo": null,
+          "base": "Base:",
+          "data_coleta": "11:11 24/11/2025"
+        },
+        {
+          "codigo_vibra": "61003",
+          "nome_posto": "P IGARASSU",
+          "razao_social": "AUTO POSTO IGARASSU LTDA.",
+          "cnpj": "04274378000134",
+          "preco": "Preço: R$ 3,6428",
+          "prazo": "5 Dias",
+          "base": "Base:",
+          "data_coleta": "11:12 24/11/2025"
+        }
+      ]
+    },
+    {
+      "nome": "ÓLEO DIESEL B S500 ADIT PETROBRAS GRID",
+      "codigo": "",
+      "postos": [
+        {
+          "codigo_vibra": "61003",
+          "nome_posto": "P IGARASSU",
+          "razao_social": "AUTO POSTO IGARASSU LTDA.",
+          "cnpj": "04274378000134",
+          "preco": "Preço:",
+          "prazo": null,
+          "base": "Base:",
+          "data_coleta": "11:12 24/11/2025"
+        }
+      ]
+    }
+  ]
+}

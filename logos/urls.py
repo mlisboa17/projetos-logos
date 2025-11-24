@@ -60,6 +60,9 @@ urlpatterns = [
     
     # VerifiK URLs
     path('verifik/', include('verifik.urls')),
+
+    # VerifiK API (Detecção)
+    path('api/verifik/', include('verifik.api_urls')),
     
     # Django Admin
     path('admin/', admin.site.urls),
@@ -75,3 +78,4 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
