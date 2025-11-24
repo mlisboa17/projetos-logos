@@ -14,7 +14,7 @@ build/
 # Dependencies
 node_modules/
 
-# Outros projetos (n√£o fazer parte deste commit)
+# Outros projetos (n„o fazer parte deste commit)
 ProjetoVerifiK/
 
 # Environment
@@ -44,8 +44,11 @@ logs/
 *.db
 *.sqlite3
 
-# AI Models (arquivos grandes)
-*.pt
-*.pth
-*.onnx
-models/*.pt
+# YOLO Training Data (imagens e datasets temporarios)
+media/produtos/*/
+verifik/dataset_yolo/
+verifik/runs/
+yolo_dataset/
+
+# Manter apenas o modelo final treinado
+!verifik/verifik_yolov8.pt
