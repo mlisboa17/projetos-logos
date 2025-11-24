@@ -1,8 +1,0 @@
-# VerifiK Dataset Configuration
-path: C:\Users\mlisb\OneDrive\Desktop\ProjetoLogus\verifik\dataset_yolo
-train: train/images
-val: train/images  # Usando mesmo conjunto para treino e validação (dataset pequeno)
-
-# Classes
-nc: 7
-names: ['REFRIGERANTE REFRIGERANTE BLACK PEPSI 350ML', 'BUDWEISER CERVEJA BUDWEISER LN 330ML', 'DE BARRIL DE CHOPP HEINEKEN 5 LITROS', 'HEINEKEN CERVEJA HEINEKEN 330ML', 'HEINEKEN CERVEJA HEINEKEN LATA 350ML', 'PILSEN CERVEJA PILSEN LOKAL LATA 473ML', 'STELLA CERVEJA STELLA PURE GOLD S GLUTEN LONG 330ML']

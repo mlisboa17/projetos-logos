@@ -1,8 +1,0 @@
-# Heineken 330ml Dataset
-path: c:\Users\mlisb\OneDrive\Desktop\ProjetoLogus\yolo_dataset
-train: images/train
-val: images/train  # Usando mesmo conjunto para validação (dataset pequeno)
-
-# Classes
-nc: 1  # Número de classes
-names: ['heineken_330ml']  # Nome das classes
