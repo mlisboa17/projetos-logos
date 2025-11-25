@@ -4,11 +4,17 @@
 
 ## 🔗 Links para Download
 
-### 📊 Dataset de Treinamento (367 MB)
+### 🚀 Notebook Google Colab (TREINAR COM GPU GRATUITA)
+**Descrição:** Notebook completo para treinar modelo YOLO com GPU T4 gratuita  
+**Link direto:** https://colab.research.google.com/github/mlisboa17/projetos-logos/blob/main/treinar_google_colab.ipynb  
+**Arquivo local:** `treinar_google_colab.ipynb`
+
+### 📊 Dataset de Treinamento (315 MB compactado)
 **Descrição:** Dataset completo com imagens anotadas de 177 produtos  
 **Localização no projeto:** `verifik/dataset_treino/`  
-**Link Google Drive:** [ADICIONAR LINK AQUI]  
-**Link OneDrive:** [ADICIONAR LINK AQUI]
+**Arquivo:** `dataset_treino.zip`  
+**Link Google Drive:** ✅ DISPONÍVEL (solicite acesso ao administrador)  
+**Instruções:** Baixe e extraia na pasta `verifik/` do projeto
 
 ### 🤖 Modelo YOLO Treinado (22 MB)
 **Descrição:** Modelo YOLOv8 treinado com produtos_mae (25/11/2025)  
