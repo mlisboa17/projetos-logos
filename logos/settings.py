@@ -93,6 +93,7 @@ INSTALLED_APPS = [
     'cameras',     # 📷 Gestão de câmeras físicas
     'fuel_prices', # ⛽ Preços de combustível (scraping)
     'verifik',     # 🤖 Sistema de IA - Detecção de produtos por câmeras
+    'solar_monitor',  #  Monitoramento em tempo real das usinas solares
 ]
 
 # ============================================================

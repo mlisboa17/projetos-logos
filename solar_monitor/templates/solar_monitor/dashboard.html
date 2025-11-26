@@ -1,0 +1,244 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Monitoramento Solar - Grupo Lisboa{% endblock %}
+
+{% block extra_css %}
+<style>
+    .solar-card {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+    }
+    
+    .stat-box {
+        text-align: center;
+        padding: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 10px;
+        margin-bottom: 15px;
+    }
+    
+    .stat-box.energia {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+    
+    .stat-box.potencia {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+    
+    .stat-box.usinas {
+        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    }
+    
+    .stat-box h3 {
+        margin: 0;
+        font-size: 2.5em;
+        font-weight: bold;
+    }
+    
+    .stat-box p {
+        margin: 5px 0 0 0;
+        opacity: 0.9;
+    }
+    
+    .usina-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px;
+        border-bottom: 1px solid #eee;
+        transition: background 0.3s;
+    }
+    
+    .usina-item:hover {
+        background: #f8f9fa;
+    }
+    
+    .status-badge {
+        display: inline-block;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 0.9em;
+        font-weight: bold;
+    }
+    
+    .status-online {
+        background: #28a745;
+        color: white;
+    }
+    
+    .status-offline {
+        background: #dc3545;
+        color: white;
+    }
+    
+    .status-alerta {
+        background: #ffc107;
+        color: #333;
+    }
+    
+    .alerta-item {
+        padding: 15px;
+        border-left: 4px solid;
+        margin-bottom: 10px;
+        border-radius: 5px;
+    }
+    
+    .alerta-critico {
+        border-color: #dc3545;
+        background: #fff5f5;
+    }
+    
+    .alerta-alerta {
+        border-color: #ff9800;
+        background: #fff8f0;
+    }
+    
+    .alerta-aviso {
+        border-color: #ffc107;
+        background: #fffbf0;
+    }
+    
+    .alerta-info {
+        border-color: #17a2b8;
+        background: #f0f9fb;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1>☀️ Monitoramento Solar - Grupo Lisboa</h1>
+            <p class="text-muted">Monitoramento em tempo real das usinas solares</p>
+        </div>
+    </div>
+
+    <!-- Estatísticas Gerais -->
+    <div class="row">
+        <div class="col-md-3">
+            <div class="stat-box">
+                <h3>{{ total_capacidade|floatformat:0 }}</h3>
+                <p>kWp Instalados</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-box potencia">
+                <h3>{{ potencia_atual_total|floatformat:1 }}</h3>
+                <p>kW Atual</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-box energia">
+                <h3>{{ energia_hoje|floatformat:1 }}</h3>
+                <p>kWh Hoje</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-box usinas">
+                <h3>{{ total_usinas }}</h3>
+                <p>Usinas Ativas</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Lista de Usinas -->
+        <div class="col-md-8">
+            <div class="solar-card">
+                <h3>Usinas Solares</h3>
+                <hr>
+                {% for usina in usinas %}
+                <div class="usina-item">
+                    <div>
+                        <h5 class="mb-1">{{ usina.nome }}</h5>
+                        <small class="text-muted">{{ usina.localizacao }} - {{ usina.capacidade_kwp }} kWp</small>
+                    </div>
+                    <div class="text-right">
+                        {% if usina.ultima_leitura %}
+                            <span class="status-badge status-{{ usina.ultima_leitura.status }}">
+                                {{ usina.ultima_leitura.get_status_display }}
+                            </span>
+                            <div class="mt-2">
+                                <strong>{{ usina.ultima_leitura.potencia_atual_kw }} kW</strong>
+                                <small class="text-muted d-block">{{ usina.ultima_leitura.energia_dia_kwh }} kWh hoje</small>
+                            </div>
+                        {% else %}
+                            <span class="status-badge bg-secondary text-white">Sem Dados</span>
+                        {% endif %}
+                        <div class="mt-2">
+                            <a href="{% url 'solar_monitor:usina_detalhes' usina.id %}" class="btn btn-sm btn-primary">
+                                Ver Detalhes
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-center text-muted py-4">Nenhuma usina cadastrada</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Alertas -->
+        <div class="col-md-4">
+            <div class="solar-card">
+                <h3>Alertas Recentes</h3>
+                <hr>
+                {% for alerta in alertas_pendentes %}
+                <div class="alerta-item alerta-{{ alerta.tipo }}">
+                    <strong>{{ alerta.titulo }}</strong>
+                    <p class="mb-1 small">{{ alerta.descricao|truncatewords:15 }}</p>
+                    <small class="text-muted">
+                        {{ alerta.usina.nome }} - {{ alerta.timestamp|timesince }} atrás
+                    </small>
+                </div>
+                {% empty %}
+                <p class="text-center text-muted py-4">✓ Nenhum alerta pendente</p>
+                {% endfor %}
+                
+                {% if alertas_pendentes %}
+                <div class="text-center mt-3">
+                    <a href="{% url 'solar_monitor:alertas' %}" class="btn btn-sm btn-outline-primary">
+                        Ver Todos os Alertas
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Links Rápidos -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="solar-card">
+                <h4>Ações Rápidas</h4>
+                <hr>
+                <a href="{% url 'admin:solar_monitor_usinasolar_add' %}" class="btn btn-success mr-2">
+                    ➕ Nova Usina
+                </a>
+                <a href="{% url 'solar_monitor:relatorios' %}" class="btn btn-info mr-2">
+                    📊 Relatórios
+                </a>
+                <a href="{% url 'solar_monitor:alertas' %}" class="btn btn-warning mr-2">
+                    ⚠️ Gerenciar Alertas
+                </a>
+                <a href="{% url 'admin:solar_monitor_leiturausina_changelist' %}" class="btn btn-secondary">
+                    📈 Ver Leituras
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Auto-refresh a cada 30 segundos
+setTimeout(function() {
+    location.reload();
+}, 30000);
+</script>
+{% endblock %}
