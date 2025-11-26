@@ -4,6 +4,8 @@ from .models import (
     DeteccaoProduto, Incidente, EvidenciaIncidente, Alerta,
     Camera, CameraStatus, ImagemProduto
 )
+from .models_coleta import ImagemProdutoPendente, LoteFotos
+from .models_anotacao import ImagemAnotada, AnotacaoProduto
 
 
 # ==============================================
@@ -152,3 +154,126 @@ class CameraStatusAdmin(admin.ModelAdmin):
     search_fields = ['camera__nome', 'mensagem_erro']
     date_hierarchy = 'data_hora'
     readonly_fields = ['data_hora']
+
+
+# ==============================================
+# 📸 COLETA DE IMAGENS
+# ==============================================
+
+@admin.register(ImagemProdutoPendente)
+class ImagemProdutoPendenteAdmin(admin.ModelAdmin):
+    list_display = ['produto', 'status', 'enviado_por', 'data_envio', 'aprovado_por', 'qualidade']
+    list_filter = ['status', 'data_envio', 'qualidade', 'produto']
+    search_fields = ['produto__nome', 'enviado_por__username', 'aprovado_por__username', 'observacoes']
+    date_hierarchy = 'data_envio'
+    readonly_fields = ['data_envio']
+    
+    fieldsets = (
+        ('Informações do Produto', {
+            'fields': ('produto', 'imagem', 'lote')
+        }),
+        ('Status e Qualidade', {
+            'fields': ('status', 'qualidade', 'observacoes', 'motivo_rejeicao')
+        }),
+        ('Rastreamento', {
+            'fields': ('enviado_por', 'data_envio', 'aprovado_por', 'data_aprovacao')
+        }),
+    )
+    
+    actions = ['aprovar_selecionadas', 'rejeitar_selecionadas']
+    
+    def aprovar_selecionadas(self, request, queryset):
+        count = 0
+        for imagem in queryset.filter(status='pendente'):
+            imagem.status = 'aprovada'
+            imagem.aprovado_por = request.user
+            imagem.qualidade = 3  # Qualidade padrão
+            imagem.save()
+            count += 1
+        self.message_user(request, f'{count} imagens aprovadas com sucesso!')
+    aprovar_selecionadas.short_description = "✓ Aprovar imagens selecionadas"
+    
+    def rejeitar_selecionadas(self, request, queryset):
+        count = 0
+        for imagem in queryset.filter(status='pendente'):
+            imagem.status = 'rejeitada'
+            imagem.aprovado_por = request.user
+            imagem.motivo_rejeicao = 'Rejeitada em lote'
+            imagem.save()
+            count += 1
+        self.message_user(request, f'{count} imagens rejeitadas.')
+    rejeitar_selecionadas.short_description = "✗ Rejeitar imagens selecionadas"
+
+
+@admin.register(LoteFotos)
+class LoteFotosAdmin(admin.ModelAdmin):
+    list_display = ['nome', 'enviado_por', 'data_criacao', 'total_imagens', 'imagens_aprovadas', 'imagens_rejeitadas', 'progresso']
+    list_filter = ['data_criacao', 'enviado_por']
+    search_fields = ['nome', 'enviado_por__username', 'descricao']
+    date_hierarchy = 'data_criacao'
+    readonly_fields = ['data_criacao', 'total_imagens', 'imagens_aprovadas', 'imagens_rejeitadas', 'progresso']
+    
+    def progresso(self, obj):
+        if obj.total_imagens == 0:
+            return "0%"
+        processadas = obj.imagens_aprovadas + obj.imagens_rejeitadas
+        percentual = (processadas / obj.total_imagens) * 100
+        return f"{percentual:.1f}%"
+    progresso.short_description = "Progresso"
+
+
+# ==============================================
+# 📦 ANOTAÇÃO DE IMAGENS
+# ==============================================
+
+@admin.register(ImagemAnotada)
+class ImagemAnotadaAdmin(admin.ModelAdmin):
+    list_display = ['id', 'status', 'enviado_por', 'data_envio', 'total_anotacoes', 'aprovado_por']
+    list_filter = ['status', 'data_envio', 'aprovado_por']
+    search_fields = ['enviado_por__username', 'aprovado_por__username', 'observacoes']
+    date_hierarchy = 'data_envio'
+    readonly_fields = ['data_envio', 'total_anotacoes']
+    
+    fieldsets = (
+        ('Imagem', {
+            'fields': ('imagem', 'observacoes')
+        }),
+        ('Status', {
+            'fields': ('status', 'total_anotacoes')
+        }),
+        ('Rastreamento', {
+            'fields': ('enviado_por', 'data_envio', 'aprovado_por', 'data_aprovacao')
+        }),
+    )
+
+
+class AnotacaoProdutoInline(admin.TabularInline):
+    model = AnotacaoProduto
+    extra = 0
+    readonly_fields = ['data_criacao']
+    fields = ['produto', 'bbox_x', 'bbox_y', 'bbox_width', 'bbox_height', 'confianca', 'observacoes']
+
+
+@admin.register(AnotacaoProduto)
+class AnotacaoProdutoAdmin(admin.ModelAdmin):
+    list_display = ['id', 'imagem_anotada', 'produto', 'confianca', 'data_criacao']
+    list_filter = ['produto', 'data_criacao']
+    search_fields = ['produto__nome', 'observacoes']
+    date_hierarchy = 'data_criacao'
+    readonly_fields = ['data_criacao', 'get_yolo_format']
+    
+    fieldsets = (
+        ('Vinculação', {
+            'fields': ('imagem_anotada', 'produto')
+        }),
+        ('Bounding Box', {
+            'fields': ('bbox_x', 'bbox_y', 'bbox_width', 'bbox_height', 'confianca')
+        }),
+        ('Informações', {
+            'fields': ('observacoes', 'data_criacao', 'get_yolo_format')
+        }),
+    )
+    
+    def get_yolo_format(self, obj):
+        return obj.get_yolo_format()
+    get_yolo_format.short_description = "Formato YOLO"

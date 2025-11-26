@@ -1,0 +1,261 @@
+╔══════════════════════════════════════════════════════════════════╗
+║           GUIA COMPLETO - Sistema de Coleta Standalone          ║
+╚══════════════════════════════════════════════════════════════════╝
+
+📦 CRIANDO O EXECUTÁVEL PARA DISTRIBUIÇÃO
+------------------------------------------
+
+PASSO 1: Instalar dependências
+   cd projetos-logos
+   python instalar_dependencias_standalone.py
+
+PASSO 2: Criar o executável
+   python criar_executavel_coleta.py
+
+PASSO 3: Localizar o executável
+   O arquivo estará em: dist/VerifiK_ColetaImagens.exe
+   
+PASSO 4: Distribuir
+   - Copie VerifiK_ColetaImagens.exe para um pendrive
+   - Leve para as máquinas dos funcionários
+   - Não precisa instalar nada!
+
+
+💾 PREPARANDO O CATÁLOGO DE PRODUTOS
+-------------------------------------
+
+Opção A: Exportar produtos do Django
+
+1. No servidor Django, execute:
+   python manage.py shell
+
+2. No shell Python:
+   from verifik.models import ProdutoMae
+   import json
+   
+   produtos = ProdutoMae.objects.filter(ativo=True)
+   produtos_list = [
+       {
+           'id': p.id,
+           'descricao_produto': p.descricao_produto,
+           'marca': p.marca
+       }
+       for p in produtos
+   ]
+   
+   with open('produtos_exportados.json', 'w', encoding='utf-8') as f:
+       json.dump(produtos_list, f, indent=2, ensure_ascii=False)
+
+3. Copie produtos_exportados.json para a mesma pasta do executável
+
+Opção B: Adicionar manualmente
+   - Os funcionários podem adicionar produtos no próprio sistema
+
+
+📸 USANDO O SISTEMA (FUNCIONÁRIOS)
+----------------------------------
+
+INÍCIO:
+1. Execute VerifiK_ColetaImagens.exe
+2. A interface abrirá automaticamente
+
+ADICIONAR PRODUTOS (primeira vez):
+1. Clique "➕ Adicionar Novo Produto"
+2. Digite a descrição COMPLETA
+   Exemplo: "Coca-Cola 350ml Lata"
+   NÃO use apenas "Coca-Cola"!
+3. Digite a marca (opcional)
+4. Salvar
+
+COLETAR IMAGENS COM ANOTAÇÕES:
+1. Carregar ou tirar foto
+2. Selecionar produto na lista
+3. Clicar e arrastar na imagem para desenhar retângulo
+4. Repetir para cada produto na foto
+5. Adicionar observações (opcional)
+6. Salvar
+
+EXPORTAR (fim do dia):
+1. Clicar "📤 Exportar para Sincronização"
+2. Escolher pasta (Desktop, Documentos, etc)
+3. Copiar a pasta criada para pendrive
+
+
+🔄 SINCRONIZANDO COM O SERVIDOR DJANGO
+---------------------------------------
+
+PASSO 1: Trazer os dados
+   - Copie a pasta exportada do pendrive para o servidor
+   - Exemplo: C:\dados_coleta\exportacao_20251126_143052
+
+PASSO 2: Importar no Django
+   cd projetos-logos
+   python importar_dados_coletados.py C:\dados_coleta\exportacao_20251126_143052
+
+PASSO 3: Verificar importação
+   - Acesse http://127.0.0.1:8000/admin/
+   - Vá em "Imagens Anotadas"
+   - Verifique se as imagens foram importadas
+
+PASSO 4: Importar para dataset de treino
+   - Acesse http://127.0.0.1:8000/coleta/importar-dataset/
+   - Clique "📥 Importar Anotadas"
+   - As imagens serão copiadas para assets/dataset/train/
+
+
+📊 ESTRUTURA DE DADOS
+---------------------
+
+Sistema Standalone salva em:
+   dados_coleta/
+      ├── coleta.db (SQLite)
+      ├── imagens/
+      │   ├── anotada_20251126_140532.jpg
+      │   └── anotada_20251126_140612.jpg
+      └── temp/
+          └── webcam_20251126_140500.jpg
+
+Exportação gera:
+   exportacao_20251126_143052/
+      ├── dados_exportacao.json
+      ├── produtos.json
+      └── imagens/
+          ├── anotada_20251126_140532.jpg
+          └── anotada_20251126_140612.jpg
+
+Formato dados_exportacao.json:
+   {
+     "data_exportacao": "2025-11-26T14:30:52",
+     "usuario": "João Silva",
+     "imagens": [
+       {
+         "id": 1,
+         "arquivo": "anotada_20251126_140532.jpg",
+         "tipo": "anotada",
+         "data": "2025-11-26 14:05:32",
+         "observacoes": "Produtos na prateleira superior",
+         "anotacoes": [
+           {
+             "produto_id": 5,
+             "x": 0.45,
+             "y": 0.32,
+             "width": 0.15,
+             "height": 0.22
+           }
+         ]
+       }
+     ]
+   }
+
+
+🎯 BOAS PRÁTICAS
+----------------
+
+PARA FUNCIONÁRIOS:
+   ✓ Use descrições COMPLETAS dos produtos
+   ✓ Desenhe boxes bem ajustados ao produto
+   ✓ Marque TODOS os produtos visíveis
+   ✓ Tire fotos com boa iluminação
+   ✓ Evite fotos tremidas ou desfocadas
+   ✓ Exporte ao final de cada dia
+
+PARA GESTORES:
+   ✓ Distribua lista de produtos atualizada
+   ✓ Importe dados regularmente
+   ✓ Verifique qualidade das anotações
+   ✓ Faça backup dos dados exportados
+
+
+⚙️ SOLUÇÃO DE PROBLEMAS
+------------------------
+
+PROBLEMA: Webcam não funciona
+SOLUÇÃO: 
+   - Verifique se opencv-python está instalado
+   - Teste a webcam em outro programa primeiro
+   - Use "Carregar Imagem" como alternativa
+
+PROBLEMA: Executável não abre
+SOLUÇÃO:
+   - Execute como administrador
+   - Desative antivírus temporariamente
+   - Recrie o executável com PyInstaller atualizado
+
+PROBLEMA: Produtos não aparecem
+SOLUÇÃO:
+   - Adicione manualmente no sistema
+   - Ou importe produtos.json
+
+PROBLEMA: Erro ao exportar
+SOLUÇÃO:
+   - Escolha pasta com permissão de escrita
+   - Libere espaço em disco
+   - Verifique se há imagens salvas
+
+
+🔐 SEGURANÇA E BACKUP
+---------------------
+
+IMPORTANTE:
+   ✓ Faça backup da pasta dados_coleta/ regularmente
+   ✓ Não delete dados antes de sincronizar
+   ✓ Guarde as pastas exportadas por 30 dias
+   ✓ Teste a importação antes de apagar originais
+
+
+📈 FLUXO COMPLETO DE TRABALHO
+-----------------------------
+
+1. PREPARAÇÃO (Gestor)
+   └─ Criar executável
+   └─ Exportar lista de produtos
+   └─ Distribuir para funcionários
+
+2. COLETA (Funcionários)
+   └─ Usar sistema diariamente
+   └─ Exportar ao final do dia
+   └─ Entregar pendrive ao gestor
+
+3. SINCRONIZAÇÃO (Gestor)
+   └─ Importar dados para Django
+   └─ Verificar qualidade
+   └─ Importar para dataset de treino
+
+4. TREINAMENTO (Gestor)
+   └─ Dataset completo
+   └─ Treinar modelo YOLO
+   └─ Deploy do modelo atualizado
+
+
+🎓 TREINAMENTO DE FUNCIONÁRIOS
+-------------------------------
+
+Duração: 15-20 minutos
+
+1. Demonstração (5 min)
+   - Mostrar interface
+   - Adicionar produto de exemplo
+   - Fazer anotação de exemplo
+
+2. Prática supervisionada (10 min)
+   - Funcionário faz anotações
+   - Corrigir erros
+   - Responder dúvidas
+
+3. Teste final (5 min)
+   - Funcionário anota 3 produtos sozinho
+   - Exporta dados
+   - Aprovado se tudo correto
+
+
+📞 SUPORTE E CONTATO
+--------------------
+
+Para dúvidas técnicas:
+   - Email do gestor
+   - Telefone do suporte
+   - Manual em: README_SISTEMA_COLETA.txt
+
+
+Última atualização: 26/11/2025
+Versão do sistema: 1.0

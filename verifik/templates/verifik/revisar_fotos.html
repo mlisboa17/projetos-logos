@@ -1,0 +1,183 @@
+{% extends 'verifik/base.html' %}
+
+{% block title %}Revisar Fotos - VerifiK{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 1400px; margin: 2rem auto; padding: 0 1rem;">
+    <div class="card" style="background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 2rem;">
+        <div class="card-header" style="border-bottom: 2px solid #667eea; padding-bottom: 1rem; margin-bottom: 2rem;">
+            <h2 style="color: #667eea; margin: 0;">🔍 Revisar Fotos Enviadas</h2>
+            <p style="color: #7f8c8d; margin-top: 0.5rem;">Aprove ou rejeite as fotos enviadas pelos funcionários</p>
+        </div>
+
+        <!-- Estatísticas gerais -->
+        <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+            <div class="stat-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1.5rem; border-radius: 8px; text-align: center;">
+                <div style="font-size: 2rem; font-weight: bold;">{{ stats.total }}</div>
+                <div style="opacity: 0.9; margin-top: 0.5rem;">Total de Imagens</div>
+            </div>
+            <div class="stat-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 1.5rem; border-radius: 8px; text-align: center;">
+                <div style="font-size: 2rem; font-weight: bold;">{{ stats.pendentes }}</div>
+                <div style="opacity: 0.9; margin-top: 0.5rem;">Aguardando Revisão</div>
+            </div>
+            <div class="stat-card" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; padding: 1.5rem; border-radius: 8px; text-align: center;">
+                <div style="font-size: 2rem; font-weight: bold;">{{ stats.aprovadas }}</div>
+                <div style="opacity: 0.9; margin-top: 0.5rem;">Aprovadas</div>
+            </div>
+            <div class="stat-card" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white; padding: 1.5rem; border-radius: 8px; text-align: center;">
+                <div style="font-size: 2rem; font-weight: bold;">{{ stats.rejeitadas }}</div>
+                <div style="opacity: 0.9; margin-top: 0.5rem;">Rejeitadas</div>
+            </div>
+        </div>
+
+        <!-- Filtros -->
+        <div class="filters" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+            <form method="get" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; align-items: end;">
+                <div>
+                    <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #2c3e50;">Status</label>
+                    <select name="status" class="form-control" style="width: 100%; padding: 0.5rem; border: 2px solid #e0e0e0; border-radius: 6px;">
+                        <option value="">Todos</option>
+                        <option value="pendente" {% if request.GET.status == 'pendente' %}selected{% endif %}>Pendente</option>
+                        <option value="aprovada" {% if request.GET.status == 'aprovada' %}selected{% endif %}>Aprovada</option>
+                        <option value="rejeitada" {% if request.GET.status == 'rejeitada' %}selected{% endif %}>Rejeitada</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #2c3e50;">Produto</label>
+                    <select name="produto" class="form-control" style="width: 100%; padding: 0.5rem; border: 2px solid #e0e0e0; border-radius: 6px;">
+                        <option value="">Todos</option>
+                        {% for produto in produtos %}
+                            <option value="{{ produto.id }}" {% if request.GET.produto|stringformat:"s" == produto.id|stringformat:"s" %}selected{% endif %}>
+                                {{ produto.descricao_produto }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #2c3e50;">Enviado por</label>
+                    <select name="usuario" class="form-control" style="width: 100%; padding: 0.5rem; border: 2px solid #e0e0e0; border-radius: 6px;">
+                        <option value="">Todos</option>
+                        {% for usuario in usuarios %}
+                            <option value="{{ usuario.id }}" {% if request.GET.usuario|stringformat:"s" == usuario.id|stringformat:"s" %}selected{% endif %}>
+                                {{ usuario.get_full_name|default:usuario.username }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <button type="submit" class="btn" style="width: 100%; padding: 0.5rem 1rem; border: none; border-radius: 6px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; cursor: pointer;">
+                        🔍 Filtrar
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Grid de imagens -->
+        {% if imagens %}
+        <div class="images-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
+            {% for imagem in imagens %}
+            <div class="image-card" style="background: white; border: 2px solid #e0e0e0; border-radius: 12px; overflow: hidden; transition: all 0.3s;">
+                <!-- Imagem -->
+                <div style="position: relative; height: 250px; background: #f0f0f0;">
+                    <img src="{{ imagem.imagem.url }}" alt="{{ imagem.produto.descricao_produto }}" style="width: 100%; height: 100%; object-fit: cover;">
+                    
+                    <!-- Badge de status -->
+                    <div style="position: absolute; top: 10px; right: 10px;">
+                        {% if imagem.status == 'pendente' %}
+                            <span style="background: #f39c12; color: white; padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.85rem; font-weight: 600;">
+                                ⏳ Pendente
+                            </span>
+                        {% elif imagem.status == 'aprovada' %}
+                            <span style="background: #27ae60; color: white; padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.85rem; font-weight: 600;">
+                                ✓ Aprovada
+                            </span>
+                        {% else %}
+                            <span style="background: #e74c3c; color: white; padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.85rem; font-weight: 600;">
+                                ✗ Rejeitada
+                            </span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Informações -->
+                <div style="padding: 1rem;">
+                    <h3 style="margin: 0 0 0.5rem 0; color: #2c3e50; font-size: 1.1rem;">
+                        {{ imagem.produto.descricao_produto }}
+                    </h3>
+                    
+                    <div style="color: #7f8c8d; font-size: 0.9rem; margin-bottom: 0.5rem;">
+                        <div>📤 {{ imagem.enviado_por.get_full_name|default:imagem.enviado_por.username }}</div>
+                        <div>📅 {{ imagem.data_envio|date:"d/m/Y H:i" }}</div>
+                        {% if imagem.lote %}
+                            <div>📦 Lote: {{ imagem.lote.nome }}</div>
+                        {% endif %}
+                    </div>
+
+                    {% if imagem.observacoes %}
+                    <div style="background: #f8f9fa; padding: 0.75rem; border-radius: 6px; margin: 0.5rem 0; font-size: 0.9rem; color: #555;">
+                        <strong>Observações:</strong><br>
+                        {{ imagem.observacoes }}
+                    </div>
+                    {% endif %}
+
+                    {% if imagem.status == 'aprovada' and imagem.qualidade %}
+                    <div style="margin: 0.5rem 0;">
+                        <strong style="color: #2c3e50;">Qualidade:</strong>
+                        <span style="color: #f39c12;">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= imagem.qualidade %}⭐{% else %}☆{% endif %}
+                            {% endfor %}
+                        </span>
+                    </div>
+                    {% endif %}
+
+                    {% if imagem.status == 'rejeitada' and imagem.motivo_rejeicao %}
+                    <div style="background: #fee; padding: 0.75rem; border-radius: 6px; margin: 0.5rem 0; font-size: 0.9rem; border-left: 3px solid #e74c3c;">
+                        <strong>Motivo da rejeição:</strong><br>
+                        {{ imagem.motivo_rejeicao }}
+                    </div>
+                    {% endif %}
+
+                    <!-- Ações -->
+                    {% if imagem.status == 'pendente' %}
+                    <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                        <form method="post" action="{% url 'aprovar_imagem' imagem.id %}" style="flex: 1;">
+                            {% csrf_token %}
+                            <input type="number" name="qualidade" min="1" max="5" value="5" required style="width: 100%; padding: 0.4rem; border: 2px solid #27ae60; border-radius: 6px; margin-bottom: 0.5rem;" placeholder="Qualidade (1-5)">
+                            <button type="submit" style="width: 100%; padding: 0.6rem; border: none; border-radius: 6px; background: #27ae60; color: white; cursor: pointer; font-weight: 600;">
+                                ✓ Aprovar
+                            </button>
+                        </form>
+                        <form method="post" action="{% url 'rejeitar_imagem' imagem.id %}" style="flex: 1;" onsubmit="return confirm('Tem certeza que deseja rejeitar esta imagem?');">
+                            {% csrf_token %}
+                            <input type="text" name="motivo" required style="width: 100%; padding: 0.4rem; border: 2px solid #e74c3c; border-radius: 6px; margin-bottom: 0.5rem;" placeholder="Motivo">
+                            <button type="submit" style="width: 100%; padding: 0.6rem; border: none; border-radius: 6px; background: #e74c3c; color: white; cursor: pointer; font-weight: 600;">
+                                ✗ Rejeitar
+                            </button>
+                        </form>
+                    </div>
+                    {% elif imagem.status == 'aprovada' %}
+                    <div style="margin-top: 1rem; color: #27ae60; text-align: center; font-weight: 600;">
+                        ✓ Aprovada por {{ imagem.aprovado_por.get_full_name|default:imagem.aprovado_por.username }}
+                        <br><small style="color: #7f8c8d;">{{ imagem.data_aprovacao|date:"d/m/Y H:i" }}</small>
+                    </div>
+                    {% else %}
+                    <div style="margin-top: 1rem; color: #e74c3c; text-align: center; font-weight: 600;">
+                        ✗ Rejeitada por {{ imagem.aprovado_por.get_full_name|default:imagem.aprovado_por.username }}
+                        <br><small style="color: #7f8c8d;">{{ imagem.data_aprovacao|date:"d/m/Y H:i" }}</small>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div style="text-align: center; padding: 3rem; color: #7f8c8d;">
+            <div style="font-size: 4rem; margin-bottom: 1rem;">📭</div>
+            <h3>Nenhuma imagem encontrada</h3>
+            <p>Tente ajustar os filtros ou aguarde novos envios.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

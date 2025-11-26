@@ -28,4 +28,8 @@ urlpatterns = [
     # API REST
     path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls')),
+    
+    # Sistema de coleta de imagens
+    path('coleta/', include('verifik.urls_coleta')),
+    path('coleta/', include('verifik.urls_anotacao')),
 ]

@@ -1,0 +1,115 @@
+{% extends 'verifik/base.html' %}
+
+{% block title %}Enviar Fotos - VerifiK{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 1200px; margin: 2rem auto; padding: 0 1rem;">
+    <div class="card" style="background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 2rem;">
+        <div class="card-header" style="border-bottom: 2px solid #667eea; padding-bottom: 1rem; margin-bottom: 2rem;">
+            <h2 style="color: #667eea; margin: 0;">📸 Enviar Fotos de Produtos</h2>
+            <p style="color: #7f8c8d; margin-top: 0.5rem;">Ajude a melhorar nosso sistema enviando fotos dos produtos</p>
+        </div>
+
+        <!-- Estatísticas do usuário -->
+        <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+            <div class="stat-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1.5rem; border-radius: 8px; text-align: center;">
+                <div style="font-size: 2rem; font-weight: bold;">{{ stats.total }}</div>
+                <div style="opacity: 0.9; margin-top: 0.5rem;">Total Enviadas</div>
+            </div>
+            <div class="stat-card" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; padding: 1.5rem; border-radius: 8px; text-align: center;">
+                <div style="font-size: 2rem; font-weight: bold;">{{ stats.aprovadas }}</div>
+                <div style="opacity: 0.9; margin-top: 0.5rem;">Aprovadas</div>
+            </div>
+            <div class="stat-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 1.5rem; border-radius: 8px; text-align: center;">
+                <div style="font-size: 2rem; font-weight: bold;">{{ stats.pendentes }}</div>
+                <div style="opacity: 0.9; margin-top: 0.5rem;">Pendentes</div>
+            </div>
+            <div class="stat-card" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white; padding: 1.5rem; border-radius: 8px; text-align: center;">
+                <div style="font-size: 2rem; font-weight: bold;">{{ stats.rejeitadas }}</div>
+                <div style="opacity: 0.9; margin-top: 0.5rem;">Rejeitadas</div>
+            </div>
+        </div>
+
+        <!-- Formulário de upload -->
+        <form method="post" enctype="multipart/form-data" id="uploadForm">
+            {% csrf_token %}
+            
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+                <label for="id_produto" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #2c3e50;">
+                    Produto *
+                </label>
+                <select name="produto" id="id_produto" required class="form-control" style="width: 100%; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem;">
+                    <option value="">Selecione um produto...</option>
+                    {% for produto in produtos %}
+                        <option value="{{ produto.id }}">{{ produto.descricao_produto }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+                <label for="id_imagens" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #2c3e50;">
+                    Imagens * (Você pode selecionar múltiplas imagens)
+                </label>
+                <input type="file" name="imagens" id="id_imagens" accept="image/*" multiple required class="form-control" style="width: 100%; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem;">
+                <small style="color: #7f8c8d; margin-top: 0.5rem; display: block;">
+                    Formatos aceitos: JPG, PNG. Tamanho máximo: 10MB por imagem.
+                </small>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+                <label for="id_lote" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #2c3e50;">
+                    Nome do Lote (opcional)
+                </label>
+                <input type="text" name="lote" id="id_lote" placeholder="Ex: Lote 001 - Prateleira A" class="form-control" style="width: 100%; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem;">
+                <small style="color: #7f8c8d; margin-top: 0.5rem; display: block;">
+                    Use para agrupar fotos tiradas na mesma sessão.
+                </small>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 2rem;">
+                <label for="id_observacoes" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #2c3e50;">
+                    Observações (opcional)
+                </label>
+                <textarea name="observacoes" id="id_observacoes" rows="3" placeholder="Adicione informações sobre a qualidade, iluminação, ângulo, etc." class="form-control" style="width: 100%; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; resize: vertical;"></textarea>
+            </div>
+
+            <!-- Preview de imagens -->
+            <div id="imagePreview" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 2rem;"></div>
+
+            <div class="form-actions" style="display: flex; gap: 1rem; justify-content: flex-end;">
+                <a href="{% url 'verifik_home' %}" class="btn btn-secondary" style="padding: 0.75rem 2rem; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; text-decoration: none; background: #95a5a6; color: white;">
+                    Cancelar
+                </a>
+                <button type="submit" class="btn btn-primary" style="padding: 0.75rem 2rem; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                    📤 Enviar Fotos
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+document.getElementById('id_imagens').addEventListener('change', function(e) {
+    const preview = document.getElementById('imagePreview');
+    preview.innerHTML = '';
+    
+    if (this.files) {
+        Array.from(this.files).forEach(file => {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const div = document.createElement('div');
+                div.style.cssText = 'position: relative; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.1);';
+                div.innerHTML = `
+                    <img src="${e.target.result}" style="width: 100%; height: 150px; object-fit: cover;">
+                    <div style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); color: white; padding: 0.5rem; font-size: 0.8rem; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">
+                        ${file.name}
+                    </div>
+                `;
+                preview.appendChild(div);
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+});
+</script>
+{% endblock %}
