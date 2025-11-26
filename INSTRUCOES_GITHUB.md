@@ -83,13 +83,19 @@ pyinstaller --name=VerifiK_ColetaImagens --onefile --windowed --clean sistema_co
 ### Onde está o banco de dados principal?
 
 O banco de dados `db.sqlite3` **NÃO está no GitHub** (gitignore).
+Está compartilhado via **OneDrive** para fácil acesso.
 
 ### Como obter o banco de dados?
 
-**Opção 1: Usar o banco existente**
+**Opção 1: Download via OneDrive (RECOMENDADO)**
 ```bash
-# Copie o arquivo db.sqlite3 da máquina principal para:
-projetos-logos/db.sqlite3
+# Execute o script automático:
+baixar_banco_onedrive.bat
+
+# Ou baixe manualmente:
+# 1. Abra o link do OneDrive (veja README.md)
+# 2. Clique em "Download"
+# 3. Mova db.sqlite3 para: projetos-logos/
 ```
 
 **Opção 2: Criar novo banco (vazio)**
@@ -99,11 +105,14 @@ python manage.py migrate
 python manage.py createsuperuser
 ```
 
-**Opção 3: Restaurar backup**
-```bash
-# Se você tem um backup do banco:
-cp backup/db.sqlite3 projetos-logos/db.sqlite3
+**Opção 3: Sincronização automática via OneDrive**
+```powershell
+# Crie link simbólico (PowerShell como Admin):
+cd projetos-logos
+New-Item -ItemType SymbolicLink -Path "db.sqlite3" -Target "C:\Users\SEU_USUARIO\OneDrive\Área de Trabalho\verifiK_Biel\projetos-logos\db.sqlite3"
 ```
+
+📚 **Documentação completa:** Veja `COMPARTILHAR_BANCO_ONEDRIVE.md`
 
 
 ## 🔧 ESTRUTURA DE ARQUIVOS

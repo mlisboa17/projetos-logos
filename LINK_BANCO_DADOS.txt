@@ -1,0 +1,96 @@
+╔══════════════════════════════════════════════════════════════════╗
+║              BANCO DE DADOS - LINK DO ONEDRIVE                   ║
+╚══════════════════════════════════════════════════════════════════╝
+
+📥 DOWNLOAD DO BANCO DE DADOS (db.sqlite3)
+══════════════════════════════════════════════════════════════════
+
+🔗 Link do OneDrive:
+──────────────────────────────────────────────────────────────────
+[COLE SEU LINK DO ONEDRIVE AQUI]
+
+Exemplo: https://1drv.ms/u/s!xxxxxxxxxxxxxxxxx
+
+
+📋 COMO OBTER O LINK (para o administrador):
+══════════════════════════════════════════════════════════════════
+1. Abra o Windows Explorer
+2. Vá para: OneDrive\Área de Trabalho\verifiK_Biel\projetos-logos
+3. Clique direito em: db.sqlite3
+4. Selecione: "Compartilhar" (Share)
+5. Configure: "Qualquer pessoa com o link pode visualizar"
+6. Copie o link gerado
+7. Cole acima neste arquivo
+
+
+📥 COMO BAIXAR (para outras pessoas):
+══════════════════════════════════════════════════════════════════
+
+Método 1: Script Automático
+──────────────────────────────────────────────────────────────────
+1. Abra: baixar_banco_onedrive.bat
+2. Configure o link do OneDrive (linha 15)
+3. Execute o arquivo
+4. Siga as instruções
+
+
+Método 2: Manual
+──────────────────────────────────────────────────────────────────
+1. Abra o link do OneDrive acima
+2. Clique no botão "Baixar" ou "Download"
+3. Aguarde o download terminar
+4. Mova db.sqlite3 para a pasta: projetos-logos\
+
+
+📊 INFORMAÇÕES DO BANCO ATUAL
+══════════════════════════════════════════════════════════════════
+Última atualização: 26/11/2025
+Tamanho aproximado: [VERIFICAR ARQUIVO]
+
+Contém:
+✓ Produtos cadastrados (ProdutoMae)
+✓ Usuários do sistema
+✓ Imagens pendentes e aprovadas
+✓ Anotações de bounding boxes
+✓ Lotes de fotos
+✓ Histórico de importações
+
+
+🔄 SINCRONIZAÇÃO AUTOMÁTICA
+══════════════════════════════════════════════════════════════════
+Se você tem acesso ao OneDrive, pode criar um link simbólico:
+
+PowerShell (como Administrador):
+cd projetos-logos
+del db.sqlite3
+New-Item -ItemType SymbolicLink -Path "db.sqlite3" -Target "C:\Users\SEU_USUARIO\OneDrive\Área de Trabalho\verifiK_Biel\projetos-logos\db.sqlite3"
+
+Vantagem: Qualquer alteração sincroniza automaticamente!
+
+
+⚠️ IMPORTANTE
+══════════════════════════════════════════════════════════════════
+- Faça backup antes de modificar o banco
+- Não compartilhe o link publicamente (dados sensíveis)
+- Mantenha o link atualizado neste arquivo
+- Use sempre a versão mais recente
+
+
+🔐 SEGURANÇA
+══════════════════════════════════════════════════════════════════
+Recomendações:
+✓ Use link "somente visualização" (não edição)
+✓ Compartilhe apenas com pessoas autorizadas
+✓ Considere proteger com senha se possível
+✓ Mantenha backups em outro local
+
+
+📞 SUPORTE
+══════════════════════════════════════════════════════════════════
+Problemas?
+- Leia: COMPARTILHAR_BANCO_ONEDRIVE.md
+- Ou crie um novo banco: python manage.py migrate
+
+
+══════════════════════════════════════════════════════════════════
+Última atualização deste arquivo: 26/11/2025
