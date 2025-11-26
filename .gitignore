@@ -14,7 +14,7 @@ build/
 # Dependencies
 node_modules/
 
-# Outros projetos (n�o fazer parte deste commit)
+# Outros projetos (n�o fazer parte deste commit)
 ProjetoVerifiK/
 
 # Environment
@@ -45,10 +45,32 @@ logs/
 *.sqlite3
 
 # YOLO Training Data (imagens e datasets temporarios)
-media/produtos/*/
+media/
+media/**
 verifik/dataset_yolo/
+verifik/dataset_treino/
+verifik/dataset_treino_incremental/
 verifik/runs/
 yolo_dataset/
+dataset_corrigido/
+resultados_deteccao/
+debug_ocr/
+fuel_prices/runs/
+fuel_prices/verifik/
+
+# Imagens de resultado/teste
+*_resultado.jpg
+*_resultado.png
+*.jpg
+*.jpeg
+*.png
+
+# Exceções - manter logos e ícones
+!assets/images/*.jpg
+!assets/images/*.png
+!static/**/*.jpg
+!static/**/*.png
 
 # Manter apenas o modelo final treinado
 !verifik/verifik_yolov8.pt
+!*.pt
