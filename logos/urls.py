@@ -61,8 +61,11 @@ urlpatterns = [
     # VerifiK URLs
     path('verifik/', include('verifik.urls')),
 
-    # VerifiK API (Detecção)
+    # VerifiK API (Detecï¿½ï¿½o)
     path('api/verifik/', include('verifik.api_urls')),
+    
+    # TranscriÃ§Ã£o de Caixa URLs
+    path('transcricao/', include('transcricao_caixa.urls')),
     
     # Django Admin
     path('admin/', admin.site.urls),

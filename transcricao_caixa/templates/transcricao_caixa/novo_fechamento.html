@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Novo Fechamento de Caixa{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'transcricao_caixa:index' %}">Transcrição Caixa</a></li>
+                    <li class="breadcrumb-item active">Novo Fechamento</li>
+                </ol>
+            </nav>
+            <h1 class="h2">
+                <i class="bi bi-plus-circle"></i> Novo Fechamento de Caixa
+            </h1>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="empresa" class="form-label">Empresa *</label>
+                            <select name="empresa" id="empresa" class="form-select" required>
+                                <option value="">Selecione uma empresa...</option>
+                                {% for empresa in empresas %}
+                                <option value="{{ empresa.id }}">{{ empresa.nome }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="form-text">
+                                Empresa que está fazendo o fechamento de caixa
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="data_fechamento" class="form-label">Data do Fechamento *</label>
+                            <input type="date" name="data_fechamento" id="data_fechamento" 
+                                   class="form-control" value="{{ data_hoje|date:'Y-m-d' }}" required>
+                            <div class="form-text">
+                                Data referente ao fechamento do caixa
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="observacoes" class="form-label">Observações</label>
+                            <textarea name="observacoes" id="observacoes" rows="4" 
+                                      class="form-control" placeholder="Observações sobre este fechamento..."></textarea>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle"></i>
+                            <strong>Próximo passo:</strong> Após criar o fechamento, você poderá fazer upload das fotos dos documentos fiscais para processamento via OCR.
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-save"></i> Criar Fechamento
+                            </button>
+                            <a href="{% url 'transcricao_caixa:index' %}" class="btn btn-secondary">
+                                <i class="bi bi-x-circle"></i> Cancelar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

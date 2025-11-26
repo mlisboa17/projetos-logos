@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Editar Fechamento{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'transcricao_caixa:index' %}">Transcrição Caixa</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'transcricao_caixa:detalhe_fechamento' fechamento.pk %}">{{ fechamento.empresa.nome }}</a></li>
+                    <li class="breadcrumb-item active">Editar</li>
+                </ol>
+            </nav>
+            <h1 class="h2">
+                <i class="bi bi-pencil"></i> Editar Fechamento
+            </h1>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Empresa</label>
+                            <input type="text" class="form-control" value="{{ fechamento.empresa.nome }}" disabled>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Data do Fechamento</label>
+                            <input type="date" class="form-control" value="{{ fechamento.data_fechamento|date:'Y-m-d' }}" disabled>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Status</label>
+                            <select name="status" id="status" class="form-select">
+                                {% for value, label in status_choices %}
+                                <option value="{{ value }}" {% if fechamento.status == value %}selected{% endif %}>
+                                    {{ label }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="observacoes" class="form-label">Observações</label>
+                            <textarea name="observacoes" id="observacoes" rows="4" class="form-control">{{ fechamento.observacoes }}</textarea>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle"></i>
+                            <strong>Informação:</strong> Empresa e data não podem ser alterados após a criação. Os totais são calculados automaticamente.
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-save"></i> Salvar Alterações
+                            </button>
+                            <a href="{% url 'transcricao_caixa:detalhe_fechamento' fechamento.pk %}" class="btn btn-secondary">
+                                <i class="bi bi-x-circle"></i> Cancelar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

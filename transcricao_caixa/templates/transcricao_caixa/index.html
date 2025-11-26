@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Transcrição de Caixa - Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="h2">
+                <i class="bi bi-receipt-cutoff"></i> Sistema de Transcrição de Caixa
+            </h1>
+            <p class="text-muted">Fechamento automático via OCR</p>
+        </div>
+    </div>
+
+    <!-- Cards de Estatísticas -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card border-primary">
+                <div class="card-body">
+                    <h6 class="text-muted mb-2">
+                        <i class="bi bi-file-earmark-text"></i> Total Fechamentos
+                    </h6>
+                    <h2 class="mb-0">{{ total_fechamentos }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-warning">
+                <div class="card-body">
+                    <h6 class="text-muted mb-2">
+                        <i class="bi bi-hourglass-split"></i> Pendentes
+                    </h6>
+                    <h2 class="mb-0">{{ fechamentos_pendentes }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-info">
+                <div class="card-body">
+                    <h6 class="text-muted mb-2">
+                        <i class="bi bi-camera"></i> Docs. Pendentes OCR
+                    </h6>
+                    <h2 class="mb-0">{{ documentos_pendentes }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-success">
+                <div class="card-body text-center">
+                    <a href="{% url 'transcricao_caixa:novo_fechamento' %}" class="btn btn-success btn-lg w-100">
+                        <i class="bi bi-plus-circle"></i> Novo Fechamento
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fechamentos Recentes -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="bi bi-clock-history"></i> Fechamentos Recentes
+                    </h5>
+                    <a href="{% url 'transcricao_caixa:lista_fechamentos' %}" class="btn btn-sm btn-outline-primary">
+                        Ver Todos
+                    </a>
+                </div>
+                <div class="card-body p-0">
+                    {% if fechamentos_recentes %}
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Empresa</th>
+                                    <th>Data</th>
+                                    <th>Status</th>
+                                    <th>Documentos</th>
+                                    <th>Total Vendas</th>
+                                    <th>Total Despesas</th>
+                                    <th>Líquido</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for fechamento in fechamentos_recentes %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ fechamento.empresa.nome }}</strong>
+                                    </td>
+                                    <td>{{ fechamento.data_fechamento|date:"d/m/Y" }}</td>
+                                    <td>
+                                        {% if fechamento.status == 'concluido' %}
+                                        <span class="badge bg-success">Concluído</span>
+                                        {% elif fechamento.status == 'revisado' %}
+                                        <span class="badge bg-info">Revisado</span>
+                                        {% elif fechamento.status == 'aguardando_revisao' %}
+                                        <span class="badge bg-warning">Aguardando Revisão</span>
+                                        {% elif fechamento.status == 'em_processamento' %}
+                                        <span class="badge bg-primary">Em Processamento</span>
+                                        {% else %}
+                                        <span class="badge bg-secondary">{{ fechamento.get_status_display }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-secondary">
+                                            {{ fechamento.total_documentos }}
+                                        </span>
+                                        ({{ fechamento.documentos_processados }} proc.)
+                                    </td>
+                                    <td class="text-success">
+                                        R$ {{ fechamento.total_vendas|floatformat:2 }}
+                                    </td>
+                                    <td class="text-danger">
+                                        R$ {{ fechamento.total_despesas|floatformat:2 }}
+                                    </td>
+                                    <td>
+                                        <strong {% if fechamento.total_liquido < 0 %}class="text-danger"{% else %}class="text-success"{% endif %}>
+                                            R$ {{ fechamento.total_liquido|floatformat:2 }}
+                                        </strong>
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'transcricao_caixa:detalhe_fechamento' fechamento.pk %}" 
+                                           class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5 text-muted">
+                        <i class="bi bi-inbox" style="font-size: 3rem;"></i>
+                        <p class="mt-3">Nenhum fechamento cadastrado ainda</p>
+                        <a href="{% url 'transcricao_caixa:novo_fechamento' %}" class="btn btn-primary">
+                            <i class="bi bi-plus-circle"></i> Criar Primeiro Fechamento
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
