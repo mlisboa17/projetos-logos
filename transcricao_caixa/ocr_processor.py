@@ -9,6 +9,10 @@ from decimal import Decimal
 from datetime import datetime
 import logging
 
+# Configurar Tesseract automaticamente
+from .tesseract_config import configurar_tesseract
+configurar_tesseract()
+
 logger = logging.getLogger(__name__)
 
 
