@@ -185,27 +185,71 @@ def upload_documento(request, fechamento_id):
 
 @login_required
 def processar_documento(request, pk):
-    """Processa um documento com OCR (placeholder - implementar lógica de OCR)"""
+    """Processa um documento com OCR usando Tesseract"""
     documento = get_object_or_404(DocumentoTranscrito, pk=pk)
     
-    # TODO: Implementar lógica de OCR aqui
-    # Por enquanto, apenas marca como processado com dados de exemplo
+    from .ocr_processor import TesseractOCRProcessor
+    from decimal import Decimal
     
     documento.status = 'processando'
     documento.save()
     
-    # Simulação de processamento OCR
-    # Em produção, usar Tesseract, Google Vision API, AWS Textract, etc.
-    documento.texto_completo = "Texto extraído da imagem (OCR não implementado ainda)"
-    documento.confianca_ocr = 85.5
-    documento.status = 'processado'
-    documento.processado_em = timezone.now()
-    documento.save()
+    try:
+        # Inicializar processador OCR
+        ocr = TesseractOCRProcessor()
+        
+        # Processar documento
+        resultado = ocr.processar_documento_completo(documento.imagem.path)
+        
+        if resultado['sucesso']:
+            # Atualizar documento com dados extraídos
+            documento.texto_completo = resultado['texto']
+            documento.confianca_ocr = resultado['confianca']
+            documento.dados_extraidos = resultado['dados_extraidos']
+            
+            # Preencher campos estruturados
+            if resultado['dados_extraidos']['numero_documento']:
+                documento.numero_documento = resultado['dados_extraidos']['numero_documento']
+            
+            if resultado['dados_extraidos']['data_documento']:
+                from datetime import datetime
+                documento.data_documento = datetime.fromisoformat(resultado['dados_extraidos']['data_documento'])
+            
+            if resultado['dados_extraidos']['valor_total']:
+                documento.valor_total = Decimal(str(resultado['dados_extraidos']['valor_total']))
+            
+            # Detectar tipo de documento se não definido
+            if not documento.tipo_documento:
+                tipo_detectado = ocr.detectar_tipo_documento(resultado['texto'])
+                try:
+                    tipo_doc = TipoDocumento.objects.filter(nome__icontains=tipo_detectado).first()
+                    if tipo_doc:
+                        documento.tipo_documento = tipo_doc
+                except:
+                    pass
+            
+            documento.status = 'processado'
+            documento.processado_em = timezone.now()
+            documento.save()
+            
+            # Atualizar status do fechamento
+            documento.fechamento.calcular_totais()
+            
+            messages.success(request, f'Documento processado! Confiança: {resultado["confianca"]}%. Por favor, revise os dados extraídos.')
+        else:
+            documento.status = 'erro'
+            documento.observacoes = f"Erro no OCR: {resultado['erro']}"
+            documento.save()
+            messages.error(request, f'Erro ao processar documento: {resultado["erro"]}')
+            return redirect('transcricao_caixa:detalhe_fechamento', pk=documento.fechamento.pk)
     
-    # Atualizar status do fechamento
-    documento.fechamento.calcular_totais()
+    except Exception as e:
+        documento.status = 'erro'
+        documento.observacoes = f"Erro inesperado: {str(e)}"
+        documento.save()
+        messages.error(request, f'Erro inesperado: {str(e)}')
+        return redirect('transcricao_caixa:detalhe_fechamento', pk=documento.fechamento.pk)
     
-    messages.success(request, 'Documento processado! Por favor, revise os dados extraídos.')
     return redirect('transcricao_caixa:revisar_documento', pk=pk)
 
 
@@ -266,27 +310,74 @@ def editar_documento(request, pk):
 
 @login_required
 def processar_lote(request):
-    """API para processar vários documentos em lote"""
+    """API para processar vários documentos em lote com OCR"""
     if request.method == 'POST':
         fechamento_id = request.POST.get('fechamento_id')
+        
+        from .ocr_processor import TesseractOCRProcessor
+        from decimal import Decimal
         
         documentos = DocumentoTranscrito.objects.filter(
             fechamento_id=fechamento_id,
             status='pendente'
         )
         
-        count = 0
+        ocr = TesseractOCRProcessor()
+        count_sucesso = 0
+        count_erro = 0
+        
         for doc in documentos:
-            # TODO: Implementar processamento OCR real
-            doc.status = 'processado'
-            doc.processado_em = timezone.now()
-            doc.save()
-            count += 1
+            try:
+                doc.status = 'processando'
+                doc.save()
+                
+                # Processar com OCR
+                resultado = ocr.processar_documento_completo(doc.imagem.path)
+                
+                if resultado['sucesso']:
+                    doc.texto_completo = resultado['texto']
+                    doc.confianca_ocr = resultado['confianca']
+                    doc.dados_extraidos = resultado['dados_extraidos']
+                    
+                    if resultado['dados_extraidos']['numero_documento']:
+                        doc.numero_documento = resultado['dados_extraidos']['numero_documento']
+                    
+                    if resultado['dados_extraidos']['data_documento']:
+                        from datetime import datetime
+                        doc.data_documento = datetime.fromisoformat(resultado['dados_extraidos']['data_documento'])
+                    
+                    if resultado['dados_extraidos']['valor_total']:
+                        doc.valor_total = Decimal(str(resultado['dados_extraidos']['valor_total']))
+                    
+                    doc.status = 'processado'
+                    doc.processado_em = timezone.now()
+                    count_sucesso += 1
+                else:
+                    doc.status = 'erro'
+                    doc.observacoes = f"Erro no OCR: {resultado['erro']}"
+                    count_erro += 1
+                
+                doc.save()
+                
+            except Exception as e:
+                doc.status = 'erro'
+                doc.observacoes = f"Erro: {str(e)}"
+                doc.save()
+                count_erro += 1
+        
+        # Recalcular totais do fechamento
+        if fechamento_id:
+            try:
+                fechamento = FechamentoCaixa.objects.get(id=fechamento_id)
+                fechamento.calcular_totais()
+            except:
+                pass
         
         return JsonResponse({
             'success': True,
-            'processados': count,
-            'mensagem': f'{count} documento(s) processado(s) com sucesso!'
+            'processados': count_sucesso,
+            'erros': count_erro,
+            'mensagem': f'{count_sucesso} documento(s) processado(s), {count_erro} erro(s)'
         })
     
     return JsonResponse({'success': False, 'mensagem': 'Método não permitido'})

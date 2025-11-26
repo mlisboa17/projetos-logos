@@ -1,0 +1,394 @@
+[
+  {
+    "posto": "Seus produtos mais consumidos",
+    "modalidade": "Combustíveis Claros",
+    "produtos": [
+      {
+        "nome": "ETANOL HIDRATADO ADITIV. PETROBRAS GRID",
+        "base": "Base:",
+        "preco": "Preço: R$ 3,5876",
+        "prazo": "3 Dias"
+      },
+      {
+        "nome": "GASOLINA COMUM C",
+        "base": "Base:",
+        "preco": "Preço: R$ 5,2140",
+        "prazo": "3 Dias"
+      }
+    ],
+    "data_coleta": "20:37 25/11/2025",
+    "codigo_vibra": "95406",
+    "razao_social": "AUTO POSTO CASA CAIADA LTDA",
+    "cnpj": "04284939000186"
+  },
+  {
+    "posto": "menu",
+    "modalidade": "",
+    "produtos": [
+      {
+        "nome": "GASOLINA PREMIUM C ADIT PETROBRAS PODIUM",
+        "base": "Base:",
+        "preco": "Preço: R$ 6,9831",
+        "prazo": "15 Dias"
+      },
+      {
+        "nome": "ETANOL HIDRATADO ADITIV. PETROBRAS GRID",
+        "base": "Base:",
+        "preco": "Preço:",
+        "prazo": null
+      },
+      {
+        "nome": "GASOLINA COMUM C ADIT PETROBRAS GRID",
+        "base": "Base:",
+        "preco": "Preço: R$ 5,3544",
+        "prazo": "3 Dias"
+      },
+      {
+        "nome": "GASOLINA COMUM C",
+        "base": "Base:",
+        "preco": "Preço: R$ 5,2140",
+        "prazo": "3 Dias"
+      },
+      {
+        "nome": "ÓLEO DIESEL B S10",
+        "base": "Base:",
+        "preco": "Preço: R$ 5,4740",
+        "prazo": "3 Dias"
+      },
+      {
+        "nome": "ÓLEO DIESEL B S500 ADIT PETROBRAS GRID",
+        "base": "Base:",
+        "preco": "Preço:",
+        "prazo": null
+      },
+      {
+        "nome": "ÓLEO DIESEL B S10 ADIT PETROBRAS GRID",
+        "base": "Base:",
+        "preco": "Preço:",
+        "prazo": null
+      }
+    ],
+    "data_coleta": "20:38 25/11/2025",
+    "codigo_vibra": "107469",
+    "razao_social": "POSTO ENSEADA DO NORTE LTDA",
+    "cnpj": "00338804000103"
+  },
+  {
+    "posto": "Seus produtos mais consumidos",
+    "modalidade": "Combustíveis Claros",
+    "produtos": [
+      {
+        "nome": "ETANOL HIDRATADO ADITIV. PETROBRAS GRID",
+        "base": "Base:",
+        "preco": "Preço: R$ 3,5876",
+        "prazo": "3 Dias"
+      },
+      {
+        "nome": "GASOLINA COMUM C ADIT PETROBRAS GRID",
+        "base": "Base:",
+        "preco": "Preço: R$ 5,3544",
+        "prazo": "3 Dias"
+      },
+      {
+        "nome": "GASOLINA COMUM C",
+        "base": "Base:",
+        "preco": "Preço: R$ 5,2140",
+        "prazo": "3 Dias"
+      },
+      {
+        "nome": "ÓLEO DIESEL B S10 ADIT PETROBRAS GRID",
+        "base": "Base:",
+        "preco": "Preço: R$ 5,4740",
+        "prazo": "3 Dias"
+      }
+    ],
+    "data_coleta": "20:38 25/11/2025",
+    "codigo_vibra": "11236",
+    "razao_social": "REAL RECIFE LTDA",
+    "cnpj": "24156978000105"
+  },
+  {
+    "posto": "menu",
+    "modalidade": "",
+    "produtos": [
+      {
+        "nome": "ETANOL HIDRATADO ADITIV. PETROBRAS GRID",
+        "base": "Base:",
+        "preco": "Preço: R$ 3,5876",
+        "prazo": "3 Dias"
+      },
+      {
+        "nome": "GASOLINA COMUM C ADIT PETROBRAS GRID",
+        "base": "Base:",
+        "preco": "Preço: R$ 5,3544",
+        "prazo": "3 Dias"
+      },
+      {
+        "nome": "GASOLINA COMUM C",
+        "base": "Base:",
+        "preco": "Preço:",
+        "prazo": null
+      },
+      {
+        "nome": "ÓLEO DIESEL B S10 ADIT PETROBRAS GRID",
+        "base": "Base:",
+        "preco": "Preço:",
+        "prazo": null
+      }
+    ],
+    "data_coleta": "20:38 25/11/2025",
+    "codigo_vibra": "1153963",
+    "razao_social": "POSTO CIDADE PATRIMONIO LTDA",
+    "cnpj": "05428059000280"
+  },
+  {
+    "posto": "menu",
+    "modalidade": "",
+    "produtos": [
+      {
+        "nome": "GASOLINA COMUM C ADIT PETROBRAS GRID",
+        "base": "Base:",
+        "preco": "Preço: R$ 5,3544",
+        "prazo": "3 Dias"
+      },
+      {
+        "nome": "ETANOL HIDRATADO COMBUSTIVEL",
+        "base": "Base:",
+        "preco": "Preço: R$ 3,5876",
+        "prazo": "3 Dias"
+      },
+      {
+        "nome": "GASOLINA COMUM C",
+        "base": "Base:",
+        "preco": "Preço:",
+        "prazo": null
+      },
+      {
+        "nome": "ÓLEO DIESEL B S10 ADIT PETROBRAS GRID",
+        "base": "Base:",
+        "preco": "Preço:",
+        "prazo": null
+      }
+    ],
+    "data_coleta": "20:39 25/11/2025",
+    "codigo_vibra": "124282",
+    "razao_social": "R.J. COMBUSTIVEIS E LUBRIFICANTES L",
+    "cnpj": "08726064000186"
+  },
+  {
+    "posto": "menu",
+    "modalidade": "",
+    "produtos": [
+      {
+        "nome": "ETANOL HIDRATADO ADITIV. PETROBRAS GRID",
+        "base": "Base:",
+        "preco": "Preço: R$ 3,5876",
+        "prazo": "3 Dias"
+      },
+      {
+        "nome": "GASOLINA COMUM C ADIT PETROBRAS GRID",
+        "base": "Base:",
+        "preco": "Preço: R$ 5,3544",
+        "prazo": "3 Dias"
+      },
+      {
+        "nome": "GASOLINA COMUM C",
+        "base": "Base:",
+        "preco": "Preço: R$ 5,2140",
+        "prazo": "3 Dias"
+      },
+      {
+        "nome": "ÓLEO DIESEL B S10",
+        "base": "Base:",
+        "preco": "Preço: R$ 5,4740",
+        "prazo": "3 Dias"
+      },
+      {
+        "nome": "ÓLEO DIESEL B S500 ADIT PETROBRAS GRID",
+        "base": "Base:",
+        "preco": "Preço:",
+        "prazo": null
+      }
+    ],
+    "data_coleta": "20:39 25/11/2025",
+    "codigo_vibra": "14219",
+    "razao_social": "AUTO POSTO GLOBO LTDA",
+    "cnpj": "41043647000188"
+  },
+  {
+    "posto": "Seus produtos mais consumidos",
+    "modalidade": "Combustíveis Claros",
+    "produtos": [
+      {
+        "nome": "ETANOL HIDRATADO ADITIV. PETROBRAS GRID",
+        "base": "Base:",
+        "preco": "Preço: R$ 3,5876",
+        "prazo": "3 Dias"
+      },
+      {
+        "nome": "GASOLINA COMUM C ADIT PETROBRAS GRID",
+        "base": "Base:",
+        "preco": "Preço: R$ 5,3544",
+        "prazo": "3 Dias"
+      },
+      {
+        "nome": "GASOLINA COMUM C",
+        "base": "Base:",
+        "preco": "Preço: R$ 5,2140",
+        "prazo": "3 Dias"
+      }
+    ],
+    "data_coleta": "20:39 25/11/2025",
+    "codigo_vibra": "156075",
+    "razao_social": "DISTRIBUIDORA R S DERIVADO DE PETRO",
+    "cnpj": "07018760000175"
+  },
+  {
+    "posto": "menu",
+    "modalidade": "",
+    "produtos": [
+      {
+        "nome": "GASOLINA COMUM C ADIT PETROBRAS GRID",
+        "base": "Base:",
+        "preco": "Preço: R$ 5,3639",
+        "prazo": "5 Dias"
+      },
+      {
+        "nome": "ETANOL HIDRATADO COMBUSTIVEL",
+        "base": "Base:",
+        "preco": "Preço: R$ 3,6428",
+        "prazo": "5 Dias"
+      },
+      {
+        "nome": "GASOLINA COMUM C",
+        "base": "Base:",
+        "preco": "Preço:",
+        "prazo": null
+      },
+      {
+        "nome": "ÓLEO DIESEL B S10",
+        "base": "Base:",
+        "preco": "Preço: R$ 5,4415",
+        "prazo": "5 Dias"
+      },
+      {
+        "nome": "ÓLEO DIESEL B S10 ADIT PETROBRAS GRID",
+        "base": "Base:",
+        "preco": "Preço:",
+        "prazo": null
+      },
+      {
+        "nome": "ETANOL HIDRATADO ADITIV. PETROBRAS GRID",
+        "base": "Base:",
+        "preco": "Preço: R$ 3,7131",
+        "prazo": "5 Dias"
+      }
+    ],
+    "data_coleta": "20:40 25/11/2025",
+    "codigo_vibra": "1775869",
+    "razao_social": "POSTO DOZE COMERCIO DE COMBUSTIVEIS",
+    "cnpj": "52308604000101"
+  },
+  {
+    "posto": "menu",
+    "modalidade": "",
+    "produtos": [
+      {
+        "nome": "ETANOL HIDRATADO ADITIV. PETROBRAS GRID",
+        "base": "Base:",
+        "preco": "Preço: R$ 3,5876",
+        "prazo": "3 Dias"
+      },
+      {
+        "nome": "GASOLINA COMUM C ADIT PETROBRAS GRID",
+        "base": "Base:",
+        "preco": "Preço:",
+        "prazo": null
+      },
+      {
+        "nome": "GASOLINA COMUM C",
+        "base": "Base:",
+        "preco": "Preço: R$ 5,2140",
+        "prazo": "3 Dias"
+      },
+      {
+        "nome": "ÓLEO DIESEL B S10",
+        "base": "Base:",
+        "preco": "Preço: R$ 5,4740",
+        "prazo": "3 Dias"
+      },
+      {
+        "nome": "ÓLEO DIESEL/BIODIESEL B2 TIPO D",
+        "base": "Base:",
+        "preco": "Preço:",
+        "prazo": null
+      }
+    ],
+    "data_coleta": "20:40 25/11/2025",
+    "codigo_vibra": "5039",
+    "razao_social": "RIO DOCE COMERCIO E SERVICOS LTDA",
+    "cnpj": "03008754000186"
+  },
+  {
+    "posto": "Seus produtos mais consumidos",
+    "modalidade": "Combustíveis Claros",
+    "produtos": [
+      {
+        "nome": "GASOLINA COMUM C ADIT PETROBRAS GRID",
+        "base": "Base:",
+        "preco": "Preço: R$ 5,3639",
+        "prazo": "5 Dias"
+      },
+      {
+        "nome": "GASOLINA COMUM C",
+        "base": "Base:",
+        "preco": "Preço: R$ 5,2233",
+        "prazo": "5 Dias"
+      },
+      {
+        "nome": "ETANOL HIDRATADO COMBUSTIVEL",
+        "base": "Base:",
+        "preco": "Preço: R$ 3,5927",
+        "prazo": "5 Dias"
+      },
+      {
+        "nome": "ÓLEO DIESEL B S10",
+        "base": "Base:",
+        "preco": "Preço: R$ 5,4806",
+        "prazo": "5 Dias"
+      },
+      {
+        "nome": "ÓLEO DIESEL B S10 ADIT PETROBRAS GRID",
+        "base": "Base:",
+        "preco": "Preço: R$ 5,5408",
+        "prazo": "5 Dias"
+      }
+    ],
+    "data_coleta": "20:40 25/11/2025",
+    "codigo_vibra": "61003",
+    "razao_social": "AUTO POSTO IGARASSU LTDA.",
+    "cnpj": "04274378000134"
+  },
+  {
+    "posto": "menu",
+    "modalidade": "",
+    "produtos": [
+      {
+        "nome": "ETANOL HIDRATADO ADITIV. PETROBRAS GRID",
+        "base": "Base:",
+        "preco": "Preço: R$ 3,5876",
+        "prazo": "3 Dias"
+      },
+      {
+        "nome": "GASOLINA COMUM C",
+        "base": "Base:",
+        "preco": "Preço:",
+        "prazo": null
+      }
+    ],
+    "data_coleta": "20:41 25/11/2025",
+    "codigo_vibra": "94762",
+    "razao_social": "POSTO CIDADE PATRIMONIO LTDA",
+    "cnpj": "05428059000107"
+  }
+]

@@ -3,15 +3,15 @@
   "modalidade": "",
   "produtos": [
     {
-      "nome": "ETANOL HIDRATADO ADITIV. PETROBRAS GRID",
-      "base": "Base:",
-      "preco": "Preço: R$ 3,5876",
-      "prazo": "3 Dias"
-    },
-    {
       "nome": "GASOLINA COMUM C ADIT PETROBRAS GRID",
       "base": "Base:",
       "preco": "Preço: R$ 5,3544",
+      "prazo": "3 Dias"
+    },
+    {
+      "nome": "ETANOL HIDRATADO COMBUSTIVEL",
+      "base": "Base:",
+      "preco": "Preço: R$ 3,5876",
       "prazo": "3 Dias"
     },
     {
@@ -27,5 +27,5 @@
       "prazo": null
     }
   ],
-  "data_coleta": "20:38 25/11/2025"
+  "data_coleta": "20:39 25/11/2025"
 }

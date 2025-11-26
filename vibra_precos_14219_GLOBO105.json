@@ -3,16 +3,10 @@
   "modalidade": "",
   "produtos": [
     {
-      "nome": "GASOLINA PREMIUM C ADIT PETROBRAS PODIUM",
-      "base": "Base:",
-      "preco": "Preço: R$ 6,9831",
-      "prazo": "15 Dias"
-    },
-    {
       "nome": "ETANOL HIDRATADO ADITIV. PETROBRAS GRID",
       "base": "Base:",
-      "preco": "Preço:",
-      "prazo": null
+      "preco": "Preço: R$ 3,5876",
+      "prazo": "3 Dias"
     },
     {
       "nome": "GASOLINA COMUM C ADIT PETROBRAS GRID",
@@ -37,13 +31,7 @@
       "base": "Base:",
       "preco": "Preço:",
       "prazo": null
-    },
-    {
-      "nome": "ÓLEO DIESEL B S10 ADIT PETROBRAS GRID",
-      "base": "Base:",
-      "preco": "Preço:",
-      "prazo": null
     }
   ],
-  "data_coleta": "20:38 25/11/2025"
+  "data_coleta": "20:39 25/11/2025"
 }
