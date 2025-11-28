@@ -47,16 +47,22 @@ class SistemaColetaImagens:
         screen_width = self.root.winfo_screenwidth()
         screen_height = self.root.winfo_screenheight()
         
-        # Usar 95% da tela disponível
-        window_width = int(screen_width * 0.95)
-        window_height = int(screen_height * 0.95)
+        # Ajuste especial para resoluções baixas como 1360x768
+        if screen_width <= 1366 or screen_height <= 768:
+            # Para telas pequenas, usar 98% da tela e maximizar
+            window_width = int(screen_width * 0.98)
+            window_height = int(screen_height * 0.98)
+            self.root.geometry(f"{window_width}x{window_height}+10+10")
+            self.root.state('zoomed')  # Maximizar automaticamente
+        else:
+            # Para telas grandes, usar 95% da tela disponível
+            window_width = int(screen_width * 0.95)
+            window_height = int(screen_height * 0.95)
+            # Centralizar janela
+            x = (screen_width - window_width) // 2
+            y = (screen_height - window_height) // 2
+            self.root.geometry(f"{window_width}x{window_height}+{x}+{y}")
         
-        # Centralizar janela
-        x = (screen_width - window_width) // 2
-        y = (screen_height - window_height) // 2
-        
-        self.root.geometry(f"{window_width}x{window_height}+{x}+{y}")
-        self.root.state('zoomed')  # Maximizar janela
         self.root.configure(bg='#f5f6fa')
         
         # Configurar evento de fechamento
@@ -89,6 +95,9 @@ class SistemaColetaImagens:
         
         # Criar interface
         self.criar_interface()
+        
+        # Mostrar ajuda inicial
+        self.mostrar_ajuda_inicial()
         
         # Mostrar ajuda inicial
         self.mostrar_ajuda_inicial()
@@ -237,6 +246,42 @@ class SistemaColetaImagens:
                 "(Cole este link no navegador)"
             )
     
+    def garantir_botoes_visiveis(self):
+        """Garante que os botões de ação sejam sempre visíveis em telas pequenas"""
+        try:
+            # Forçar o scroll para o final se a tela for muito pequena
+            screen_height = self.root.winfo_screenheight()
+            if screen_height <= 768:
+                # Scroll para o final do painel de controles
+                if hasattr(self, 'canvas_controles'):
+                    self.canvas_controles.yview_moveto(1.0)  # Move para o final
+                    
+            # Verificar novamente após 5 segundos
+            self.root.after(5000, self.garantir_botoes_visiveis)
+        except Exception as e:
+            print(f"Erro ao ajustar scroll: {e}")
+    
+    def mostrar_ajuda_inicial(self):
+        """Mostra instruções na primeira execução"""
+        ajuda = messagebox.askyesno(
+            "📖 Bem-vindo ao Sistema de Coleta!",
+            "COMO USAR (4 passos simples):\n\n" +
+            "1️⃣ Escolha o PRODUTO na lista à esquerda\n" +
+            "2️⃣ Carregue uma FOTO ou tire com a câmera\n" +
+            "3️⃣ DESENHE retângulos: clique e arraste onde está cada produto\n" +
+            "4️⃣ Clique em SALVAR quando terminar\n\n" +
+            "💡 DICA: Você pode marcar VÁRIOS produtos na mesma foto!\n\n" +
+            "Deseja ver um tutorial em vídeo?"
+        )
+        
+        if ajuda:
+            messagebox.showinfo(
+                "📺 Tutorial",
+                "Tutorial em vídeo disponível em:\n\n" +
+                "https://drive.google.com/tutorial\n\n" +
+                "(Cole este link no navegador)"
+            )
+    
     def criar_interface(self):
         """Cria a interface gráfica"""
         
@@ -254,21 +299,26 @@ class SistemaColetaImagens:
         frame_topo = tk.Frame(self.root, bg='#667eea', height=80)
         frame_topo.pack(fill='x', padx=0, pady=0)
         
-        tk.Label(
-            frame_topo,
-            text="📸 Sistema de Coleta de Imagens - VerifiK",
-            font=('Segoe UI', 20, 'bold'),
-            bg='#667eea',
-            fg='white'
-        ).pack(pady=5)
+        # Título responsivo baseado no tamanho da tela
+        screen_width = self.root.winfo_screenwidth()
+        title_font_size = 16 if screen_width <= 1366 else 20
+        subtitle_font_size = 9 if screen_width <= 1366 else 11
         
         tk.Label(
             frame_topo,
-            text="1️⃣ Selecione o produto  →  2️⃣ Carregue/tire foto  →  3️⃣ Desenhe retângulos  →  4️⃣ Salve",
-            font=('Segoe UI', 11),
+            text="📸 Sistema de Coleta - VerifiK" if screen_width <= 1366 else "📸 Sistema de Coleta de Imagens - VerifiK",
+            font=('Segoe UI', title_font_size, 'bold'),
             bg='#667eea',
             fg='white'
-        ).pack(pady=10)
+        ).pack(pady=3 if screen_width <= 1366 else 5)
+        
+        tk.Label(
+            frame_topo,
+            text="1️⃣ Produto → 2️⃣ Foto → 3️⃣ Retângulos → 4️⃣ Salvar" if screen_width <= 1366 else "1️⃣ Selecione o produto  →  2️⃣ Carregue/tire foto  →  3️⃣ Desenhe retângulos  →  4️⃣ Salve",
+            font=('Segoe UI', subtitle_font_size),
+            bg='#667eea',
+            fg='white'
+        ).pack(pady=5 if screen_width <= 1366 else 10)
         
         # Frame principal - 3 colunas
         frame_principal = tk.Frame(self.root, bg='#f5f6fa')
@@ -276,9 +326,19 @@ class SistemaColetaImagens:
         
         # Configurar pesos das colunas para responsividade
         frame_principal.grid_rowconfigure(0, weight=1)
-        frame_principal.grid_columnconfigure(0, weight=1, minsize=280)  # Produtos
-        frame_principal.grid_columnconfigure(1, weight=5, minsize=700)  # Imagem (MAIOR)
-        frame_principal.grid_columnconfigure(2, weight=1, minsize=300)  # Controles
+        
+        # Ajuste responsivo para diferentes resoluções
+        screen_width = self.root.winfo_screenwidth()
+        if screen_width <= 1366:
+            # Para telas pequenas - painéis mais compactos
+            frame_principal.grid_columnconfigure(0, weight=1, minsize=240)  # Produtos (menor)
+            frame_principal.grid_columnconfigure(1, weight=4, minsize=600)  # Imagem (ajustado)
+            frame_principal.grid_columnconfigure(2, weight=1, minsize=260)  # Controles (menor)
+        else:
+            # Para telas grandes - painéis normais
+            frame_principal.grid_columnconfigure(0, weight=1, minsize=280)  # Produtos
+            frame_principal.grid_columnconfigure(1, weight=5, minsize=700)  # Imagem (MAIOR)
+            frame_principal.grid_columnconfigure(2, weight=1, minsize=300)  # Controles
         
         # Coluna 1 - Lista de produtos
         self.criar_painel_produtos(frame_principal)
@@ -549,13 +609,26 @@ class SistemaColetaImagens:
         frame = tk.Frame(canvas_scroll, bg='white', relief='ridge', borderwidth=2)
         
         # Configurar scrollbar
-        frame.bind('<Configure>', lambda e: canvas_scroll.configure(scrollregion=canvas_scroll.bbox('all')))
+        def configure_scroll_region(event):
+            canvas_scroll.configure(scrollregion=canvas_scroll.bbox('all'))
+        
+        def on_mouse_wheel(event):
+            canvas_scroll.yview_scroll(int(-1*(event.delta/120)), "units")
+        
+        frame.bind('<Configure>', configure_scroll_region)
         canvas_scroll.create_window((0, 0), window=frame, anchor='nw')
         canvas_scroll.configure(yscrollcommand=scrollbar_vertical.set)
+        
+        # Bind scroll do mouse
+        canvas_scroll.bind("<MouseWheel>", on_mouse_wheel)
+        frame.bind("<MouseWheel>", on_mouse_wheel)
         
         # Empacotar canvas e scrollbar
         canvas_scroll.pack(side='left', fill='both', expand=True)
         scrollbar_vertical.pack(side='right', fill='y')
+        
+        # Salvar referência do canvas para uso posterior
+        self.canvas_controles = canvas_scroll
         
         # Cabeçalho Produto Selecionado
         header_produto = tk.Frame(frame, bg='#e67e22', relief='raised', bd=2)
@@ -634,16 +707,20 @@ class SistemaColetaImagens:
         scrollbar = tk.Scrollbar(frame_lista_anotacoes)
         scrollbar.pack(side='right', fill='y')
         
+        # Ajustar altura da lista baseado na resolução da tela
+        screen_height = self.root.winfo_screenheight()
+        list_height = 6 if screen_height <= 768 else 10
+        
         self.lista_anotacoes = tk.Listbox(
             frame_lista_anotacoes,
             yscrollcommand=scrollbar.set,
-            font=('Segoe UI', 10),
+            font=('Segoe UI', 9 if screen_height <= 768 else 10),
             selectmode='single',
             activestyle='none',
             selectbackground='#e74c3c',
             selectforeground='white',
-            height=10,
-            width=35
+            height=list_height,
+            width=30 if screen_height <= 768 else 35
         )
         self.lista_anotacoes.pack(side='left', fill='both', expand=True)
         scrollbar.config(command=self.lista_anotacoes.yview)
@@ -666,10 +743,15 @@ class SistemaColetaImagens:
             bg='white'
         ).pack(pady=(5, 2))
         
+        # Área de observações responsiva
+        screen_height = self.root.winfo_screenheight()
+        obs_height = 2 if screen_height <= 768 else 3
+        obs_font_size = 9 if screen_height <= 768 else 10
+        
         self.text_observacoes = tk.Text(
             frame, 
-            height=3,
-            font=('Segoe UI', 10),
+            height=obs_height,
+            font=('Segoe UI', obs_font_size),
             relief='solid',
             borderwidth=1,
             bg='#f8f9fa',
@@ -681,6 +763,11 @@ class SistemaColetaImagens:
         frame_acoes = tk.Frame(frame, bg='white')
         frame_acoes.pack(fill='x', pady=5, padx=10)
         
+        # Botões responsivos para diferentes alturas de tela
+        screen_height = self.root.winfo_screenheight()
+        btn_font_size = 8 if screen_height <= 768 else 9
+        btn_padding = 3 if screen_height <= 768 else 5
+        
         # Botão Limpar (compacto)
         tk.Button(
             frame_acoes,
@@ -688,12 +775,12 @@ class SistemaColetaImagens:
             command=self.limpar_tudo,
             bg='#95a5a6',
             fg='white',
-            font=('Segoe UI', 9, 'bold'),
+            font=('Segoe UI', btn_font_size, 'bold'),
             relief='raised',
-            bd=2,
+            bd=1 if screen_height <= 768 else 2,
             cursor='hand2',
-            pady=5
-        ).pack(fill='x', pady=2)
+            pady=btn_padding
+        ).pack(fill='x', pady=1)
         
         # Botão Salvar (compacto)
         tk.Button(
@@ -702,12 +789,12 @@ class SistemaColetaImagens:
             command=self.salvar_anotacoes,
             bg='#27ae60',
             fg='white',
-            font=('Segoe UI', 10, 'bold'),
+            font=('Segoe UI', btn_font_size + 1 if screen_height > 768 else btn_font_size, 'bold'),
             relief='raised',
-            bd=3,
+            bd=2 if screen_height <= 768 else 3,
             cursor='hand2',
-            pady=8
-        ).pack(fill='x', pady=2)
+            pady=btn_padding + 2 if screen_height > 768 else btn_padding
+        ).pack(fill='x', pady=1)
         
         # Botão Exportar (compacto)
         tk.Button(
@@ -716,22 +803,39 @@ class SistemaColetaImagens:
             command=self.exportar_dados,
             bg='#f39c12',
             fg='white',
-            font=('Segoe UI', 9, 'bold'),
+            font=('Segoe UI', btn_font_size, 'bold'),
             relief='raised',
-            bd=2,
+            bd=1 if screen_height <= 768 else 2,
             cursor='hand2',
-            pady=6
-        ).pack(fill='x', pady=2)
+            pady=btn_padding
+        ).pack(fill='x', pady=1)
         
         # Dica sobre exportar (compacta)
-        tk.Label(
+        dica_final = tk.Label(
             frame,
             text="💡 Use EXPORTAR no fim do dia",
             font=('Segoe UI', 7),
             bg='#fff3cd',
             fg='#856404',
             pady=3
-        ).pack(fill='x', padx=10, pady=2)
+        )
+        dica_final.pack(fill='x', padx=10, pady=2)
+        
+        # Indicador visual para telas pequenas
+        screen_height = self.root.winfo_screenheight()
+        if screen_height <= 768:
+            indicador_scroll = tk.Label(
+                frame,
+                text="⬇️ ROLE PARA BAIXO PARA VER TODOS OS BOTÕES ⬇️",
+                font=('Segoe UI', 8, 'bold'),
+                bg='#ff6b6b',
+                fg='white',
+                pady=5
+            )
+            indicador_scroll.pack(fill='x', padx=10, pady=5)
+        
+        # Garantir que os botões sejam sempre visíveis
+        self.root.after(1000, self.garantir_botoes_visiveis)
         
     def carregar_produtos(self):
         """Carrega produtos do banco de dados"""

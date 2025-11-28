@@ -1,0 +1,349 @@
+{
+  "timestamp": "20251128_184741",
+  "produtos_detectados": 57,
+  "valor_total": 142.5,
+  "deteccoes": [
+    {
+      "produto": "AGUA TONICA ANTARCTICA 350ML",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.530088",
+      "confianca": 85
+    },
+    {
+      "produto": "AGUA TONICA DIET ANTARCTICA LATA 350 ML",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.553169",
+      "confianca": 85
+    },
+    {
+      "produto": "AGUA TONICA ROSE FRUTAS VERMELHAS SCHWEPPES LATA 220ML",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.555017",
+      "confianca": 85
+    },
+    {
+      "produto": "AGUA TONICA SCHWEPPES LATA 350ML",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.563370",
+      "confianca": 85
+    },
+    {
+      "produto": "FANTA LARANJA PET 1L",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.575467",
+      "confianca": 85
+    },
+    {
+      "produto": "FANTA MISTERIO CHUCKY LT 350ML",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.577420",
+      "confianca": 85
+    },
+    {
+      "produto": "GUARANA ANTARCTICA GARRAFA PET 1 L",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.588582",
+      "confianca": 85
+    },
+    {
+      "produto": "GUARANA KUAT PET 1 LITRO",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.595909",
+      "confianca": 85
+    },
+    {
+      "produto": "REFR FYS GUARANA ZERO ACUCAR LT 350 ML",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.610532",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRI GUARANA FYS 350ML LATA",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.620408",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRI PEPSI BLACK 1LT",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.632136",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRI PEPSI BLACK 200ML",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.647545",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIG GUARANA ANTARCTICA ZERO 1L",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.654800",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE BLACK PEPSI 350ML",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.667562",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE COCA COLA 1L",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.679011",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE COCA COLA 500ML",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.689138",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE COCA COLA CAFE ESPRESSO LT 220ML",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.704483",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE COCA COLA GARRAFA 2L",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.708171",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE COCA COLA LATA 350ML",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.720855",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE COCA COLA PET 250ML",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.735884",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE COCA COLA SEM ACUCAR PET 250 ML",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.743282",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE COCA COLA ZERO 2L",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.753211",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE COCA COLA ZERO 500ML",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.761691",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE COCA COLA ZERO GARRAFA 1L",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.777009",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE COCA COLA ZERO LATA 350ML",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.785062",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE COLA PEPSI GARRAFA 200ML",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.798550",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE DE LIMAO H2OH 500ML",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.809678",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE FANTA CAJU LATA 350 ML",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.820004",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE FANTA LARANJA 2L",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.829934",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE FANTA LARANJA ZERO LATA 350ML",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.833787",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE FANTA MARACUJA LATA 350ML",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.846602",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE FANTA UVA LATA 350 ML",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.859980",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE FANTA UVA PET 2L",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.869264",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE GUARANA ANT LATA 350ML",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.879241",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE GUARANA ANT ZERO LATA 350ML",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.888460",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE GUARANA ANTARCTICA 2L",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.902457",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE GUARANA ANTARCTICA GARRAFA 200ML",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.911804",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE GUARANA ANTARCTICA ZERO PET 2 L",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.921874",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE GUARANA IT GARRAFA 2L",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.929787",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE GUARANA JESUS 350ML",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.956504",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE GUARANA ZERO ACUCAR ANTARCTICA GARRAFA 200ML",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.961378",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE H2O LIMONETO 500ML",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.972235",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE H2OH LIMAO ZERO 1,5L",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.985120",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE H2OH LIMONETO PET 1,5 L",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:50.997371",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE KUAT GUARANA PET 2L",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:51.011646",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE LARANJA FANTA LATA 350ML",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:51.020154",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE PEPSI 350ML",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:51.031806",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE PEPSI BLACK PET 2 L",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:51.054008",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE PEPSI COLA PET 1L",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:51.064951",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE PEPSI GARRAFA 2L",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:51.087572",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE PEPSI TWIST LATA 350ML",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:51.097383",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE PEPSI TWIST PET 2 LITROS",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:51.106944",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE SPRITE 2L",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:51.112996",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE SPRITE LATA 350ML",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:51.120995",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE SPRITE LEMON FRESH 510ML",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:51.130381",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE SPRITE LIMAO SEM ACUCAR PET 2 L",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:51.150052",
+      "confianca": 85
+    },
+    {
+      "produto": "REFRIGERANTE SPRITE ZERO LATA 350ML",
+      "valor": 2.5,
+      "timestamp": "2025-11-28T18:46:51.165030",
+      "confianca": 85
+    }
+  ]
+}

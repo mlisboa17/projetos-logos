@@ -1,0 +1,325 @@
+{
+  "timestamp": 1764368794.7927685,
+  "open_food_facts": [
+    {
+      "codigo": "7891000100103",
+      "nome": "Leite Condensado Integral moça",
+      "marca": "Nestlé,Moça",
+      "categoria": "Laticínios, Leites condensados",
+      "ingredientes": "LEITE INTEGRAL, AÇÚCAR E LACTOSE.",
+      "imagem": "https://images.openfoodfacts.org/images/products/789/100/010/0103/front_pt.34.400.jpg",
+      "nutriscore": "e",
+      "pais": "Brasil",
+      "fonte": "OpenFoodFacts"
+    },
+    {
+      "codigo": "3017620422003",
+      "nome": "Nutella",
+      "marca": "Nutella,Ferrero",
+      "categoria": "Petit-déjeuners,Produits à tartiner,Produits à tartiner sucrés,Pâtes à tartiner,Pâtes à tartiner aux noisettes",
+      "ingredientes": "Sucre, huile de palme, NOISETTES 13%, cacao maigre 7,4%, LAIT écrémé en poudre 6,6%, LACTOSERUM en poudre, émulsifiants: lécithines [SOJA), vanilline. Sans gluten.",
+      "imagem": "https://images.openfoodfacts.org/images/products/301/762/042/2003/front_en.633.400.jpg",
+      "nutriscore": "e",
+      "pais": "Belgique,France,Allemagne,Inde,Italie,Luxembourg,Maroc,Pays-Bas,Philippines,Pologne,Roumanie,Espagne,Suisse,Turquie,Royaume-Uni,États-Unis",
+      "fonte": "OpenFoodFacts"
+    }
+  ],
+  "upc_itemdb": [
+    {
+      "codigo": "012000161155",
+      "nome": "LIFEWTR Premium Purified Bottled Water  pH Balanced with Electrolytes For Taste  1 Liter Bottle (Packaging May Vary)",
+      "marca": "LIFEWTR",
+      "categoria": "Food, Beverages & Tobacco > Beverages > Water",
+      "descricao": "LIFEWTR is a premium bottled water that fuses creativity and design to serve as a source of inspiration as well as hydration. LIFEWTR is a purified water  pH balanced with electrolytes added for taste. LIFEWTR is a premium bottle water brand committed to advancing and showcasing sources of creativity. That?s why every few months we launch a new series of LIFEWTR plastic bottles focused on a unique aspect in art? putting the spotting on new emerging creators.",
+      "imagens": [
+        "https://pics.walgreens.com/prodimg/595160/450.jpg",
+        "https://images.frys.com/art/product/300x300/9068867.01.prod.jpg",
+        "https://i5.walmartimages.com/asr/b29c7d39-72ae-464d-8bb3-1a89fbda40d6.102cd8b37ec485c62739a1f933389b1b.jpeg?odnHeight=450&odnWidth=450&odnBg=ffffff",
+        "https://target.scene7.com/is/image/Target/GUEST_46ff2a61-1d87-4887-8a8c-d284dc77bdb1?wid=1000&hei=1000"
+      ],
+      "fonte": "UPCItemDB"
+    },
+    {
+      "codigo": "049000028928",
+      "nome": "Sprite Lemon Lime Soda Soft Drinks, 12 fl oz, 12 Pack",
+      "marca": "Sprite",
+      "categoria": "Food, Beverages & Tobacco > Beverages > Soda",
+      "descricao": "Colorless, lemon-lime soft drink with 100% natural flavors. Caffeine-free. Sprite Zero Sugar  zero-calorie, sugar-free soda - is also available. Perfect size for drinking with meals, on the go, or any time. Sprite soda is Available in 7.5 FL OZ mini cans, 8 FL OZ bottles, 8.5 FL OZ bottles, 10 FL OZ cans, 12 FL OZ cans, 12 FL OZ bottles, 16 FL OZ cans, 16 FL OZ bottles, 16.9 FL OZ bottles, 20 FL OZ bottles, 24 FL OZ bottles, 1 liter bottles, 1.25 liter bottles, 2 liter bottles, 3 liter bottles, and a variety of multi-packs.",
+      "imagens": [
+        "https://pics.walgreens.com/prodimg/417524/450.jpg",
+        "https://www.officedepot.com/pictures/us/od/sk/lg/203762_sk_lg.jpg",
+        "https://i5.walmartimages.com/asr/83ca8c89-a30b-4770-b1de-5b6f47256a57.ca9aae090fe6d83337922dd630436a62.jpeg?odnHeight=450&odnWidth=450&odnBg=ffffff",
+        "https://target.scene7.com/is/image/Target/GUEST_17187f3d-41bc-4471-8232-2fc084875814?wid=1000&hei=1000",
+        "http://ct.mywebgrocer.com/legacy/productimagesroot/DJ/2/118372.jpg",
+        "https://products.blains.com/600/44/446537.jpg",
+        "https://www.staples-3p.com/s7/is/image/Staples/s1139470_sc7?$enl$",
+        "https://www.cvs.com/bizcontent/merchandising/productimages/large/49000028928.jpg",
+        "https://jetimages.jetcdn.net/md5/40111bfb1c4311853fc49b5c7bdb8dfc.500"
+      ],
+      "fonte": "UPCItemDB"
+    },
+    {
+      "codigo": "012000638398",
+      "nome": "Brisk Strawberry Melon Flavored Drink, 12 fl oz, 12 pack",
+      "marca": "Pepsi",
+      "categoria": "Food, Beverages & Tobacco > Beverages",
+      "descricao": "Don't be fooled by that sweet pink color. There's nothing cute and cuddly about this Brisk. It's got intense strawberry and melon flavors that will give your taste buds a real workout.",
+      "imagens": [
+        "https://i5.walmartimages.com/asr/ad4d0b65-f80c-4a29-8a87-1a3b65111764_1.647c9cb3a4a12f6ba1d0d0fd54787bee.jpeg?odnHeight=450&odnWidth=450&odnBg=ffffff",
+        "http://ct.mywebgrocer.com/legacy/productimagesroot/DJ/5/889005.jpg"
+      ],
+      "fonte": "UPCItemDB"
+    }
+  ],
+  "google_vision_recursos": {
+    "product_search": "Busca de produtos visuais em catálogo",
+    "logo_detection": "Detecção de logos e marcas",
+    "text_detection": "OCR avançado para textos em produtos",
+    "label_detection": "Identificação automática de objetos",
+    "web_detection": "Busca de produtos similares na web"
+  },
+  "base_conhecimento": {
+    "categorias": {
+      "bebidas": {
+        "refrigerantes": {
+          "marcas": [
+            "Coca-Cola",
+            "Pepsi",
+            "Guaraná Antarctica",
+            "Fanta",
+            "Sprite"
+          ],
+          "formatos": [
+            "Lata 350ml",
+            "Garrafa 600ml",
+            "Garrafa 2L",
+            "Garrafa 250ml"
+          ],
+          "caracteristicas_visuais": {
+            "coca_cola": {
+              "cores": [
+                "vermelho",
+                "branco"
+              ],
+              "formato": "cilíndrico"
+            },
+            "pepsi": {
+              "cores": [
+                "azul",
+                "vermelho",
+                "branco"
+              ],
+              "formato": "cilíndrico"
+            },
+            "guarana": {
+              "cores": [
+                "verde",
+                "vermelho"
+              ],
+              "formato": "cilíndrico"
+            }
+          }
+        },
+        "agua": {
+          "marcas": [
+            "Crystal",
+            "Bonafont",
+            "São Lourenço",
+            "Nestlé"
+          ],
+          "formatos": [
+            "Garrafa 500ml",
+            "Garrafa 1.5L",
+            "Garrafa 300ml"
+          ],
+          "caracteristicas_visuais": {
+            "transparente": true,
+            "formato": "garrafa_plastica"
+          }
+        },
+        "cerveja": {
+          "marcas": [
+            "Skol",
+            "Brahma",
+            "Antarctica",
+            "Heineken",
+            "Budweiser"
+          ],
+          "formatos": [
+            "Lata 350ml",
+            "Garrafa 600ml",
+            "Long Neck 355ml"
+          ],
+          "caracteristicas_visuais": {
+            "skol": {
+              "cores": [
+                "azul",
+                "branco"
+              ],
+              "formato": "cilíndrico"
+            },
+            "brahma": {
+              "cores": [
+                "vermelho",
+                "dourado"
+              ],
+              "formato": "cilíndrico"
+            }
+          }
+        }
+      },
+      "alimentos": {
+        "snacks": {
+          "marcas": [
+            "Doritos",
+            "Ruffles",
+            "Cheetos",
+            "Pringles"
+          ],
+          "formatos": [
+            "Pacote pequeno",
+            "Pacote familiar",
+            "Tubo"
+          ],
+          "caracteristicas_visuais": {
+            "formato_retangular": [
+              "Doritos",
+              "Ruffles"
+            ],
+            "formato_cilindrico": [
+              "Pringles"
+            ]
+          }
+        },
+        "biscoitos": {
+          "marcas": [
+            "Oreo",
+            "Negresco",
+            "Passatempo",
+            "Trakinas"
+          ],
+          "formatos": [
+            "Pacote tradicional",
+            "Pacote familia"
+          ],
+          "caracteristicas_visuais": {
+            "formato_retangular": true,
+            "cores_comuns": [
+              "azul",
+              "vermelho",
+              "amarelo"
+            ]
+          }
+        }
+      },
+      "higiene": {
+        "shampoo": {
+          "marcas": [
+            "Seda",
+            "Pantene",
+            "Elseve",
+            "Clear"
+          ],
+          "formatos": [
+            "Frasco 400ml",
+            "Frasco 200ml",
+            "Sachê"
+          ],
+          "caracteristicas_visuais": {
+            "formato": "frasco_plastico",
+            "cores_variadas": true
+          }
+        }
+      }
+    },
+    "padroes_codigo_barras": {
+      "brasil": {
+        "prefixos": [
+          "789",
+          "790"
+        ],
+        "estrutura": "EAN-13",
+        "formato": "XXXXXXXXXXXXX"
+      },
+      "eua": {
+        "prefixos": [
+          "0",
+          "1"
+        ],
+        "estrutura": "UPC-A",
+        "formato": "XXXXXXXXXXXX"
+      },
+      "europa": {
+        "prefixos": [
+          "4",
+          "5",
+          "6",
+          "7"
+        ],
+        "estrutura": "EAN-13",
+        "formato": "XXXXXXXXXXXXX"
+      }
+    },
+    "dimensoes_tipicas": {
+      "lata_refrigerante": {
+        "altura": 123,
+        "diametro": 66,
+        "volume": 350
+      },
+      "garrafa_agua_500ml": {
+        "altura": 200,
+        "diametro": 65,
+        "volume": 500
+      },
+      "pacote_biscoito": {
+        "largura": 150,
+        "altura": 110,
+        "espessura": 30
+      },
+      "frasco_shampoo_400ml": {
+        "altura": 180,
+        "largura": 60,
+        "volume": 400
+      }
+    }
+  },
+  "bibliotecas_ml": {
+    "tensorflow_hub": {
+      "modelos_produtos": [
+        "retail-product-detector",
+        "grocery-products-detection",
+        "brand-logo-detection"
+      ],
+      "uso": "Modelos pré-treinados para produtos de varejo",
+      "instalacao": "pip install tensorflow tensorflow-hub"
+    },
+    "torchvision": {
+      "modelos": [
+        "ResNet",
+        "MobileNet",
+        "EfficientNet"
+      ],
+      "uso": "Transfer learning para classificação de produtos",
+      "instalacao": "pip install torch torchvision"
+    },
+    "detectron2": {
+      "capacidades": [
+        "Instance Segmentation",
+        "Object Detection",
+        "Keypoint Detection"
+      ],
+      "uso": "Detecção avançada de produtos em prateleiras",
+      "instalacao": "pip install detectron2"
+    },
+    "mmdetection": {
+      "algoritmos": [
+        "YOLO",
+        "R-CNN",
+        "RetinaNet",
+        "FCOS"
+      ],
+      "uso": "Framework completo para detecção de objetos",
+      "instalacao": "pip install mmdet"
+    }
+  }
+}

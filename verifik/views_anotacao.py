@@ -323,3 +323,167 @@ def executar_importacao(request):
         
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)}, status=500)
+
+
+@login_required
+def exportar_dataset(request):
+    """Interface para exportar dataset de treino"""
+    
+    if not request.user.is_staff:
+        messages.error(request, 'Apenas gestores podem acessar esta área.')
+        return redirect('verifik_home')
+    
+    if request.method == 'POST':
+        try:
+            import zipfile
+            from django.http import HttpResponse
+            import tempfile
+            import os
+            
+            formato = request.POST.get('formato', 'yolo')
+            incluir_simples = request.POST.get('incluir_simples') == 'on'
+            incluir_anotadas = request.POST.get('incluir_anotadas') == 'on'
+            
+            if not (incluir_simples or incluir_anotadas):
+                messages.error(request, 'Selecione pelo menos um tipo de imagem para exportar.')
+                return redirect('exportar_dataset')
+            
+            # Criar arquivo ZIP temporário
+            with tempfile.NamedTemporaryFile(delete=False, suffix='.zip') as temp_zip:
+                with zipfile.ZipFile(temp_zip.name, 'w', zipfile.ZIP_DEFLATED) as zipf:
+                    
+                    # Contador de arquivos
+                    total_imagens = 0
+                    total_anotacoes = 0
+                    
+                    # Exportar imagens simples
+                    if incluir_simples:
+                        imagens_simples = ImagemProdutoPendente.objects.filter(status='aprovada')
+                        
+                        for img in imagens_simples:
+                            try:
+                                if img.imagem and hasattr(img.imagem, 'path') and os.path.exists(img.imagem.path):
+                                    produto_nome = img.produto.descricao_produto.replace('/', '_')
+                                    
+                                    # Nome do arquivo no ZIP
+                                    timestamp = img.data_coleta.strftime('%Y%m%d_%H%M%S') if img.data_coleta else 'sem_data'
+                                    filename = f"simples/{produto_nome}/{produto_nome}_{timestamp}_{img.id}.jpg"
+                                    
+                                    # Adicionar imagem ao ZIP
+                                    zipf.write(img.imagem.path, filename)
+                                    total_imagens += 1
+                                    
+                            except Exception as e:
+                                print(f"Erro ao exportar imagem simples {img.id}: {e}")
+                    
+                    # Exportar imagens anotadas
+                    if incluir_anotadas:
+                        imagens_anotadas = ImagemAnotada.objects.filter(status='concluida')
+                        
+                        for imagem in imagens_anotadas:
+                            try:
+                                if imagem.imagem and hasattr(imagem.imagem, 'path') and os.path.exists(imagem.imagem.path):
+                                    
+                                    # Nome base da imagem
+                                    timestamp = imagem.data_envio.strftime('%Y%m%d_%H%M%S')
+                                    base_name = f"anotada_{imagem.id}_{timestamp}"
+                                    
+                                    # Adicionar imagem ao ZIP
+                                    img_filename = f"anotadas/images/{base_name}.jpg"
+                                    zipf.write(imagem.imagem.path, img_filename)
+                                    total_imagens += 1
+                                    
+                                    # Criar arquivo de anotações
+                                    anotacoes = imagem.anotacoes.all()
+                                    if anotacoes.exists():
+                                        
+                                        if formato == 'yolo':
+                                            # Formato YOLO
+                                            txt_content = ""
+                                            for anotacao in anotacoes:
+                                                # Classe 0 (assumindo uma classe por enquanto)
+                                                txt_content += f"0 {anotacao.bbox_x} {anotacao.bbox_y} {anotacao.bbox_width} {anotacao.bbox_height}\n"
+                                            
+                                            txt_filename = f"anotadas/labels/{base_name}.txt"
+                                            zipf.writestr(txt_filename, txt_content)
+                                            
+                                        elif formato == 'coco':
+                                            # Formato COCO JSON (simplificado)
+                                            import json
+                                            
+                                            coco_data = {
+                                                "images": [{
+                                                    "id": imagem.id,
+                                                    "file_name": f"{base_name}.jpg",
+                                                    "width": 640,  # Padrão
+                                                    "height": 480  # Padrão
+                                                }],
+                                                "annotations": [],
+                                                "categories": [{"id": 1, "name": "produto"}]
+                                            }
+                                            
+                                            for idx, anotacao in enumerate(anotacoes):
+                                                coco_data["annotations"].append({
+                                                    "id": idx + 1,
+                                                    "image_id": imagem.id,
+                                                    "category_id": 1,
+                                                    "bbox": [anotacao.bbox_x, anotacao.bbox_y, 
+                                                           anotacao.bbox_width, anotacao.bbox_height],
+                                                    "area": anotacao.bbox_width * anotacao.bbox_height
+                                                })
+                                            
+                                            json_filename = f"anotadas/annotations/{base_name}.json"
+                                            zipf.writestr(json_filename, json.dumps(coco_data, indent=2))
+                                        
+                                        total_anotacoes += len(anotacoes)
+                                        
+                            except Exception as e:
+                                print(f"Erro ao exportar imagem anotada {imagem.id}: {e}")
+                    
+                    # Criar arquivo README
+                    readme_content = f"""Dataset VerifiK - Exportado em {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+
+Estatísticas:
+- Total de imagens: {total_imagens}
+- Total de anotações: {total_anotacoes}
+- Formato: {formato.upper()}
+
+Estrutura:
+"""
+                    if incluir_simples:
+                        readme_content += "- simples/: Imagens simples organizadas por produto\n"
+                    if incluir_anotadas:
+                        if formato == 'yolo':
+                            readme_content += "- anotadas/images/: Imagens com múltiplos produtos\n"
+                            readme_content += "- anotadas/labels/: Arquivos YOLO (.txt)\n"
+                        elif formato == 'coco':
+                            readme_content += "- anotadas/images/: Imagens com múltiplos produtos\n"
+                            readme_content += "- anotadas/annotations/: Arquivos COCO (.json)\n"
+                    
+                    zipf.writestr("README.txt", readme_content)
+                
+                # Enviar arquivo ZIP
+                with open(temp_zip.name, 'rb') as f:
+                    response = HttpResponse(f.read(), content_type='application/zip')
+                    filename = f"verifik_dataset_{datetime.now().strftime('%Y%m%d_%H%M%S')}.zip"
+                    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+                
+                # Limpar arquivo temporário
+                os.unlink(temp_zip.name)
+                
+                return response
+                
+        except Exception as e:
+            messages.error(request, f'Erro ao exportar dataset: {str(e)}')
+            return redirect('exportar_dataset')
+    
+    # GET - mostrar formulário
+    # Estatísticas para o formulário
+    stats = {
+        'imagens_simples': ImagemProdutoPendente.objects.filter(status='aprovada').count(),
+        'imagens_anotadas': ImagemAnotada.objects.filter(status='concluida').count(),
+        'total_anotacoes': AnotacaoProduto.objects.filter(imagem_anotada__status='concluida').count(),
+    }
+    
+    context = {'stats': stats}
+    return render(request, 'verifik/exportar_dataset.html', context)

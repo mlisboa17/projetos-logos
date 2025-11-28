@@ -4,6 +4,86 @@
 
 {% block content %}
 <style>
+    /* Layout Responsivo para Resolução Baixa */
+    .anotacao-layout {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+    
+    .painel-lateral {
+        flex: 0 0 280px;
+        min-width: 280px;
+    }
+    
+    .area-anotacao {
+        flex: 1;
+        min-width: 500px;
+    }
+    
+    /* Otimização para 1360x768 e resoluções similares */
+    @media (max-width: 1400px) {
+        .anotacao-layout {
+            flex-direction: column;
+        }
+        
+        .painel-lateral {
+            flex: none;
+            width: 100%;
+            order: 2;
+        }
+        
+        .area-anotacao {
+            flex: none;
+            width: 100%;
+            order: 1;
+            min-width: auto;
+        }
+        
+        .container-fluid {
+            margin: 0.5rem auto !important;
+            padding: 0 0.25rem !important;
+        }
+        
+        .card {
+            padding: 1rem !important;
+        }
+    }
+    
+    /* Otimização específica para 1360x768 */
+    @media (max-width: 1360px) and (max-height: 768px) {
+        .container-fluid {
+            margin: 0.25rem auto !important;
+        }
+        
+        .card {
+            padding: 0.75rem !important;
+            border-radius: 8px !important;
+        }
+        
+        h2 {
+            font-size: 1.25rem !important;
+            margin-bottom: 0.75rem !important;
+        }
+        
+        h3 {
+            font-size: 1.1rem !important;
+            margin-bottom: 0.5rem !important;
+        }
+        
+        /* Botões mais compactos */
+        .btn-acao {
+            padding: 0.5rem 1rem !important;
+            font-size: 0.9rem !important;
+        }
+        
+        /* Painel lateral mais compacto */
+        .produtos-grid {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    }
+
     #canvas-container {
         position: relative;
         display: inline-block;
@@ -13,6 +93,7 @@
     
     #image-canvas {
         max-width: 100%;
+        max-height: 70vh;
         border: 2px solid #667eea;
         border-radius: 8px;
         cursor: crosshair;
@@ -82,12 +163,12 @@
     }
 </style>
 
-<div class="container" style="max-width: 1600px; margin: 2rem auto; padding: 0 1rem;">
-    <div style="display: grid; grid-template-columns: 300px 1fr; gap: 2rem;">
+<div class="container-fluid" style="margin: 1rem auto; padding: 0 0.5rem;">
+    <div class="anotacao-layout">
         
         <!-- Painel Lateral -->
-        <div>
-            <div class="card" style="background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 1.5rem; position: sticky; top: 20px;">
+        <div class="painel-lateral">
+            <div class="card" style="background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 1.5rem;">
                 <h3 style="color: #667eea; margin-bottom: 1rem;">🎯 Ferramentas</h3>
                 
                 <!-- Status -->
@@ -131,36 +212,46 @@
                     {% endfor %}
                 </div>
                 
-                <!-- Ações -->
-                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                    {% if imagem.status == 'anotando' %}
-                    <form method="post" action="{% url 'finalizar_anotacao' imagem.id %}">
-                        {% csrf_token %}
-                        <button type="submit" style="width: 100%; padding: 0.75rem; background: #27ae60; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
-                            ✓ Finalizar Anotações
-                        </button>
-                    </form>
-                    {% endif %}
-                    <a href="{% url 'anotar_imagem' %}" style="width: 100%; padding: 0.75rem; background: #95a5a6; color: white; border: none; border-radius: 8px; text-align: center; text-decoration: none; font-weight: 600;">
-                        ← Voltar
-                    </a>
+                <!-- Ações - Sempre Visíveis -->
+                <div class="acoes-fixas" style="position: sticky; bottom: 0; background: white; padding: 1rem 0; border-top: 2px solid #667eea; margin-top: 1rem; box-shadow: 0 -2px 10px rgba(0,0,0,0.1);">
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                        {% if imagem.status == 'anotando' %}
+                        <form method="post" action="{% url 'finalizar_anotacao' imagem.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-acao" style="width: 100%; padding: 1rem; background: #27ae60; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 1.1rem; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+                                ✓ FINALIZAR ANOTAÇÕES
+                            </button>
+                        </form>
+                        
+                        <!-- Botão de Exportar Dataset -->
+                        <a href="{% url 'exportar_dataset' imagem.id %}" class="btn-acao" style="width: 100%; padding: 1rem; background: #3498db; color: white; border: none; border-radius: 8px; text-align: center; text-decoration: none; font-weight: 700; font-size: 1.1rem; display: block; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+                            📥 EXPORTAR DATASET
+                        </a>
+                        {% endif %}
+                        
+                        <a href="{% url 'anotar_imagem' %}" class="btn-acao" style="width: 100%; padding: 1rem; background: #95a5a6; color: white; border: none; border-radius: 8px; text-align: center; text-decoration: none; font-weight: 700; font-size: 1.1rem; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+                            ← VOLTAR
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
         
         <!-- Área de Anotação -->
-        <div class="card" style="background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 2rem;">
-            <h2 style="color: #667eea; margin-bottom: 1.5rem;">✏️ Marque os Produtos na Imagem</h2>
-            
-            <div id="canvas-container" style="text-align: center;">
-                <img id="image-canvas" src="{{ imagem.imagem.url }}" alt="Imagem para anotar">
-            </div>
-            
-            <!-- Lista de Anotações -->
-            <div id="anotacoes-lista" style="margin-top: 2rem;">
-                <h3 style="color: #2c3e50; margin-bottom: 1rem;">📋 Anotações Criadas</h3>
-                <div id="lista-items" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.75rem;">
-                    <!-- Preenchido via JavaScript -->
+        <div class="area-anotacao">
+            <div class="card" style="background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 2rem;">
+                <h2 style="color: #667eea; margin-bottom: 1.5rem;">✏️ Marque os Produtos na Imagem</h2>
+                
+                <div id="canvas-container" style="text-align: center;">
+                    <img id="image-canvas" src="{{ imagem.imagem.url }}" alt="Imagem para anotar">
+                </div>
+                
+                <!-- Lista de Anotações -->
+                <div id="anotacoes-lista" style="margin-top: 1.5rem;">
+                    <h3 style="color: #2c3e50; margin-bottom: 1rem;">📋 Anotações Criadas</h3>
+                    <div id="lista-items" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.5rem;">
+                        <!-- Preenchido via JavaScript -->
+                    </div>
                 </div>
             </div>
         </div>

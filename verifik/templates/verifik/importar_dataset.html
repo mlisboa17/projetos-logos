@@ -165,6 +165,38 @@
 
         <!-- Área de Resultado -->
         <div id="resultado" style="margin-top: 2rem; display: none;"></div>
+        
+        <!-- Seção de Ações do Dataset -->
+        <div style="background: #f1f3f4; padding: 2rem; border-radius: 12px; margin-top: 3rem; border: 2px solid #e9ecef;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <div>
+                    <h3 style="color: #2c3e50; margin: 0 0 0.5rem 0;">📦 Gerenciar Dataset</h3>
+                    <p style="color: #7f8c8d; margin: 0;">Exporte ou gerencie os dados do dataset de treinamento</p>
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                <!-- Exportar Dataset -->
+                <div style="background: white; padding: 1.5rem; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <div style="color: #e67e22; font-size: 2rem; margin-bottom: 1rem;">📥</div>
+                    <h4 style="color: #2c3e50; margin: 0 0 0.5rem 0;">Exportar Dataset</h4>
+                    <p style="color: #7f8c8d; margin: 0 0 1rem 0; font-size: 0.9rem;">Baixe o dataset completo em formato ZIP para treinamento</p>
+                    <a href="{% url 'exportar_dataset' %}" style="display: inline-block; padding: 0.8rem 1.5rem; background: linear-gradient(135deg, #e67e22 0%, #d35400 100%); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: all 0.3s ease;">
+                        📥 Exportar Dataset
+                    </a>
+                </div>
+                
+                <!-- Voltar para Home -->
+                <div style="background: white; padding: 1.5rem; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <div style="color: #3498db; font-size: 2rem; margin-bottom: 1rem;">🏠</div>
+                    <h4 style="color: #2c3e50; margin: 0 0 0.5rem 0;">Voltar ao Início</h4>
+                    <p style="color: #7f8c8d; margin: 0 0 1rem 0; font-size: 0.9rem;">Retorne à página principal do VerifiK</p>
+                    <a href="{% url 'verifik_home' %}" style="display: inline-block; padding: 0.8rem 1.5rem; background: linear-gradient(135deg, #3498db 0%, #2980b9 100%); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: all 0.3s ease;">
+                        🏠 Página Inicial
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
