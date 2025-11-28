@@ -183,26 +183,30 @@ def importar_dataset(request):
         return redirect('verifik_home')
     
     # Estatísticas de imagens simples (1 produto por foto)
-    imagens_simples = ImagemProdutoPendente.objects.filter(status='aprovada')
+    imagens_simples = ImagemProdutoPendente.objects.filter(status='aprovada').select_related('produto')[:20]  # Limitar para performance
     stats_simples = {
-        'total': imagens_simples.count(),
-        'por_produto': {}
+        'total': ImagemProdutoPendente.objects.filter(status='aprovada').count(),
+        'por_produto': {},
+        'imagens_preview': imagens_simples
     }
     
-    for img in imagens_simples:
+    # Calcular distribuição por produto para todas as imagens simples
+    todas_imagens_simples = ImagemProdutoPendente.objects.filter(status='aprovada').select_related('produto')
+    for img in todas_imagens_simples:
         produto_nome = img.produto.descricao_produto
         if produto_nome not in stats_simples['por_produto']:
             stats_simples['por_produto'][produto_nome] = 0
         stats_simples['por_produto'][produto_nome] += 1
     
     # Estatísticas de imagens anotadas (múltiplos produtos)
-    imagens_anotadas = ImagemAnotada.objects.filter(status='aprovada')
+    imagens_anotadas = ImagemAnotada.objects.filter(status='aprovada').select_related('enviado_por')[:20]  # Limitar para performance
     stats_anotadas = {
-        'total_imagens': imagens_anotadas.count(),
+        'total_imagens': ImagemAnotada.objects.filter(status='aprovada').count(),
         'total_anotacoes': AnotacaoProduto.objects.filter(
             imagem_anotada__status='aprovada'
         ).count(),
-        'por_produto': {}
+        'por_produto': {},
+        'imagens_preview': imagens_anotadas
     }
     
     anotacoes = AnotacaoProduto.objects.filter(

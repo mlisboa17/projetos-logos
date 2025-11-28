@@ -1,35 +1,35 @@
 {
-  "posto": "menu",
-  "modalidade": "",
+  "posto": "Seus produtos mais consumidos",
+  "modalidade": "Combustíveis Claros",
   "produtos": [
     {
       "nome": "GASOLINA COMUM C ADIT PETROBRAS GRID",
       "base": "Base:",
-      "preco": "Preço: R$ 5,3820",
+      "preco": "Preço: R$ 5,3639",
       "prazo": "5 Dias"
     },
     {
       "nome": "ETANOL HIDRATADO COMBUSTIVEL",
       "base": "Base:",
-      "preco": "Preço: R$ 3,6428",
+      "preco": "Preço: R$ 3,5927",
       "prazo": "5 Dias"
     },
     {
       "nome": "GASOLINA COMUM C",
       "base": "Base:",
-      "preco": "Preço: R$ 5,2414",
+      "preco": "Preço: R$ 5,2233",
       "prazo": "5 Dias"
     },
     {
       "nome": "ÓLEO DIESEL B S10",
       "base": "Base:",
-      "preco": "Preço:",
-      "prazo": null
+      "preco": "Preço: R$ 5,4415",
+      "prazo": "5 Dias"
     },
     {
       "nome": "ÓLEO DIESEL B S10 ADIT PETROBRAS GRID",
       "base": "Base:",
-      "preco": "Preço: R$ 5,4917",
+      "preco": "Preço: R$ 5,5308",
       "prazo": "5 Dias"
     },
     {
@@ -39,5 +39,5 @@
       "prazo": "5 Dias"
     }
   ],
-  "data_coleta": "05:27 23/11/2025"
+  "data_coleta": "04:30 28/11/2025"
 }

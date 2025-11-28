@@ -517,14 +517,16 @@ class VibraScraper:
                 
                 # Se conseguiu extrair pelo menos nome, verificar se já existe
                 if produto_info['nome']:
+                    # FORÇAR PRAZO DE 3 DIAS PARA TODOS OS PRODUTOS
+                    produto_info['prazo'] = '3 Dias'
+                    
                     # Usar nome como chave para evitar duplicatas
                     if produto_info['nome'] not in produtos_unicos:
                         produtos_unicos[produto_info['nome']] = produto_info
                         print(f"    ✓ {produto_info['nome']}")
                         if produto_info['preco']:
                             print(f"      💰 {produto_info['preco']}")
-                        if produto_info['prazo']:
-                            print(f"      [TIME] {produto_info['prazo']}")
+                        print(f"      [TIME] 3 Dias (PADRONIZADO)")
                     else:
                         print(f"    [WARN] Duplicado - ignorando")
                 else:

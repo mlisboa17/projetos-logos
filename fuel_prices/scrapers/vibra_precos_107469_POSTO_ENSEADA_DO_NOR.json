@@ -11,13 +11,13 @@
     {
       "nome": "ETANOL HIDRATADO ADITIV. PETROBRAS GRID",
       "base": "Base:",
-      "preco": "Preço: R$ 3,6377",
+      "preco": "Preço: R$ 3,5876",
       "prazo": "3 Dias"
     },
     {
       "nome": "GASOLINA COMUM C ADIT PETROBRAS GRID",
       "base": "Base:",
-      "preco": "Preço: R$ 5,3724",
+      "preco": "Preço: R$ 5,3544",
       "prazo": "3 Dias"
     },
     {
@@ -29,9 +29,15 @@
     {
       "nome": "ÓLEO DIESEL B S10",
       "base": "Base:",
-      "preco": "Preço: R$ 5,4349",
+      "preco": "Preço: R$ 5,4740",
       "prazo": "3 Dias"
+    },
+    {
+      "nome": "ÓLEO DIESEL B S500 ADIT PETROBRAS GRID",
+      "base": "Base:",
+      "preco": "Preço:",
+      "prazo": null
     }
   ],
-  "data_coleta": "05:06 23/11/2025"
+  "data_coleta": "04:28 28/11/2025"
 }

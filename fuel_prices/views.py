@@ -454,3 +454,209 @@ def api_precos_por_data(request):
         'postos': list(postos_set),
         'estatisticas': estatisticas,
     })
+
+
+# ==============================================================
+# APIS PARA SISTEMA LOGUS/PRICE
+# ==============================================================
+
+@csrf_exempt
+def api_logus_feed(request):
+    """
+    API específica para alimentar sistema Logus/Price
+    Retorna dados formatados para integração
+    """
+    try:
+        from django.db.models import Max
+        
+        # Buscar preços mais recentes (últimas 6 horas)
+        periodo = timezone.now() - timedelta(hours=6)
+        
+        # Query otimizada para feed
+        precos_recentes = PrecoVibra.objects.filter(
+            data_coleta__gte=periodo,
+            disponivel=True
+        ).select_related('posto').order_by('-data_coleta')
+        
+        # Organizar por posto
+        feed_data = {}
+        
+        for preco in precos_recentes:
+            codigo_posto = preco.posto.codigo_vibra
+            
+            if codigo_posto not in feed_data:
+                feed_data[codigo_posto] = {
+                    'posto_info': {
+                        'codigo_vibra': preco.posto.codigo_vibra,
+                        'nome_fantasia': preco.posto.nome_fantasia,
+                        'cnpj': preco.posto.cnpj,
+                        'razao_social': preco.posto.razao_social
+                    },
+                    'combustiveis': []
+                }
+            
+            # Adicionar combustível
+            feed_data[codigo_posto]['combustiveis'].append({
+                'produto': preco.produto_nome,
+                'codigo_produto': preco.produto_codigo,
+                'preco_unitario': float(preco.preco),
+                'prazo_pagamento': preco.prazo_pagamento,
+                'modalidade_frete': preco.modalidade,
+                'base_distribuicao': preco.base_distribuicao,
+                'data_coleta': preco.data_coleta.isoformat(),
+                'timestamp_unix': int(preco.data_coleta.timestamp())
+            })
+        
+        # Converter para lista
+        postos_lista = list(feed_data.values())
+        
+        response = {
+            'sistema': 'Fuel Prices - Feed Logus/Price',
+            'versao': '1.0',
+            'status': 'online',
+            'timestamp_geracao': timezone.now().isoformat(),
+            'periodo_dados': '6 horas',
+            'total_postos': len(postos_lista),
+            'total_precos': sum(len(posto['combustiveis']) for posto in postos_lista),
+            'postos': postos_lista
+        }
+        
+        return JsonResponse(response, json_dumps_params={'indent': 2})
+        
+    except Exception as e:
+        return JsonResponse({
+            'sistema': 'Fuel Prices - Feed Logus/Price',
+            'status': 'error',
+            'erro': str(e),
+            'timestamp': timezone.now().isoformat()
+        }, status=500)
+
+
+@csrf_exempt
+def api_precos_atual(request):
+    """
+    API para obter preços atuais de combustível
+    Retorna preços mais recentes de cada posto/produto
+    """
+    try:
+        from django.db.models import Max
+        
+        # Buscar preços das últimas 24 horas
+        ontem = timezone.now() - timedelta(days=1)
+        
+        # Obter preços mais recentes por posto e produto
+        precos_recentes = PrecoVibra.objects.filter(
+            data_coleta__gte=ontem,
+            disponivel=True
+        ).values(
+            'posto__nome_fantasia',
+            'posto__codigo_vibra', 
+            'posto__cnpj',
+            'produto_nome',
+            'produto_codigo'
+        ).annotate(
+            data_mais_recente=Max('data_coleta')
+        )
+        
+        # Buscar dados completos
+        precos_finais = []
+        for item in precos_recentes:
+            preco_obj = PrecoVibra.objects.filter(
+                posto__nome_fantasia=item['posto__nome_fantasia'],
+                produto_nome=item['produto_nome'],
+                data_coleta=item['data_mais_recente']
+            ).first()
+            
+            if preco_obj:
+                precos_finais.append({
+                    'posto': {
+                        'nome': preco_obj.posto.nome_fantasia,
+                        'codigo': preco_obj.posto.codigo_vibra,
+                        'cnpj': preco_obj.posto.cnpj,
+                        'razao_social': preco_obj.posto.razao_social
+                    },
+                    'combustivel': {
+                        'nome': preco_obj.produto_nome,
+                        'codigo': preco_obj.produto_codigo
+                    },
+                    'preco': {
+                        'valor': float(preco_obj.preco),
+                        'prazo_pagamento': preco_obj.prazo_pagamento,
+                        'modalidade': preco_obj.modalidade,
+                        'base_distribuicao': preco_obj.base_distribuicao
+                    },
+                    'coleta': {
+                        'data_hora': preco_obj.data_coleta.isoformat(),
+                        'disponivel': preco_obj.disponivel
+                    }
+                })
+        
+        response = {
+            'status': 'success',
+            'timestamp': timezone.now().isoformat(),
+            'total_precos': len(precos_finais),
+            'periodo_coleta': '24 horas',
+            'dados': precos_finais
+        }
+        
+        return JsonResponse(response)
+        
+    except Exception as e:
+        return JsonResponse({
+            'status': 'error',
+            'message': str(e),
+            'timestamp': timezone.now().isoformat()
+        }, status=500)
+
+
+@csrf_exempt
+def api_resumo_postos(request):
+    """
+    API para obter resumo de todos os postos
+    """
+    try:
+        # Buscar todos os postos ativos
+        postos = PostoVibra.objects.filter(ativo=True)
+        
+        resumo_postos = []
+        for posto in postos:
+            # Contar preços das últimas 24 horas
+            ontem = timezone.now() - timedelta(days=1)
+            total_precos_recentes = PrecoVibra.objects.filter(
+                posto=posto,
+                data_coleta__gte=ontem
+            ).count()
+            
+            # Última coleta
+            ultimo_preco = PrecoVibra.objects.filter(
+                posto=posto
+            ).order_by('-data_coleta').first()
+            
+            resumo_postos.append({
+                'codigo': posto.codigo_vibra,
+                'nome': posto.nome_fantasia,
+                'cnpj': posto.cnpj,
+                'razao_social': posto.razao_social,
+                'ativo': posto.ativo,
+                'estatisticas': {
+                    'precos_24h': total_precos_recentes,
+                    'ultima_coleta': ultimo_preco.data_coleta.isoformat() if ultimo_preco else None,
+                    'tem_dados_recentes': total_precos_recentes > 0
+                }
+            })
+        
+        response = {
+            'status': 'success',
+            'timestamp': timezone.now().isoformat(),
+            'total_postos': len(resumo_postos),
+            'dados': resumo_postos
+        }
+        
+        return JsonResponse(response)
+        
+    except Exception as e:
+        return JsonResponse({
+            'status': 'error', 
+            'message': str(e),
+            'timestamp': timezone.now().isoformat()
+        }, status=500)

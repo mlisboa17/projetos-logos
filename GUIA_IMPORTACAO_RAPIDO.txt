@@ -1,0 +1,111 @@
+╔══════════════════════════════════════════════════════════════════╗
+║                    GUIA RÁPIDO - IMPORTAÇÃO                     ║
+╚══════════════════════════════════════════════════════════════════╝
+
+📋 COMO IMPORTAR PASTAS DO SISTEMA STANDALONE PARA O VERIFIK
+================================================================
+
+🎯 MÉTODO 1 - IMPORTAÇÃO ASSISTIDA (RECOMENDADO)
+-----------------------------------------------
+python importar_dados_assistido.py
+
+   ✅ Encontra pastas automaticamente
+   ✅ Mostra informações das pastas
+   ✅ Permite escolha fácil
+   ✅ Interface amigável
+
+🎯 MÉTODO 2 - IMPORTAÇÃO MANUAL
+------------------------------
+python importar_dados_coletados.py "C:\caminho\para\exportacao_20251126_143052"
+
+   ⚠️  Precisa saber o caminho exato
+   ⚠️  Mais técnico
+
+📂 ONDE PROCURAR AS PASTAS EXPORTADAS
+====================================
+
+Os funcionários costumam salvar as pastas em:
+
+🖥️  Desktop (Área de Trabalho)
+   C:\Users\NOME_USUARIO\Desktop\exportacao_*
+
+📁 Documentos
+   C:\Users\NOME_USUARIO\Documents\exportacao_*
+
+📥 Downloads  
+   C:\Users\NOME_USUARIO\Downloads\exportacao_*
+
+☁️  Google Drive
+   C:\Users\NOME_USUARIO\Google Drive\VerifiK\exportacao_*
+
+☁️  OneDrive
+   C:\Users\NOME_USUARIO\OneDrive\VerifiK\exportacao_*
+
+🔍 COMO IDENTIFICAR UMA PASTA VÁLIDA
+===================================
+
+✅ Nome começa com "exportacao_"
+✅ Formato: exportacao_YYYYMMDD_HHMMSS
+✅ Contém arquivo "dados_exportacao.json"
+✅ Contém pasta "imagens/"
+
+Exemplo: exportacao_20251126_143052/
+
+📋 ESTRUTURA DA PASTA EXPORTADA
+==============================
+
+exportacao_20251126_143052/
+├── dados_exportacao.json     # Metadados (usuário, data, etc.)
+├── produtos.json            # Produtos novos (opcional)
+└── imagens/                # Fotos coletadas
+    ├── anotada_001.jpg
+    ├── anotada_002.jpg  
+    └── ...
+
+🚀 PROCESSO COMPLETO DE IMPORTAÇÃO
+=================================
+
+1️⃣ PREPARAR SERVIDOR
+   cd "C:\Users\mlisb\OneDrive\Desktop\ProjetoLogus"
+   python manage.py runserver 8000
+
+2️⃣ IMPORTAR DADOS COLETADOS
+   python importar_dados_assistido.py
+   
+3️⃣ VERIFICAR IMPORTAÇÃO
+   - Acesse: http://127.0.0.1:8000/login/
+   - Login: admin / admin123
+   - Vá em "VerifiK" > "Importar Dataset"
+
+4️⃣ ADICIONAR AO DATASET DE TREINO
+   - Na página "Importar Dataset"
+   - Clique "📥 Importar Anotadas"
+   - Agora as imagens estão prontas para treinar o modelo!
+
+💡 DICAS IMPORTANTES
+==================
+
+🔄 SINCRONIZAÇÃO AUTOMÁTICA
+   Se os funcionários salvaram em Google Drive ou OneDrive,
+   as pastas já estarão sincronizadas automaticamente!
+
+📊 VERIFICAÇÃO DE DADOS
+   O script mostra quantas imagens e anotações cada pasta tem
+   antes da importação.
+
+🔐 PERMISSÕES
+   Certifique-se que tem acesso às pastas onde os funcionários
+   salvaram os dados.
+
+⚠️ BACKUP
+   As imagens originais ficam na pasta de origem.
+   A importação faz CÓPIA, não move os arquivos.
+
+🎉 RESULTADO FINAL
+   Após a importação, você terá:
+   - Imagens no banco de dados Django
+   - Anotações de produtos preservadas
+   - Dados prontos para treinamento do modelo YOLO
+   - Histórico de quem coletou cada imagem
+
+════════════════════════════════════════════════════════════════════

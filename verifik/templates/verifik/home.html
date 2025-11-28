@@ -153,6 +153,7 @@
         <a href="{% url 'anotar_imagem' %}" class="btn" style="background: #11998e; margin-right: 1rem;">📦 Anotar Produtos</a>
         {% if user.is_staff %}
         <a href="{% url 'revisar_fotos' %}" class="btn" style="background: #f39c12; margin-right: 1rem;">🔍 Revisar Fotos</a>
+        <a href="{% url 'importar_pasta_standalone' %}" class="btn" style="background: #e67e22; margin-right: 1rem;">📁 Importar Pasta</a>
         <a href="{% url 'importar_dataset' %}" class="btn" style="background: #27ae60;">📥 Importar Dataset</a>
         {% endif %}
         <a href="/admin/verifik/incidente/" class="btn" style="background: #e74c3c;">Gerenciar Incidentes</a>
