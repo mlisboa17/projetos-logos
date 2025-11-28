@@ -1,12 +1,12 @@
 @echo off
 REM ============================================================================
-REM   Download Automático do Banco de Dados via OneDrive
+REM   Download Autom�tico do Banco de Dados via OneDrive
 REM ============================================================================
 
 echo.
-echo ╔══════════════════════════════════════════════════════════════════╗
-echo ║         Download do Banco de Dados - VerifiK OneDrive           ║
-echo ╚══════════════════════════════════════════════════════════════════╝
+echo +------------------------------------------------------------------+
+echo �         Download do Banco de Dados - VerifiK OneDrive           �
+echo +------------------------------------------------------------------+
 echo.
 
 REM ============================================================================
@@ -15,24 +15,24 @@ REM ============================================================================
 REM Substitua o link abaixo pelo link compartilhado do OneDrive
 REM Para obter: Clique direito em db.sqlite3 > Compartilhar > Copiar link
 
-set LINK_ONEDRIVE=https://1drv.ms/SEU_LINK_AQUI
+set LINK_ONEDRIVE=http://192.168.68.102:8080/banco
 
 REM ============================================================================
 
-echo 📋 Instruções:
-echo ════════════════════════════════════════════════════════════════
+echo ?? Instru��es:
+echo ----------------------------------------------------------------
 echo.
-echo 1. O navegador será aberto com o link do OneDrive
-echo 2. Clique no botão "Baixar" ou "Download"
+echo 1. O navegador ser� aberto com o link do OneDrive
+echo 2. Clique no bot�o "Baixar" ou "Download"
 echo 3. Aguarde o download terminar
 echo 4. Volte aqui e pressione qualquer tecla
 echo.
-echo ════════════════════════════════════════════════════════════════
+echo ----------------------------------------------------------------
 echo.
 
 REM Verificar se o link foi configurado
 if "%LINK_ONEDRIVE%"=="https://1drv.ms/SEU_LINK_AQUI" (
-    echo ⚠️  ATENÇÃO: Link do OneDrive não configurado!
+    echo ??  ATEN��O: Link do OneDrive n�o configurado!
     echo.
     echo Por favor, edite este arquivo e configure o LINK_ONEDRIVE
     echo na linha 15 com o link compartilhado do seu OneDrive.
@@ -52,34 +52,34 @@ echo Abrindo OneDrive no navegador...
 start "" "%LINK_ONEDRIVE%"
 
 echo.
-echo ⏳ Aguardando download...
+echo ? Aguardando download...
 echo.
 pause
 
 REM Procurar arquivo baixado
 echo.
-echo 🔍 Procurando arquivo baixado...
+echo ?? Procurando arquivo baixado...
 echo.
 
 set ARQUIVO_ENCONTRADO=0
 
 REM Verificar em Downloads
 if exist "%USERPROFILE%\Downloads\db.sqlite3" (
-    echo ✓ Arquivo encontrado em Downloads!
+    echo ? Arquivo encontrado em Downloads!
     set ARQUIVO_ENCONTRADO=1
     set CAMINHO_ORIGEM=%USERPROFILE%\Downloads\db.sqlite3
 )
 
-REM Verificar variações de nome
+REM Verificar varia��es de nome
 if exist "%USERPROFILE%\Downloads\db.sqlite3 (1).sqlite3" (
-    echo ✓ Arquivo encontrado em Downloads (versão duplicada)!
+    echo ? Arquivo encontrado em Downloads (vers�o duplicada)!
     set ARQUIVO_ENCONTRADO=1
     set CAMINHO_ORIGEM=%USERPROFILE%\Downloads\db.sqlite3 (1).sqlite3
 )
 
 if %ARQUIVO_ENCONTRADO%==0 (
     echo.
-    echo ❌ Arquivo não encontrado automaticamente
+    echo ? Arquivo n�o encontrado automaticamente
     echo.
     echo Por favor, copie manualmente:
     echo    Origem: Pasta Downloads
@@ -89,10 +89,10 @@ if %ARQUIVO_ENCONTRADO%==0 (
     exit /b 1
 )
 
-REM Fazer backup se já existir
+REM Fazer backup se j� existir
 if exist "db.sqlite3" (
     echo.
-    echo ⚠️  Banco de dados já existe!
+    echo ??  Banco de dados j� existe!
     echo.
     echo Deseja fazer backup antes de substituir? (S/N)
     set /p BACKUP=
@@ -102,43 +102,46 @@ if exist "db.sqlite3" (
         set NOME_BACKUP=%NOME_BACKUP: =0%
         echo Criando backup: %NOME_BACKUP%
         copy /Y "db.sqlite3" "%NOME_BACKUP%"
-        echo ✓ Backup criado!
+        echo ? Backup criado!
     )
 )
 
 REM Copiar arquivo
 echo.
-echo 📋 Copiando banco de dados...
+echo ?? Copiando banco de dados...
 copy /Y "%CAMINHO_ORIGEM%" "db.sqlite3"
 
 if errorlevel 1 (
-    echo ❌ Erro ao copiar arquivo!
+    echo ? Erro ao copiar arquivo!
     pause
     exit /b 1
 )
 
-echo ✓ Arquivo copiado com sucesso!
+echo ? Arquivo copiado com sucesso!
 
 REM Remover arquivo de Downloads
 del "%CAMINHO_ORIGEM%" 2>nul
 
 REM Verificar tamanho do arquivo
 echo.
-echo 📊 Informações do banco:
-echo ════════════════════════════════════════════════════════════════
+echo ?? Informa��es do banco:
+echo ----------------------------------------------------------------
 dir db.sqlite3 | find "db.sqlite3"
 echo.
 
-echo ══════════════════════════════════════════════════════════════════
-echo ✅ BANCO DE DADOS INSTALADO COM SUCESSO!
-echo ══════════════════════════════════════════════════════════════════
+echo ------------------------------------------------------------------
+echo ? BANCO DE DADOS INSTALADO COM SUCESSO!
+echo ------------------------------------------------------------------
 echo.
-echo 📁 Localização: %CD%\db.sqlite3
+echo ?? Localiza��o: %CD%\db.sqlite3
 echo.
-echo 🚀 Próximos passos:
+echo ?? Pr�ximos passos:
 echo    1. Execute: python manage.py runserver
-echo    2. Ou crie o executável: criar_executavel.bat
+echo    2. Ou crie o execut�vel: criar_executavel.bat
 echo.
-echo ══════════════════════════════════════════════════════════════════
+echo ------------------------------------------------------------------
 echo.
 pause
+
+
+

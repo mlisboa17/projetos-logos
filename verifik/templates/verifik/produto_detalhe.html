@@ -25,6 +25,34 @@
                     <h3>Vendas Totais</h3>
                     <div class="number" style="color: #27ae60;">{{ total_vendas }}</div>
                 </div>
+                
+                <!-- PAINEL DE TREINAMENTO -->
+                <div class="stat-card" style="border-left-color: #667eea; background: linear-gradient(135deg, #667eea10 0%, #764ba210 100%);">
+                    <h3 style="color: #667eea;">🤖 Treinamento IA</h3>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem;">
+                        <div>
+                            <div style="font-size: 0.85rem; color: #7f8c8d;">Novas</div>
+                            <div class="number" style="font-size: 1.5rem; color: #e74c3c;">{{ imagens_nao_treinadas }}</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.85rem; color: #7f8c8d;">Treinadas</div>
+                            <div class="number" style="font-size: 1.5rem; color: #27ae60;">{{ imagens_treinadas }}</div>
+                        </div>
+                    </div>
+                    
+                    {% if imagens_nao_treinadas > 0 %}
+                    <button onclick="treinarProduto()" 
+                            style="width: 100%; margin-top: 1rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 0.75rem; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.95rem; transition: transform 0.2s; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);"
+                            onmouseover="this.style.transform='scale(1.05)'"
+                            onmouseout="this.style.transform='scale(1)'">
+                        🚀 Treinar Este Produto
+                    </button>
+                    {% else %}
+                    <div style="margin-top: 1rem; padding: 0.75rem; background: #e8f5e9; border-radius: 8px; text-align: center; color: #2e7d32; font-size: 0.9rem;">
+                        ✅ Todas as imagens foram treinadas
+                    </div>
+                    {% endif %}
+                </div>
             </div>
         </div>
         
@@ -79,86 +107,364 @@
     
     {% if is_admin %}
     <div style="margin: 1.5rem 0; padding: 1.5rem; background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); border-radius: 10px; border: 2px dashed #667eea;">
-        <h3 style="margin-bottom: 1rem; color: #667eea;">➕ Adicionar Novas Imagens</h3>
-        <form method="POST" action="{% url 'verifik_adicionar_imagem' produto.pk %}" enctype="multipart/form-data" id="uploadForm">
-            {% csrf_token %}
-            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; margin-bottom: 1rem;">
-                <div>
-                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Selecionar Imagens:</label>
-                    <input type="file" name="imagens" accept="image/*" required multiple id="imagensInput"
-                           style="padding: 0.5rem; border: 2px solid #e0e0e0; border-radius: 5px; width: 100%;">
-                    <small style="color: #7f8c8d; display: block; margin-top: 0.25rem;">
-                        <strong>Ctrl/Cmd + clique</strong> para múltiplas ou arraste arquivos aqui<br>
-                        <span id="fileCount" style="color: #27ae60; font-weight: bold;"></span>
-                    </small>
+        <h3 style="margin-bottom: 1rem; color: #667eea;">➕ Adicionar e Anotar Imagens</h3>
+        
+        <!-- UPLOAD DE IMAGENS -->
+        <div style="margin-bottom: 1.5rem;">
+            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Selecionar Imagens:</label>
+            <input type="file" accept="image/*" multiple id="imagensInput"
+                   style="padding: 0.5rem; border: 2px solid #e0e0e0; border-radius: 5px; width: 100%;">
+            <small style="color: #7f8c8d; display: block; margin-top: 0.25rem;">
+                <strong>Ctrl/Cmd + clique</strong> para múltiplas ou arraste arquivos aqui<br>
+                <span id="fileCount" style="color: #27ae60; font-weight: bold;"></span>
+            </small>
+        </div>
+        
+        <!-- PREVIEW E ANOTAÇÃO -->
+        <div id="imagePreviewArea" style="display: none;">
+            <div style="background: white; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                <h4 style="margin: 0 0 1rem 0;">📸 Imagem <span id="currentImageNumber">1</span> de <span id="totalImages">0</span></h4>
+                
+                <!-- Canvas para desenhar bboxes -->
+                <div style="position: relative; display: inline-block;">
+                    <canvas id="annotationCanvas" style="border: 2px solid #667eea; border-radius: 8px; cursor: crosshair; max-width: 100%;"></canvas>
                 </div>
-                <div>
-                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Descrição (opcional):</label>
-                    <input type="text" name="descricao" placeholder="Ex: Vista frontal, ângulo 45°, etc."
-                           style="padding: 0.5rem; border: 2px solid #e0e0e0; border-radius: 5px; width: 100%;">
-                    <small style="color: #7f8c8d; display: block; margin-top: 0.25rem;">
-                        Será aplicada a todas as imagens selecionadas
-                    </small>
+                
+                <!-- Instruções -->
+                <div style="background: #e3f2fd; padding: 1rem; border-radius: 5px; margin-top: 1rem;">
+                    <p style="margin: 0; font-size: 0.9rem; color: #1976d2;">
+                        <strong>📌 Como anotar:</strong><br>
+                        1. Clique e arraste para desenhar um retângulo ao redor do produto<br>
+                        2. Selecione qual produto está na região marcada<br>
+                        3. Repita para cada produto na imagem<br>
+                        4. Clique em "Próxima Imagem" quando terminar
+                    </p>
+                </div>
+                
+                <!-- Produtos detectados na imagem atual -->
+                <div id="currentAnnotations" style="margin-top: 1rem;">
+                    <h5 style="margin: 0 0 0.5rem 0;">Produtos marcados nesta imagem:</h5>
+                    <div id="annotationsList" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                        <em style="color: #95a5a6;">Nenhum produto marcado ainda</em>
+                    </div>
+                </div>
+                
+                <!-- Botões de navegação -->
+                <div style="display: flex; gap: 1rem; margin-top: 1rem; justify-content: space-between;">
+                    <button onclick="undoLastAnnotation()" class="btn" style="background: #f39c12;">
+                        ↶ Desfazer Última
+                    </button>
+                    <div style="display: flex; gap: 1rem;">
+                        <button onclick="previousImage()" id="btnPrevious" class="btn" style="background: #95a5a6;">
+                            ← Anterior
+                        </button>
+                        <button onclick="nextImage()" id="btnNext" class="btn" style="background: #3498db;">
+                            Próxima →
+                        </button>
+                        <button onclick="saveAllAnnotations()" id="btnSave" class="btn" style="background: #27ae60; display: none;">
+                            💾 Salvar Todas
+                        </button>
+                    </div>
                 </div>
             </div>
-            
-            <div style="display: flex; gap: 1rem; justify-content: flex-end;">
-                <button type="button" onclick="document.getElementById('uploadForm').reset(); document.getElementById('fileCount').textContent = '';" 
-                        class="btn" style="background: #95a5a6;">
-                    🔄 Limpar
-                </button>
-                <button type="submit" class="btn" style="background: #27ae60; padding: 0.75rem 2rem;">
-                    💾 Salvar Imagens
-                </button>
-            </div>
-        </form>
+        </div>
+        
+        <!-- Botão para cancelar -->
+        <div id="cancelArea" style="display: none; margin-top: 1rem;">
+            <button onclick="cancelAnnotation()" class="btn" style="background: #e74c3c; width: 100%;">
+                ✕ Cancelar Anotação
+            </button>
+        </div>
         
         <script>
+            // Estado da anotação
+            let uploadedImages = [];
+            let currentImageIndex = 0;
+            let canvas, ctx;
+            let drawing = false;
+            let startX, startY;
+            let currentRect = null;
+            let allProdutos = [];
+            
             const input = document.getElementById('imagensInput');
             const countSpan = document.getElementById('fileCount');
+            
+            // Buscar lista de produtos ao carregar
+            fetch('/verifik/api/produtos/')
+                .then(r => r.json())
+                .then(data => {
+                    allProdutos = data;
+                });
             
             input.addEventListener('change', function(e) {
                 const count = e.target.files.length;
                 if (count > 0) {
                     countSpan.textContent = `✓ ${count} imagem${count > 1 ? 'ns' : ''} selecionada${count > 1 ? 's' : ''}`;
+                    processFiles(e.target.files);
                 } else {
                     countSpan.textContent = '';
                 }
             });
             
-            // Suporte para drag and drop
-            const form = document.getElementById('uploadForm');
-            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-                form.addEventListener(eventName, preventDefaults, false);
-            });
-            
-            function preventDefaults(e) {
-                e.preventDefault();
-                e.stopPropagation();
+            function processFiles(files) {
+                uploadedImages = [];
+                
+                Array.from(files).forEach((file, index) => {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        uploadedImages.push({
+                            file: file,
+                            dataURL: e.target.result,
+                            annotations: []
+                        });
+                        
+                        if (uploadedImages.length === files.length) {
+                            startAnnotation();
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                });
             }
             
-            ['dragenter', 'dragover'].forEach(eventName => {
-                form.addEventListener(eventName, () => {
-                    form.style.borderColor = '#27ae60';
-                    form.style.background = 'linear-gradient(135deg, #27ae6015 0%, #2ecc7115 100%)';
-                });
-            });
-            
-            ['dragleave', 'drop'].forEach(eventName => {
-                form.addEventListener(eventName, () => {
-                    form.style.borderColor = '#667eea';
-                    form.style.background = 'linear-gradient(135deg, #667eea15 0%, #764ba215 100%)';
-                });
-            });
-            
-            form.addEventListener('drop', function(e) {
-                const dt = e.dataTransfer;
-                const files = dt.files;
-                input.files = files;
+            function startAnnotation() {
+                document.getElementById('imagePreviewArea').style.display = 'block';
+                document.getElementById('cancelArea').style.display = 'block';
+                document.getElementById('totalImages').textContent = uploadedImages.length;
                 
-                const event = new Event('change');
-                input.dispatchEvent(event);
-            });
+                canvas = document.getElementById('annotationCanvas');
+                ctx = canvas.getContext('2d');
+                
+                canvas.addEventListener('mousedown', startDrawing);
+                canvas.addEventListener('mousemove', draw);
+                canvas.addEventListener('mouseup', endDrawing);
+                
+                loadImage(0);
+            }
+            
+            function loadImage(index) {
+                currentImageIndex = index;
+                const imgData = uploadedImages[index];
+                
+                const img = new Image();
+                img.onload = function() {
+                    const maxWidth = 800;
+                    const scale = Math.min(1, maxWidth / img.width);
+                    
+                    canvas.width = img.width * scale;
+                    canvas.height = img.height * scale;
+                    
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    
+                    // Redesenhar anotações existentes
+                    imgData.annotations.forEach(ann => {
+                        drawBox(ann.x, ann.y, ann.width, ann.height, '#27ae60');
+                    });
+                };
+                img.src = imgData.dataURL;
+                
+                document.getElementById('currentImageNumber').textContent = index + 1;
+                updateAnnotationsList();
+                updateNavigationButtons();
+            }
+            
+            function startDrawing(e) {
+                const rect = canvas.getBoundingClientRect();
+                startX = e.clientX - rect.left;
+                startY = e.clientY - rect.top;
+                drawing = true;
+            }
+            
+            function draw(e) {
+                if (!drawing) return;
+                
+                const rect = canvas.getBoundingClientRect();
+                const currentX = e.clientX - rect.left;
+                const currentY = e.clientY - rect.top;
+                
+                // Redesenhar imagem
+                loadImage(currentImageIndex);
+                
+                // Desenhar retângulo atual
+                const width = currentX - startX;
+                const height = currentY - startY;
+                drawBox(startX, startY, width, height, '#667eea');
+            }
+            
+            function drawBox(x, y, width, height, color) {
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 3;
+                ctx.strokeRect(x, y, width, height);
+            }
+            
+            function endDrawing(e) {
+                if (!drawing) return;
+                drawing = false;
+                
+                const rect = canvas.getBoundingClientRect();
+                const endX = e.clientX - rect.left;
+                const endY = e.clientY - rect.top;
+                
+                const width = endX - startX;
+                const height = endY - startY;
+                
+                if (Math.abs(width) > 20 && Math.abs(height) > 20) {
+                    selectProduct(startX, startY, width, height);
+                }
+            }
+            
+            function selectProduct(x, y, width, height) {
+                // Criar modal para seleção de produto
+                const modal = document.createElement('div');
+                modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 10000;';
+                
+                const content = document.createElement('div');
+                content.style.cssText = 'background: white; padding: 2rem; border-radius: 15px; max-width: 500px; max-height: 80vh; overflow-y: auto;';
+                
+                content.innerHTML = `
+                    <h3 style="margin: 0 0 1rem 0;">Selecione o Produto</h3>
+                    <input type="text" id="produtoSearch" placeholder="Buscar produto..." 
+                           style="width: 100%; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 8px; margin-bottom: 1rem;">
+                    <div id="produtosList" style="max-height: 400px; overflow-y: auto;"></div>
+                    <button onclick="this.closest('[style*=fixed]').remove()" 
+                            style="width: 100%; margin-top: 1rem; padding: 0.75rem; background: #95a5a6; color: white; border: none; border-radius: 8px; cursor: pointer;">
+                        Cancelar
+                    </button>
+                `;
+                
+                modal.appendChild(content);
+                document.body.appendChild(modal);
+                
+                renderProdutosList(allProdutos);
+                
+                document.getElementById('produtoSearch').addEventListener('input', function(e) {
+                    const search = e.target.value.toLowerCase();
+                    const filtered = allProdutos.filter(p => 
+                        p.marca.toLowerCase().includes(search) || 
+                        p.descricao_produto.toLowerCase().includes(search)
+                    );
+                    renderProdutosList(filtered);
+                });
+                
+                function renderProdutosList(produtos) {
+                    const list = document.getElementById('produtosList');
+                    list.innerHTML = produtos.map(p => `
+                        <div onclick="addAnnotation(${p.id}, '${p.marca} ${p.descricao_produto}', ${x}, ${y}, ${width}, ${height}); this.closest('[style*=fixed]').remove();"
+                             style="padding: 1rem; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 0.5rem; cursor: pointer; transition: background 0.2s;"
+                             onmouseover="this.style.background='#f8f9fa'"
+                             onmouseout="this.style.background='white'">
+                            <strong>${p.marca}</strong><br>
+                            <span style="color: #7f8c8d; font-size: 0.9rem;">${p.descricao_produto}</span>
+                        </div>
+                    `).join('');
+                }
+            }
+            
+            function addAnnotation(productId, productName, x, y, width, height) {
+                uploadedImages[currentImageIndex].annotations.push({
+                    product_id: productId,
+                    product_name: productName,
+                    x: x,
+                    y: y,
+                    width: width,
+                    height: height
+                });
+                
+                loadImage(currentImageIndex);
+                updateAnnotationsList();
+            }
+            
+            function updateAnnotationsList() {
+                const list = document.getElementById('annotationsList');
+                const annotations = uploadedImages[currentImageIndex].annotations;
+                
+                if (annotations.length === 0) {
+                    list.innerHTML = '<em style="color: #95a5a6;">Nenhum produto marcado ainda</em>';
+                } else {
+                    list.innerHTML = annotations.map((ann, idx) => `
+                        <span style="background: #27ae60; color: white; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem;">
+                            ${idx + 1}. ${ann.product_name}
+                        </span>
+                    `).join('');
+                }
+            }
+            
+            function undoLastAnnotation() {
+                uploadedImages[currentImageIndex].annotations.pop();
+                loadImage(currentImageIndex);
+            }
+            
+            function previousImage() {
+                if (currentImageIndex > 0) {
+                    loadImage(currentImageIndex - 1);
+                }
+            }
+            
+            function nextImage() {
+                if (currentImageIndex < uploadedImages.length - 1) {
+                    loadImage(currentImageIndex + 1);
+                }
+            }
+            
+            function updateNavigationButtons() {
+                document.getElementById('btnPrevious').disabled = currentImageIndex === 0;
+                document.getElementById('btnNext').style.display = currentImageIndex === uploadedImages.length - 1 ? 'none' : 'inline-block';
+                document.getElementById('btnSave').style.display = currentImageIndex === uploadedImages.length - 1 ? 'inline-block' : 'none';
+            }
+            
+            function saveAllAnnotations() {
+                // Verificar se todas as imagens têm anotações
+                const semAnotacao = uploadedImages.filter(img => img.annotations.length === 0);
+                if (semAnotacao.length > 0) {
+                    if (!confirm(`${semAnotacao.length} imagem(ns) não têm produtos marcados. Deseja continuar mesmo assim?`)) {
+                        return;
+                    }
+                }
+                
+                const formData = new FormData();
+                
+                uploadedImages.forEach((img, index) => {
+                    formData.append('images', img.file);
+                    formData.append(`annotations_${index}`, JSON.stringify(img.annotations));
+                });
+                
+                // Mostrar loading
+                document.getElementById('btnSave').textContent = '⏳ Salvando...';
+                document.getElementById('btnSave').disabled = true;
+                
+                fetch('/verifik/treinar-incremental/', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: formData
+                })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(`✅ Sucesso! ${data.total_products} produtos salvos. Treinamento iniciado em background.`);
+                        window.location.reload();
+                    } else {
+                        alert('Erro: ' + data.error);
+                        document.getElementById('btnSave').textContent = '💾 Salvar Todas';
+                        document.getElementById('btnSave').disabled = false;
+                    }
+                })
+                .catch(error => {
+                    alert('Erro: ' + error);
+                    document.getElementById('btnSave').textContent = '💾 Salvar Todas';
+                    document.getElementById('btnSave').disabled = false;
+                });
+            }
+            
+            function cancelAnnotation() {
+                if (confirm('Deseja cancelar? Todas as anotações serão perdidas.')) {
+                    uploadedImages = [];
+                    document.getElementById('imagePreviewArea').style.display = 'none';
+                    document.getElementById('cancelArea').style.display = 'none';
+                    document.getElementById('imagensInput').value = '';
+                    countSpan.textContent = '';
+                }
+            }
         </script>
     </div>
     {% endif %}
@@ -211,4 +517,110 @@
         </a>
     </div>
 </div>
+
+<!-- PAINEL DE STATUS DE TREINAMENTO -->
+<div id="statusTreinamento" style="display: none; position: fixed; bottom: 20px; right: 20px; background: white; border-radius: 15px; box-shadow: 0 8px 30px rgba(0,0,0,0.2); padding: 1.5rem 2rem; max-width: 400px; z-index: 1000; border: 2px solid #667eea;">
+    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+        <div style="width: 40px; height: 40px; border: 3px solid #667eea; border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+        <div>
+            <h3 style="margin: 0; color: #667eea;">Treinamento em Andamento</h3>
+            <p style="margin: 0.25rem 0 0 0; color: #7f8c8d; font-size: 0.9rem;" id="statusMessage">Iniciando...</p>
+        </div>
+    </div>
+    <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px;">
+        <p style="margin: 0; font-size: 0.85rem; color: #7f8c8d;">
+            <strong>📦 Produto:</strong> {{ produto.descricao_produto }}<br>
+            <strong>🖼️ Imagens novas:</strong> <span id="countNovas">{{ imagens_nao_treinadas }}</span><br>
+            <strong>🎨 Com augmentation:</strong> <span id="countTotal">{{ imagens_nao_treinadas|default:0|add:0|mul:8 }}</span> imagens
+        </p>
+    </div>
+    <button onclick="fecharStatus()" style="position: absolute; top: 10px; right: 10px; background: none; border: none; cursor: pointer; font-size: 1.5rem; color: #95a5a6;">✕</button>
+</div>
+
+<div id="sucessoTreinamento" style="display: none; position: fixed; bottom: 20px; right: 20px; background: #27ae60; color: white; border-radius: 15px; box-shadow: 0 8px 30px rgba(0,0,0,0.2); padding: 1.5rem 2rem; max-width: 400px; z-index: 1000;">
+    <h3 style="margin: 0 0 0.5rem 0;">✅ Treinamento Iniciado!</h3>
+    <p style="margin: 0; font-size: 0.9rem; opacity: 0.9;" id="sucessoMessage"></p>
+</div>
+
+<style>
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.stat-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-left: 4px solid #3498db;
+}
+
+.stat-card h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.9rem;
+    color: #7f8c8d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stat-card .number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #3498db;
+}
+</style>
+
+<script>
+function treinarProduto() {
+    const produtoId = {{ produto.pk }};
+    const imagensNovas = {{ imagens_nao_treinadas }};
+    
+    if (!confirm(`Deseja treinar este produto com ${imagensNovas} imagens novas?\n\nSerão geradas ${imagensNovas * 8} imagens no total com data augmentation.\n\nO treinamento continuará do checkpoint anterior.`)) {
+        return;
+    }
+    
+    // Mostrar painel de status
+    document.getElementById('statusTreinamento').style.display = 'block';
+    document.getElementById('statusMessage').textContent = `Preparando ${imagensNovas} imagens...`;
+    
+    // Fazer requisição
+    fetch('/verifik/treinar-produto/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: JSON.stringify({
+            produto_id: produtoId
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById('statusTreinamento').style.display = 'none';
+            
+            const sucessoDiv = document.getElementById('sucessoTreinamento');
+            document.getElementById('sucessoMessage').textContent = data.message;
+            sucessoDiv.style.display = 'block';
+            
+            // Recarregar página após 3 segundos
+            setTimeout(() => {
+                window.location.reload();
+            }, 3000);
+        } else {
+            alert('Erro: ' + data.error);
+            document.getElementById('statusTreinamento').style.display = 'none';
+        }
+    })
+    .catch(error => {
+        console.error('Erro:', error);
+        alert('Erro ao iniciar treinamento: ' + error);
+        document.getElementById('statusTreinamento').style.display = 'none';
+    });
+}
+
+function fecharStatus() {
+    document.getElementById('statusTreinamento').style.display = 'none';
+}
+</script>
 {% endblock %}

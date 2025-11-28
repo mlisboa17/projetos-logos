@@ -1,0 +1,88 @@
+═══════════════════════════════════════════════════════════════
+  CONFIGURAR SINCRONIZAÇÃO COM GOOGLE DRIVE - SIMPLES
+═══════════════════════════════════════════════════════════════
+
+🎯 LINK DA SUA PASTA:
+https://drive.google.com/drive/folders/1Ra793s-hRMaL5PdU7OLNX3YSMKG0YTYd
+
+
+📋 OPÇÃO 1: GOOGLE DRIVE PARA DESKTOP (AUTOMÁTICO - RECOMENDADO)
+───────────────────────────────────────────────────────────────
+
+1️⃣ BAIXAR E INSTALAR:
+   • Acesse: https://www.google.com/drive/download/
+   • Clique em "Fazer download do Drive para computador"
+   • Instale o programa
+   • Faça login com sua conta Google
+
+
+2️⃣ CONFIGURAR SINCRONIZAÇÃO:
+   • Abra o app "Google Drive" (ícone na barra de tarefas)
+   • Clique na engrenagem ⚙️ → "Preferências"
+   • Vá em "Google Drive" → "Minhas unidades"
+   • Marque "Sincronizar com este computador"
+   • A pasta ficará em: C:\Users\SEU_NOME\Google Drive\
+
+
+3️⃣ CRIAR PASTA PARA O SISTEMA:
+   • Abra: C:\Users\mlisb\Google Drive\
+   • Crie uma pasta chamada: VerifiK - Coletas
+   • Caminho final: C:\Users\mlisb\Google Drive\VerifiK - Coletas
+
+
+4️⃣ CONFIGURAR NO SISTEMA:
+   
+   Abra o arquivo: sistema_coleta_standalone_v2.py
+   
+   Procure pela linha (perto do início):
+   PASTA_EXPORTACAO_DRIVE = r""
+   
+   Altere para:
+   PASTA_EXPORTACAO_DRIVE = r"C:\Users\mlisb\Google Drive\VerifiK - Coletas"
+   
+   Salve o arquivo
+
+
+5️⃣ RECOMPILAR O EXECUTÁVEL:
+   Execute: criar_executavel_v2.2.bat
+
+
+✅ PRONTO! Agora quando clicar em "EXPORTAR DADOS":
+   • Sistema pergunta se quer usar a pasta configurada
+   • Você confirma
+   • Arquivos são salvos na pasta do Google Drive
+   • Sincronização acontece automaticamente em segundo plano
+   • Outras pessoas acessam pela pasta compartilhada!
+
+
+═══════════════════════════════════════════════════════════════
+
+📋 OPÇÃO 2: SEM INSTALAR NADA (MANUAL)
+───────────────────────────────────────────────────────────────
+
+Se não quiser instalar o Google Drive para Desktop:
+
+1. Ao clicar em "EXPORTAR DADOS", escolha qualquer pasta local
+2. Depois, acesse: https://drive.google.com/drive/folders/1Ra793s-hRMaL5PdU7OLNX3YSMKG0YTYd
+3. Arraste a pasta exportada para dentro do Google Drive
+4. Aguarde o upload concluir
+
+⚠️ Desvantagem: Você precisa fazer upload manual toda vez
+
+
+═══════════════════════════════════════════════════════════════
+
+💡 DICAS:
+
+• Google Drive para Desktop sincroniza automaticamente
+• Funciona mesmo offline (sincroniza quando voltar a internet)
+• Você pode acompanhar o progresso pelo ícone do Drive na barra
+• A pasta compartilhada fica acessível para toda a equipe
+• Não precisa fazer upload manual
+
+
+🔗 AJUDA GOOGLE:
+https://support.google.com/drive/answer/7329379
+
+
+═══════════════════════════════════════════════════════════════
