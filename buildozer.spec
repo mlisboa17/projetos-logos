@@ -1,26 +1,26 @@
 [app]
 
 # (str) Title of your application
-title = VerifiK Mobile
+title = VerifiK Mobile - Coleta de Imagens
 
 # (str) Package name
-package.name = verifik
+package.name = verifik_coleta
 
 # (str) Package domain (needed for android/ios packaging)
-package.domain = com.logos
+package.domain = com.logos.verifik
 
 # (str) Source code where the main.py live
 source.dir = .
 
 # (list) Source files to include (let empty to include all the files)
-source.include_exts = py,png,jpg,kv,atlas,json,db
+source.include_exts = py,png,jpg,jpeg,kv,atlas,json,db,sqlite
 
 # (str) Application versioning (method 1)
-version = 2.1.0
+version = 3.0.0
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy,pillow,requests,sqlite3,android
+requirements = python3,kivy==2.3.0,pillow,requests,sqlite3,pyjnius,android,kivymd
 
 # (str) Supported orientation (landscape, sensorLandscape, portrait or all)
 orientation = portrait
@@ -29,7 +29,7 @@ orientation = portrait
 fullscreen = 0
 
 # (list) Permissions
-android.permissions = INTERNET,CAMERA,WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE
+android.permissions = INTERNET,CAMERA,WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE,ACCESS_NETWORK_STATE,WAKE_LOCK
 
 # (int) Target Android API, should be as high as possible.
 android.api = 33
