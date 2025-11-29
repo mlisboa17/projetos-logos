@@ -1,0 +1,49 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y git zip unzip openjdk-11-jdk
+        pip install --upgrade pip
+        pip install buildozer cython kivy[base] pyjnius plyer
+    
+    - name: Setup Android SDK
+      run: |
+        wget -q https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip
+        unzip -q commandlinetools-linux-7583922_latest.zip
+        sudo mkdir -p /opt/android-sdk/cmdline-tools
+        sudo mv cmdline-tools /opt/android-sdk/cmdline-tools/latest
+        sudo chown -R $USER:$USER /opt/android-sdk
+        echo "ANDROID_HOME=/opt/android-sdk" >> $GITHUB_ENV
+        echo "/opt/android-sdk/cmdline-tools/latest/bin" >> $GITHUB_PATH
+        yes | /opt/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses
+    
+    - name: Build APK
+      run: |
+        rm -rf .buildozer bin
+        buildozer android debug
+    
+    - name: Upload APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: VerifiK-Mobile-APK
+        path: bin/*.apk

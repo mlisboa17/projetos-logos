@@ -266,7 +266,11 @@
     
     <div class="nav">
         <a href="{% url 'home' %}">🏠 Dashboard</a>
+        <a href="{% url 'verifik_home' %}">🔍 VerifiK</a>
         <a href="{% url 'verifik_produtos_lista' %}">📦 Produtos</a>
+        {% if user.is_staff %}
+            <a href="{% url 'importar_pasta_standalone' %}">📁 Importar Pasta</a>
+        {% endif %}
         <a href="/api/">🔌 API</a>
         {% if is_admin %}
             <a href="/admin/">⚙️ Admin</a>

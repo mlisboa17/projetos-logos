@@ -1,0 +1,74 @@
+#:kivy 2.3.0
+
+<VerifiKMobile>:
+    canvas.before:
+        Color:
+            rgba: 0.95, 0.95, 0.98, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+<Button>:
+    font_size: '14sp'
+    size_hint_y: None
+    height: '48dp'
+    canvas.before:
+        Color:
+            rgba: self.background_color if self.background_color else (0.2, 0.6, 0.8, 1)
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [10, 10, 10, 10]
+    color: 1, 1, 1, 1
+    bold: True
+
+<Label>:
+    color: 0.2, 0.2, 0.2, 1
+    text_size: self.size
+    halign: 'center'
+    valign: 'middle'
+
+<Spinner>:
+    font_size: '14sp'
+    text_size: self.size
+    halign: 'center'
+    valign: 'middle'
+    canvas.before:
+        Color:
+            rgba: 0.9, 0.9, 0.9, 1
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [5, 5, 5, 5]
+
+<TextInput>:
+    font_size: '14sp'
+    multiline: False
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [5, 5, 5, 5]
+        Color:
+            rgba: 0.7, 0.7, 0.7, 1
+        Line:
+            rounded_rectangle: self.x, self.y, self.width, self.height, 5
+            width: 1
+
+<ImageAnnotationWidget>:
+    canvas.before:
+        Color:
+            rgba: 0.95, 0.95, 0.95, 1
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [8, 8, 8, 8]
+        Color:
+            rgba: 0.7, 0.7, 0.7, 1
+        Line:
+            rounded_rectangle: self.x, self.y, self.width, self.height, 8
+            width: 2
+            dash_length: 10
+            dash_offset: 5

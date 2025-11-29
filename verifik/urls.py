@@ -32,4 +32,5 @@ urlpatterns = [
     # Sistema de coleta de imagens
     path('coleta/', include('verifik.urls_coleta')),
     path('coleta/', include('verifik.urls_anotacao')),
+    path('coleta/', include('verifik.urls_importacao')),
 ]

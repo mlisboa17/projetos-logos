@@ -38,11 +38,39 @@
                     <h3 style="color: #2c3e50; margin: 0 0 0.5rem 0;">📸 Imagens Simples (1 Produto por Foto)</h3>
                     <p style="color: #7f8c8d; margin: 0;">Fotos enviadas pelos funcionários com um único produto</p>
                 </div>
-                <button onclick="importarSimples()" class="btn-import" style="padding: 1rem 2rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1rem;">
-                    📥 Importar Simples
-                </button>
+                <div style="display: flex; gap: 1rem;">
+                    <button onclick="visualizarSimples()" style="padding: 1rem 2rem; background: #3498db; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1rem;">
+                        👁️ Visualizar
+                    </button>
+                    <button onclick="importarSimples()" class="btn-import" style="padding: 1rem 2rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1rem;">
+                        💾 Salvar no Dataset
+                    </button>
+                </div>
             </div>
             
+            <!-- Preview de Imagens Simples -->
+            <div id="previewSimples" style="display: none; background: white; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h4 style="color: #2c3e50; margin: 0;">🖼️ Preview das Imagens (primeiras {{ stats_simples.imagens_preview|length }})</h4>
+                    <button onclick="document.getElementById('previewSimples').style.display='none'" style="background: #e74c3c; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer;">
+                        ✕ Fechar
+                    </button>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; max-height: 400px; overflow-y: auto;">
+                    {% for imagem in stats_simples.imagens_preview %}
+                    <div style="border: 2px solid #e9ecef; border-radius: 8px; overflow: hidden; transition: transform 0.2s;">
+                        <img src="{{ imagem.imagem.url }}" alt="{{ imagem.produto.descricao_produto }}" 
+                             style="width: 100%; height: 150px; object-fit: cover; cursor: pointer;"
+                             onclick="abrirModal('{{ imagem.imagem.url }}', '{{ imagem.produto.descricao_produto }}', '{{ imagem.enviado_por.get_full_name|default:imagem.enviado_por.username }}')">
+                        <div style="padding: 0.5rem; background: #f8f9fa;">
+                            <div style="font-size: 0.85rem; font-weight: 600; color: #2c3e50; margin-bottom: 0.25rem;">{{ imagem.produto.descricao_produto }}</div>
+                            <div style="font-size: 0.75rem; color: #7f8c8d;">por {{ imagem.enviado_por.get_full_name|default:imagem.enviado_por.username }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
             {% if stats_simples.por_produto %}
             <div style="background: white; padding: 1.5rem; border-radius: 8px;">
                 <h4 style="color: #2c3e50; margin-bottom: 1rem;">Distribuição por Produto:</h4>
@@ -70,11 +98,39 @@
                     <h3 style="color: #2c3e50; margin: 0 0 0.5rem 0;">📦 Imagens Anotadas (Múltiplos Produtos)</h3>
                     <p style="color: #7f8c8d; margin: 0;">Fotos com bounding boxes marcando cada produto</p>
                 </div>
-                <button onclick="importarAnotadas()" class="btn-import" style="padding: 1rem 2rem; background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1rem;">
-                    📥 Importar Anotadas
-                </button>
+                <div style="display: flex; gap: 1rem;">
+                    <button onclick="visualizarAnotadas()" style="padding: 1rem 2rem; background: #3498db; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1rem;">
+                        👁️ Visualizar
+                    </button>
+                    <button onclick="importarAnotadas()" class="btn-import" style="padding: 1rem 2rem; background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1rem;">
+                        💾 Salvar no Dataset
+                    </button>
+                </div>
             </div>
             
+            <!-- Preview de Imagens Anotadas -->
+            <div id="previewAnotadas" style="display: none; background: white; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h4 style="color: #2c3e50; margin: 0;">🖼️ Preview das Imagens (primeiras {{ stats_anotadas.imagens_preview|length }})</h4>
+                    <button onclick="document.getElementById('previewAnotadas').style.display='none'" style="background: #e74c3c; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer;">
+                        ✕ Fechar
+                    </button>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; max-height: 400px; overflow-y: auto;">
+                    {% for imagem in stats_anotadas.imagens_preview %}
+                    <div style="border: 2px solid #e9ecef; border-radius: 8px; overflow: hidden; transition: transform 0.2s;">
+                        <img src="{{ imagem.imagem.url }}" alt="Imagem Anotada" 
+                             style="width: 100%; height: 150px; object-fit: cover; cursor: pointer;"
+                             onclick="abrirModal('{{ imagem.imagem.url }}', 'Imagem Anotada ({{ imagem.total_anotacoes }} produtos)', '{{ imagem.enviado_por.get_full_name|default:imagem.enviado_por.username }}')">
+                        <div style="padding: 0.5rem; background: #f0fff4;">
+                            <div style="font-size: 0.85rem; font-weight: 600; color: #2c3e50; margin-bottom: 0.25rem;">{{ imagem.total_anotacoes }} produto(s) marcado(s)</div>
+                            <div style="font-size: 0.75rem; color: #7f8c8d;">por {{ imagem.enviado_por.get_full_name|default:imagem.enviado_por.username }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
             {% if stats_anotadas.por_produto %}
             <div style="background: white; padding: 1.5rem; border-radius: 8px;">
                 <h4 style="color: #2c3e50; margin-bottom: 1rem;">Distribuição por Produto:</h4>
@@ -109,18 +165,98 @@
 
         <!-- Área de Resultado -->
         <div id="resultado" style="margin-top: 2rem; display: none;"></div>
+        
+        <!-- Seção de Ações do Dataset -->
+        <div style="background: #f1f3f4; padding: 2rem; border-radius: 12px; margin-top: 3rem; border: 2px solid #e9ecef;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <div>
+                    <h3 style="color: #2c3e50; margin: 0 0 0.5rem 0;">📦 Gerenciar Dataset</h3>
+                    <p style="color: #7f8c8d; margin: 0;">Exporte ou gerencie os dados do dataset de treinamento</p>
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                <!-- Exportar Dataset -->
+                <div style="background: white; padding: 1.5rem; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <div style="color: #e67e22; font-size: 2rem; margin-bottom: 1rem;">📥</div>
+                    <h4 style="color: #2c3e50; margin: 0 0 0.5rem 0;">Exportar Dataset</h4>
+                    <p style="color: #7f8c8d; margin: 0 0 1rem 0; font-size: 0.9rem;">Baixe o dataset completo em formato ZIP para treinamento</p>
+                    <a href="{% url 'exportar_dataset' %}" style="display: inline-block; padding: 0.8rem 1.5rem; background: linear-gradient(135deg, #e67e22 0%, #d35400 100%); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: all 0.3s ease;">
+                        📥 Exportar Dataset
+                    </a>
+                </div>
+                
+                <!-- Voltar para Home -->
+                <div style="background: white; padding: 1.5rem; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <div style="color: #3498db; font-size: 2rem; margin-bottom: 1rem;">🏠</div>
+                    <h4 style="color: #2c3e50; margin: 0 0 0.5rem 0;">Voltar ao Início</h4>
+                    <p style="color: #7f8c8d; margin: 0 0 1rem 0; font-size: 0.9rem;">Retorne à página principal do VerifiK</p>
+                    <a href="{% url 'verifik_home' %}" style="display: inline-block; padding: 0.8rem 1.5rem; background: linear-gradient(135deg, #3498db 0%, #2980b9 100%); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: all 0.3s ease;">
+                        🏠 Página Inicial
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para visualização de imagens -->
+<div id="modalImagem" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9);">
+    <div style="position: relative; margin: auto; padding: 20px; width: 90%; max-width: 800px; top: 50%; transform: translateY(-50%);">
+        <span onclick="fecharModal()" style="position: absolute; top: 15px; right: 35px; color: #fff; font-size: 40px; font-weight: bold; cursor: pointer;">&times;</span>
+        <img id="imagemModal" style="width: 100%; height: auto; border-radius: 8px;">
+        <div id="infoModal" style="color: white; text-align: center; margin-top: 1rem; font-size: 1.2rem;"></div>
     </div>
 </div>
 
 <script>
+// Funções de visualização
+function visualizarSimples() {
+    const preview = document.getElementById('previewSimples');
+    if (preview.style.display === 'none' || preview.style.display === '') {
+        preview.style.display = 'block';
+        preview.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } else {
+        preview.style.display = 'none';
+    }
+}
+
+function visualizarAnotadas() {
+    const preview = document.getElementById('previewAnotadas');
+    if (preview.style.display === 'none' || preview.style.display === '') {
+        preview.style.display = 'block';
+        preview.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } else {
+        preview.style.display = 'none';
+    }
+}
+
+function abrirModal(imagemUrl, titulo, autor) {
+    document.getElementById('imagemModal').src = imagemUrl;
+    document.getElementById('infoModal').innerHTML = `<strong>${titulo}</strong><br>Enviado por: ${autor}`;
+    document.getElementById('modalImagem').style.display = 'block';
+}
+
+function fecharModal() {
+    document.getElementById('modalImagem').style.display = 'none';
+}
+
+// Fechar modal ao clicar fora da imagem
+window.onclick = function(event) {
+    const modal = document.getElementById('modalImagem');
+    if (event.target === modal) {
+        fecharModal();
+    }
+}
+
 function importarSimples() {
-    if (!confirm('Deseja importar todas as imagens simples aprovadas para o dataset de treino?')) {
+    if (!confirm('Deseja SALVAR todas as imagens simples aprovadas no dataset de treinamento?')) {
         return;
     }
     
     const btn = event.target;
     btn.disabled = true;
-    btn.textContent = '⏳ Importando...';
+    btn.textContent = '💾 Salvando...';
     
     const formData = new FormData();
     formData.append('tipo', 'simples');
@@ -134,23 +270,23 @@ function importarSimples() {
     .then(data => {
         mostrarResultado(data);
         btn.disabled = false;
-        btn.textContent = '📥 Importar Simples';
+        btn.textContent = '💾 Salvar no Dataset';
     })
     .catch(err => {
         alert('Erro: ' + err);
         btn.disabled = false;
-        btn.textContent = '📥 Importar Simples';
+        btn.textContent = '💾 Salvar no Dataset';
     });
 }
 
 function importarAnotadas() {
-    if (!confirm('Deseja importar todas as imagens anotadas aprovadas para o dataset de treino?')) {
+    if (!confirm('Deseja SALVAR todas as imagens anotadas aprovadas no dataset de treinamento?')) {
         return;
     }
     
     const btn = event.target;
     btn.disabled = true;
-    btn.textContent = '⏳ Importando...';
+    btn.textContent = '💾 Salvando...';
     
     const formData = new FormData();
     formData.append('tipo', 'anotadas');
@@ -164,12 +300,12 @@ function importarAnotadas() {
     .then(data => {
         mostrarResultado(data);
         btn.disabled = false;
-        btn.textContent = '📥 Importar Anotadas';
+        btn.textContent = '💾 Salvar no Dataset';
     })
     .catch(err => {
         alert('Erro: ' + err);
         btn.disabled = false;
-        btn.textContent = '📥 Importar Anotadas';
+        btn.textContent = '💾 Salvar no Dataset';
     });
 }
 
@@ -180,8 +316,9 @@ function mostrarResultado(data) {
     if (data.success) {
         resultado.innerHTML = `
             <div style="background: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 1.5rem; border-radius: 8px;">
-                <h4 style="margin: 0 0 1rem 0;">✅ ${data.mensagem}</h4>
-                <p style="margin: 0;"><strong>Total de imagens importadas:</strong> ${data.importadas}</p>
+                <h4 style="margin: 0 0 1rem 0;">💾 ${data.mensagem}</h4>
+                <p style="margin: 0;"><strong>Total de imagens salvas no dataset:</strong> ${data.importadas}</p>
+                <p style="margin: 0.5rem 0 0 0;"><strong>Localização:</strong> assets/dataset/train/</p>
                 ${data.erros.length > 0 ? `
                     <details style="margin-top: 1rem;">
                         <summary style="cursor: pointer; font-weight: 600;">⚠️ ${data.erros.length} erro(s) encontrado(s)</summary>
@@ -190,6 +327,14 @@ function mostrarResultado(data) {
                         </ul>
                     </details>
                 ` : ''}
+                <div style="margin-top: 1rem; padding: 1rem; background: rgba(255,255,255,0.7); border-radius: 6px;">
+                    <strong>🎯 Próximos passos:</strong>
+                    <ol style="margin: 0.5rem 0 0 1.5rem;">
+                        <li>As imagens estão prontas para treinamento</li>
+                        <li>Execute o script de treinamento do modelo YOLO</li>
+                        <li>Teste o modelo treinado com novas imagens</li>
+                    </ol>
+                </div>
             </div>
         `;
     } else {

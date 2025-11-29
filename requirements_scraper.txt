@@ -1,0 +1,5 @@
+# requirements_scraper.txt
+# Dependências mínimas para o scraper standalone
+
+playwright==1.48.0
+requests==2.31.0

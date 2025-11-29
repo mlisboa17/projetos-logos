@@ -9,6 +9,7 @@ from .views_anotacao import (
     finalizar_anotacao,
     importar_dataset,
     executar_importacao,
+    exportar_dataset,
 )
 
 urlpatterns = [
@@ -19,4 +20,5 @@ urlpatterns = [
     path('anotar/<int:imagem_id>/finalizar/', finalizar_anotacao, name='finalizar_anotacao'),
     path('importar-dataset/', importar_dataset, name='importar_dataset'),
     path('importar-dataset/executar/', executar_importacao, name='executar_importacao'),
+    path('exportar-dataset/', exportar_dataset, name='exportar_dataset'),
 ]

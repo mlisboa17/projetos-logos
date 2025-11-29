@@ -1,0 +1,363 @@
+{% extends 'verifik/base.html' %}
+
+{% block title %}Importar Pasta Standalone - VerifiK{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 1200px; margin: 2rem auto; padding: 0 1rem;">
+    <div class="card" style="background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 2rem;">
+        <div class="card-header" style="border-bottom: 2px solid #667eea; padding-bottom: 1rem; margin-bottom: 2rem;">
+            <h2 style="color: #667eea; margin: 0;">📁 Importar Pasta do Sistema Standalone</h2>
+            <p style="color: #7f8c8d; margin-top: 0.5rem;">Importe dados coletados pelos funcionários usando o sistema offline</p>
+        </div>
+
+        <!-- Informações sobre o processo -->
+        <div style="background: #e3f2fd; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #2196f3; margin-bottom: 2rem;">
+            <h4 style="color: #1565c0; margin: 0 0 1rem 0;">ℹ️ Como funciona</h4>
+            <ul style="color: #1565c0; margin: 0; padding-left: 1.5rem;">
+                <li><strong>Cole o caminho completo</strong> da pasta de exportação</li>
+                <li><strong>Formato esperado:</strong> <code>exportacao_YYYYMMDD_HHMMSS</code></li>
+                <li><strong>A pasta deve conter:</strong> dados_exportacao.json + pasta imagens/</li>
+                <li><strong>Resultado:</strong> Todas as imagens e anotações serão importadas automaticamente</li>
+            </ul>
+        </div>
+
+        <!-- Formulário de importação -->
+        <div style="background: #f8f9fa; padding: 2rem; border-radius: 12px; margin-bottom: 2rem;">
+            <form id="formImportacao" onsubmit="executarImportacao(event)">
+                {% csrf_token %}
+                
+                <div style="margin-bottom: 1.5rem;">
+                    <label for="caminhoPasta" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #2c3e50;">
+                        📂 Pasta de Exportação Selecionada
+                    </label>
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <input 
+                            type="text" 
+                            id="caminhoPasta" 
+                            name="caminho_pasta" 
+                            required
+                            readonly
+                            placeholder="Nenhuma pasta selecionada..."
+                            style="flex: 1; padding: 0.75rem; border: 2px solid #e9ecef; border-radius: 8px; font-size: 1rem; background: #f8f9fa;"
+                        >
+                        <button 
+                            type="button" 
+                            onclick="selecionarPasta()" 
+                            style="padding: 0.75rem 1.5rem; background: #28a745; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; white-space: nowrap;"
+                        >
+                            📁 Procurar Pasta
+                        </button>
+                        <button 
+                            type="button" 
+                            onclick="digitarCaminho()" 
+                            style="padding: 0.75rem 1.5rem; background: #6c757d; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; white-space: nowrap;"
+                        >
+                            ✏️ Digitar Caminho
+                        </button>
+                    </div>
+                    <small style="color: #6c757d; margin-top: 0.5rem; display: block;">
+                        💡 Clique em "Procurar Pasta" para navegar até a pasta de exportação do sistema standalone
+                    </small>
+                </div>
+
+                <div style="text-align: center;">
+                    <button 
+                        type="submit" 
+                        id="btnImportar"
+                        style="padding: 1rem 3rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1.1rem;"
+                    >
+                        📥 Importar Pasta Completa
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Exemplos de caminhos -->
+        <div style="background: #fff3cd; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #f39c12; margin-bottom: 2rem;">
+            <h4 style="color: #856404; margin: 0 0 1rem 0;">📋 Exemplos de Caminhos</h4>
+            <div style="color: #856404;">
+                <p><strong>Desktop:</strong></p>
+                <code style="background: white; padding: 0.25rem 0.5rem; border-radius: 4px;">C:\Users\SeuNome\Desktop\exportacao_20251128_143052</code>
+                
+                <p style="margin-top: 1rem;"><strong>Google Drive:</strong></p>
+                <code style="background: white; padding: 0.25rem 0.5rem; border-radius: 4px;">C:\Users\SeuNome\Google Drive\VerifiK\exportacao_20251128_143052</code>
+                
+                <p style="margin-top: 1rem;"><strong>OneDrive:</strong></p>
+                <code style="background: white; padding: 0.25rem 0.5rem; border-radius: 4px;">C:\Users\SeuNome\OneDrive\VerifiK\exportacao_20251128_143052</code>
+            </div>
+        </div>
+
+        <!-- Área de resultado -->
+        <div id="resultadoImportacao" style="display: none; margin-top: 2rem;"></div>
+
+        <!-- Link para próximo passo -->
+        <div style="background: #d4edda; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #28a745; margin-top: 2rem;">
+            <h4 style="color: #155724; margin: 0 0 1rem 0;">🎯 Próximo Passo</h4>
+            <p style="color: #155724; margin: 0;">
+                Após importar, vá para 
+                <a href="{% url 'importar_dataset' %}" style="color: #155724; font-weight: 600;">
+                    📥 Importar Dataset
+                </a> 
+                e clique em "Importar Anotadas" para adicionar as imagens ao dataset de treinamento.
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+function selecionarPasta() {
+    // Mostrar instrução para o usuário
+    if (!confirm('ATENÇÃO: Você será redirecionado para selecionar a pasta.\n\n1. Navegue até a pasta de exportação (ex: exportacao_20251128_143052)\n2. ENTRE na pasta (dê duplo clique)\n3. Selecione qualquer arquivo dentro da pasta\n4. Clique OK\n\nContinuar?')) {
+        return;
+    }
+    
+    // Criar elemento input file temporário para seleção de pasta
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.webkitdirectory = true;
+    input.directory = true;
+    input.multiple = true;
+    
+    input.onchange = function(e) {
+        if (e.target.files.length > 0) {
+            // Pegar informações dos arquivos selecionados
+            const files = Array.from(e.target.files);
+            const firstFile = files[0];
+            
+            // Extrair o nome da pasta de exportação
+            let nomePasta = '';
+            let caminhoPasta = '';
+            
+            if (firstFile.webkitRelativePath) {
+                const pathParts = firstFile.webkitRelativePath.split('/');
+                nomePasta = pathParts[0];
+                
+                // Tentar construir caminho baseado no nome da pasta
+                if (nomePasta.startsWith('exportacao_')) {
+                    caminhoPasta = nomePasta; // Usar apenas o nome da pasta
+                    
+                    // Se possível, tentar obter caminho mais completo
+                    try {
+                        if (firstFile.path) {
+                            const fullPath = firstFile.path.replace(/\//g, '\\');
+                            const pastaIndex = fullPath.lastIndexOf(nomePasta);
+                            if (pastaIndex >= 0) {
+                                caminhoPasta = fullPath.substring(0, pastaIndex + nomePasta.length);
+                            }
+                        }
+                    } catch (e) {
+                        // Ignorar erros de acesso ao path
+                    }
+                }
+            }
+            
+            if (!caminhoPasta) {
+                alert('Não foi possível determinar a pasta de exportação. Tente selecionar uma pasta que comece com "exportacao_"');
+                return;
+            }
+            
+            document.getElementById('caminhoPasta').value = caminhoPasta;
+            
+            // Mostrar informações sobre a pasta selecionada
+            verificarPasta(caminhoPasta, files);
+        }
+    };
+    
+    input.click();
+}
+
+function verificarPasta(caminho, files) {
+    // Verificar se tem os arquivos necessários
+    let temDadosExportacao = false;
+    let temPastaImagens = false;
+    let numeroImagens = 0;
+    
+    for (let file of files) {
+        if (file.name === 'dados_exportacao.json') {
+            temDadosExportacao = true;
+        }
+        if (file.webkitRelativePath.includes('/imagens/') || file.webkitRelativePath.includes('\\imagens\\')) {
+            temPastaImagens = true;
+            numeroImagens++;
+        }
+    }
+    
+    // Mostrar feedback visual
+    const input = document.getElementById('caminhoPasta');
+    const info = document.createElement('div');
+    info.id = 'infoPasta';
+    info.style.cssText = 'margin-top: 0.5rem; padding: 1rem; border-radius: 6px; font-size: 0.9rem;';
+    
+    if (temDadosExportacao && temPastaImagens) {
+        info.style.background = '#d4edda';
+        info.style.color = '#155724';
+        info.style.border = '1px solid #c3e6cb';
+        info.innerHTML = `
+            ✅ <strong>Pasta válida detectada!</strong><br>
+            📄 Arquivo dados_exportacao.json: Encontrado<br>
+            📁 Pasta imagens: Encontrada (${numeroImagens} arquivo(s))<br>
+            🎯 Pronto para importação!
+        `;
+    } else {
+        info.style.background = '#f8d7da';
+        info.style.color = '#721c24';
+        info.style.border = '1px solid #f5c6cb';
+        info.innerHTML = `
+            ❌ <strong>Pasta inválida</strong><br>
+            📄 dados_exportacao.json: ${temDadosExportacao ? 'Encontrado' : 'Não encontrado'}<br>
+            📁 Pasta imagens: ${temPastaImagens ? 'Encontrada' : 'Não encontrada'}<br>
+            💡 Selecione uma pasta de exportação válida do sistema standalone
+        `;
+    }
+    
+    // Remover info anterior se existir
+    const infoAnterior = document.getElementById('infoPasta');
+    if (infoAnterior) {
+        infoAnterior.remove();
+    }
+    
+    // Adicionar nova info
+    input.parentNode.parentNode.appendChild(info);
+}
+
+function executarImportacao(event) {
+    event.preventDefault();
+    
+    const form = document.getElementById('formImportacao');
+    const btn = document.getElementById('btnImportar');
+    const caminhoPasta = document.getElementById('caminhoPasta').value.trim();
+    const resultado = document.getElementById('resultadoImportacao');
+    
+    if (!caminhoPasta) {
+        alert('Por favor, digite o caminho da pasta');
+        return;
+    }
+    
+    // Desabilitar botão e mostrar loading
+    btn.disabled = true;
+    btn.innerHTML = '⏳ Importando...';
+    resultado.style.display = 'none';
+    
+    // Preparar dados
+    const formData = new FormData();
+    formData.append('caminho_pasta', caminhoPasta);
+    formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+    
+    // Fazer requisição
+    fetch('{% url "executar_importacao_pasta" %}', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        mostrarResultado(data);
+        
+        // Reabilitar botão
+        btn.disabled = false;
+        btn.innerHTML = '📥 Importar Pasta Completa';
+    })
+    .catch(error => {
+        console.error('Erro:', error);
+        mostrarResultado({
+            success: false,
+            error: 'Erro de comunicação com o servidor'
+        });
+        
+        // Reabilitar botão
+        btn.disabled = false;
+        btn.innerHTML = '📥 Importar Pasta Completa';
+    });
+}
+
+function mostrarResultado(data) {
+    const resultado = document.getElementById('resultadoImportacao');
+    resultado.style.display = 'block';
+    
+    if (data.success) {
+        const detalhes = data.detalhes;
+        
+        resultado.innerHTML = `
+            <div style="background: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 2rem; border-radius: 8px;">
+                <h4 style="margin: 0 0 1rem 0;">✅ ${data.mensagem}</h4>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1rem 0;">
+                    <div style="background: rgba(255,255,255,0.7); padding: 1rem; border-radius: 6px;">
+                        <strong>📁 Pasta:</strong><br>${detalhes.pasta}
+                    </div>
+                    <div style="background: rgba(255,255,255,0.7); padding: 1rem; border-radius: 6px;">
+                        <strong>👤 Usuário:</strong><br>${detalhes.usuario}
+                    </div>
+                    <div style="background: rgba(255,255,255,0.7); padding: 1rem; border-radius: 6px;">
+                        <strong>📸 Imagens:</strong><br>${detalhes.imagens_importadas}
+                    </div>
+                    <div style="background: rgba(255,255,255,0.7); padding: 1rem; border-radius: 6px;">
+                        <strong>📦 Produtos:</strong><br>${detalhes.produtos_importados}
+                    </div>
+                </div>
+                
+                ${detalhes.total_erros > 0 ? `
+                    <details style="margin-top: 1rem;">
+                        <summary style="cursor: pointer; font-weight: 600;">⚠️ ${detalhes.total_erros} erro(s) encontrado(s)</summary>
+                        <ul style="margin-top: 0.5rem;">
+                            ${detalhes.erros.map(erro => `<li>${erro}</li>`).join('')}
+                        </ul>
+                    </details>
+                ` : ''}
+                
+                <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid #c3e6cb;">
+                    <p style="margin: 0 0 0.5rem 0;"><strong>🎉 Importação concluída!</strong></p>
+                    <a href="{% url 'importar_dataset' %}" style="color: #155724; text-decoration: none; font-weight: 600;">
+                        ➡️ Ir para Importar Dataset
+                    </a>
+                </div>
+            </div>
+        `;
+    } else {
+        resultado.innerHTML = `
+            <div style="background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 1.5rem; border-radius: 8px;">
+                <h4 style="margin: 0 0 1rem 0;">❌ Erro na Importação</h4>
+                <p style="margin: 0;">${data.error}</p>
+                
+                <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #f5c6cb;">
+                    <strong>💡 Verifique se:</strong>
+                    <ul style="margin-top: 0.5rem;">
+                        <li>O caminho da pasta está correto</li>
+                        <li>A pasta contém o arquivo dados_exportacao.json</li>
+                        <li>A pasta contém a subpasta "imagens"</li>
+                        <li>Você tem permissão para acessar a pasta</li>
+                    </ul>
+                </div>
+            </div>
+        `;
+    }
+}
+
+function digitarCaminho() {
+    const caminhoAtual = document.getElementById('caminhoPasta').value;
+    const caminho = prompt('Digite o caminho completo da pasta de exportação:\n\nExemplo: C:\\Documentos\\exportacao_20251128_143052', caminhoAtual);
+    
+    if (caminho && caminho.trim() !== '') {
+        const caminhoLimpo = caminho.trim();
+        document.getElementById('caminhoPasta').value = caminhoLimpo;
+        
+        // Remover info anterior se existir
+        const infoAnterior = document.getElementById('infoPasta');
+        if (infoAnterior) {
+            infoAnterior.remove();
+        }
+        
+        // Mostrar feedback simples
+        const info = document.createElement('div');
+        info.id = 'infoPasta';
+        info.style.cssText = 'margin-top: 0.5rem; padding: 1rem; border-radius: 6px; font-size: 0.9rem; background: #fff3cd; color: #856404; border: 1px solid #ffeaa7;';
+        info.innerHTML = `
+            📁 <strong>Caminho definido:</strong> ${caminhoLimpo}<br>
+            💡 Clique em "Importar" para verificar e processar a pasta
+        `;
+        
+        document.getElementById('caminhoPasta').parentNode.appendChild(info);
+    }
+}
+</script>
+
+{% endblock %}

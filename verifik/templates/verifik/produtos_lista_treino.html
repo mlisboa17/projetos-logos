@@ -1,0 +1,209 @@
+{% extends 'base.html' %}
+
+{% block title %}VerifiK - Produtos{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 1400px; margin: 2rem auto; padding: 0 1rem;">
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h1 style="margin: 0;">🤖 VerifiK - Treinamento de IA</h1>
+        
+        <div style="display: flex; gap: 1rem;">
+            <div style="background: white; padding: 1rem 1.5rem; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                <div style="font-size: 0.85rem; color: #7f8c8d; margin-bottom: 0.25rem;">Imagens Novas</div>
+                <div id="countNovas" style="font-size: 1.5rem; font-weight: bold; color: #e74c3c;">
+                    {{ total_imagens_nao_treinadas }}
+                </div>
+            </div>
+            
+            <div style="background: white; padding: 1rem 1.5rem; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                <div style="font-size: 0.85rem; color: #7f8c8d; margin-bottom: 0.25rem;">Total Treinadas</div>
+                <div id="countTreinadas" style="font-size: 1.5rem; font-weight: bold; color: #27ae60;">
+                    {{ total_imagens_treinadas }}
+                </div>
+            </div>
+            
+            <button 
+                id="btnTreinarNovas" 
+                onclick="treinarNovasImagens()"
+                style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 1rem 2rem; border-radius: 10px; cursor: pointer; font-size: 1rem; font-weight: bold; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4); transition: transform 0.2s;"
+                onmouseover="this.style.transform='scale(1.05)'"
+                onmouseout="this.style.transform='scale(1)'"
+                {% if total_imagens_nao_treinadas == 0 %}disabled style="opacity: 0.5; cursor: not-allowed;"{% endif %}>
+                🚀 Treinar Imagens Novas
+            </button>
+        </div>
+    </div>
+    
+    <div id="statusTreinamento" style="display: none; background: #3498db; color: white; padding: 1rem; border-radius: 10px; margin-bottom: 1rem; animation: pulse 2s infinite;">
+        <strong>⏳ Treinamento em andamento...</strong>
+        <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem;" id="statusMessage"></p>
+    </div>
+    
+    <div id="sucessoTreinamento" style="display: none; background: #27ae60; color: white; padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
+        <strong>✅ Treinamento iniciado com sucesso!</strong>
+        <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem;" id="sucessoMessage"></p>
+    </div>
+    
+    <div style="background: white; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); padding: 2rem;">
+        <h2 style="margin-bottom: 1.5rem;">📦 Produtos Cadastrados</h2>
+        
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="background: #f8f9fa; border-bottom: 2px solid #dee2e6;">
+                        <th style="padding: 1rem; text-align: left;">Produto</th>
+                        <th style="padding: 1rem; text-align: left;">Marca</th>
+                        <th style="padding: 1rem; text-align: center;">Tipo</th>
+                        <th style="padding: 1rem; text-align: center;">Imgs Treino</th>
+                        <th style="padding: 1rem; text-align: center;">Novas</th>
+                        <th style="padding: 1rem; text-align: center;">Treinadas</th>
+                        <th style="padding: 1rem; text-align: center;">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for produto in produtos %}
+                    <tr style="border-bottom: 1px solid #ecf0f1;">
+                        <td style="padding: 1rem;">
+                            <strong>{{ produto.descricao_produto }}</strong>
+                        </td>
+                        <td style="padding: 1rem;">{{ produto.marca }}</td>
+                        <td style="padding: 1rem; text-align: center;">
+                            <span style="background: #e3f2fd; color: #1976d2; padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.85rem;">
+                                {{ produto.tipo }}
+                            </span>
+                        </td>
+                        <td style="padding: 1rem; text-align: center;">
+                            <strong style="font-size: 1.2rem;">{{ produto.total_imagens }}</strong>
+                        </td>
+                        <td style="padding: 1rem; text-align: center;">
+                            {% if produto.imagens_nao_treinadas > 0 %}
+                                <span style="background: #ffebee; color: #c62828; padding: 0.25rem 0.75rem; border-radius: 15px; font-weight: bold;">
+                                    🆕 {{ produto.imagens_nao_treinadas }}
+                                </span>
+                            {% else %}
+                                <span style="color: #95a5a6;">-</span>
+                            {% endif %}
+                        </td>
+                        <td style="padding: 1rem; text-align: center;">
+                            {% if produto.imagens_treinadas > 0 %}
+                                <span style="background: #e8f5e9; color: #2e7d32; padding: 0.25rem 0.75rem; border-radius: 15px; font-weight: bold;">
+                                    ✓ {{ produto.imagens_treinadas }}
+                                </span>
+                            {% else %}
+                                <span style="color: #95a5a6;">0</span>
+                            {% endif %}
+                        </td>
+                        <td style="padding: 1rem; text-align: center;">
+                            <a href="{% url 'admin:verifik_produtomae_change' produto.pk %}" 
+                               style="background: #3498db; color: white; padding: 0.5rem 1rem; border-radius: 5px; text-decoration: none; font-size: 0.9rem; display: inline-block;">
+                                ✏️ Editar
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" style="padding: 2rem; text-align: center; color: #95a5a6;">
+                            Nenhum produto cadastrado
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div style="margin-top: 2rem; background: #fff3cd; border-left: 4px solid #ffc107; padding: 1.5rem; border-radius: 10px;">
+        <h3 style="margin-top: 0; color: #856404;">💡 Como funciona o treinamento incremental:</h3>
+        <ul style="color: #856404; line-height: 1.8;">
+            <li><strong>Apenas imagens novas:</strong> Treina somente as imagens adicionadas desde o último treinamento</li>
+            <li><strong>Continua do checkpoint:</strong> Não reinicia do zero, continua do estado anterior do modelo</li>
+            <li><strong>Data Augmentation:</strong> Gera 7 variações por imagem (rotação, brilho, contraste, etc.)</li>
+            <li><strong>Execução em background:</strong> Você pode continuar usando o sistema enquanto treina</li>
+            <li><strong>Marcação automática:</strong> Após o treino, imagens são marcadas como "treinadas"</li>
+        </ul>
+    </div>
+</div>
+
+<style>
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+button:disabled {
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+    transform: none !important;
+}
+</style>
+
+<script>
+function treinarNovasImagens() {
+    const btn = document.getElementById('btnTreinarNovas');
+    const statusDiv = document.getElementById('statusTreinamento');
+    const sucessoDiv = document.getElementById('sucessoTreinamento');
+    const statusMessage = document.getElementById('statusMessage');
+    const sucessoMessage = document.getElementById('sucessoMessage');
+    
+    // Confirmar ação
+    const totalNovas = parseInt(document.getElementById('countNovas').textContent);
+    if (totalNovas === 0) {
+        alert('Não há imagens novas para treinar!');
+        return;
+    }
+    
+    if (!confirm(`Deseja iniciar o treinamento com ${totalNovas} imagens novas?\n\nO processo pode levar vários minutos e será executado em background.`)) {
+        return;
+    }
+    
+    // Desabilitar botão
+    btn.disabled = true;
+    btn.textContent = '⏳ Iniciando...';
+    
+    // Mostrar status
+    statusDiv.style.display = 'block';
+    sucessoDiv.style.display = 'none';
+    statusMessage.textContent = `Preparando ${totalNovas} imagens para treinamento...`;
+    
+    // Fazer requisição
+    fetch('{% url "verifik:treinar_novas_imagens" %}', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            statusDiv.style.display = 'none';
+            sucessoDiv.style.display = 'block';
+            sucessoMessage.textContent = data.message;
+            
+            // Atualizar contadores
+            document.getElementById('countNovas').textContent = '0';
+            const countTreinadas = document.getElementById('countTreinadas');
+            countTreinadas.textContent = parseInt(countTreinadas.textContent) + totalNovas;
+            
+            // Recarregar página após 3 segundos
+            setTimeout(() => {
+                window.location.reload();
+            }, 3000);
+        } else {
+            alert('Erro: ' + data.error);
+            btn.disabled = false;
+            btn.textContent = '🚀 Treinar Imagens Novas';
+            statusDiv.style.display = 'none';
+        }
+    })
+    .catch(error => {
+        console.error('Erro:', error);
+        alert('Erro ao iniciar treinamento: ' + error);
+        btn.disabled = false;
+        btn.textContent = '🚀 Treinar Imagens Novas';
+        statusDiv.style.display = 'none';
+    });
+}
+</script>
+{% endblock %}

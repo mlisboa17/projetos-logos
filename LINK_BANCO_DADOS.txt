@@ -1,21 +1,26 @@
-╔══════════════════════════════════════════════════════════════════╗
-║              BANCO DE DADOS - LINK DO ONEDRIVE                   ║
-╚══════════════════════════════════════════════════════════════════╝
++------------------------------------------------------------------+
+�              BANCO DE DADOS - LINK DO ONEDRIVE                   �
++------------------------------------------------------------------+
 
-📥 DOWNLOAD DO BANCO DE DADOS (db.sqlite3)
-══════════════════════════════════════════════════════════════════
+?? DOWNLOAD DO BANCO DE DADOS (db.sqlite3)
+------------------------------------------------------------------
 
-🔗 Link do OneDrive:
-──────────────────────────────────────────────────────────────────
-[COLE SEU LINK DO ONEDRIVE AQUI]
+?? Link do OneDrive:
+------------------------------------------------------------------
+https://drive.google.com/uc?export=download&id=1N_eU1mQUJGX-G-RrenApfUM6Nfs0eA8V
+
+# Google Drive - Download Direto
+# Funciona de qualquer lugar com internet
+# Permissão: Qualquer pessoa com o link pode VISUALIZAR
+# Para atualizar: Substitua o arquivo db.sqlite3 no Google Drive (link permanece o mesmo)
 
 Exemplo: https://1drv.ms/u/s!xxxxxxxxxxxxxxxxx
 
 
-📋 COMO OBTER O LINK (para o administrador):
-══════════════════════════════════════════════════════════════════
+?? COMO OBTER O LINK (para o administrador):
+------------------------------------------------------------------
 1. Abra o Windows Explorer
-2. Vá para: OneDrive\Área de Trabalho\verifiK_Biel\projetos-logos
+2. V� para: OneDrive\�rea de Trabalho\verifiK_Biel\projetos-logos
 3. Clique direito em: db.sqlite3
 4. Selecione: "Compartilhar" (Share)
 5. Configure: "Qualquer pessoa com o link pode visualizar"
@@ -23,74 +28,77 @@ Exemplo: https://1drv.ms/u/s!xxxxxxxxxxxxxxxxx
 7. Cole acima neste arquivo
 
 
-📥 COMO BAIXAR (para outras pessoas):
-══════════════════════════════════════════════════════════════════
+?? COMO BAIXAR (para outras pessoas):
+------------------------------------------------------------------
 
-Método 1: Script Automático
-──────────────────────────────────────────────────────────────────
+M�todo 1: Script Autom�tico
+------------------------------------------------------------------
 1. Abra: baixar_banco_onedrive.bat
 2. Configure o link do OneDrive (linha 15)
 3. Execute o arquivo
-4. Siga as instruções
+4. Siga as instru��es
 
 
-Método 2: Manual
-──────────────────────────────────────────────────────────────────
+M�todo 2: Manual
+------------------------------------------------------------------
 1. Abra o link do OneDrive acima
-2. Clique no botão "Baixar" ou "Download"
+2. Clique no bot�o "Baixar" ou "Download"
 3. Aguarde o download terminar
 4. Mova db.sqlite3 para a pasta: projetos-logos\
 
 
-📊 INFORMAÇÕES DO BANCO ATUAL
-══════════════════════════════════════════════════════════════════
-Última atualização: 26/11/2025
+?? INFORMA��ES DO BANCO ATUAL
+------------------------------------------------------------------
+�ltima atualiza��o: 26/11/2025
 Tamanho aproximado: [VERIFICAR ARQUIVO]
 
-Contém:
-✓ Produtos cadastrados (ProdutoMae)
-✓ Usuários do sistema
-✓ Imagens pendentes e aprovadas
-✓ Anotações de bounding boxes
-✓ Lotes de fotos
-✓ Histórico de importações
+Cont�m:
+? Produtos cadastrados (ProdutoMae)
+? Usu�rios do sistema
+? Imagens pendentes e aprovadas
+? Anota��es de bounding boxes
+? Lotes de fotos
+? Hist�rico de importa��es
 
 
-🔄 SINCRONIZAÇÃO AUTOMÁTICA
-══════════════════════════════════════════════════════════════════
-Se você tem acesso ao OneDrive, pode criar um link simbólico:
+?? SINCRONIZA��O AUTOM�TICA
+------------------------------------------------------------------
+Se voc� tem acesso ao OneDrive, pode criar um link simb�lico:
 
 PowerShell (como Administrador):
 cd projetos-logos
 del db.sqlite3
-New-Item -ItemType SymbolicLink -Path "db.sqlite3" -Target "C:\Users\SEU_USUARIO\OneDrive\Área de Trabalho\verifiK_Biel\projetos-logos\db.sqlite3"
+New-Item -ItemType SymbolicLink -Path "db.sqlite3" -Target "C:\Users\SEU_USUARIO\OneDrive\�rea de Trabalho\verifiK_Biel\projetos-logos\db.sqlite3"
 
-Vantagem: Qualquer alteração sincroniza automaticamente!
+Vantagem: Qualquer altera��o sincroniza automaticamente!
 
 
-⚠️ IMPORTANTE
-══════════════════════════════════════════════════════════════════
-- Faça backup antes de modificar o banco
-- Não compartilhe o link publicamente (dados sensíveis)
+?? IMPORTANTE
+------------------------------------------------------------------
+- Fa�a backup antes de modificar o banco
+- N�o compartilhe o link publicamente (dados sens�veis)
 - Mantenha o link atualizado neste arquivo
-- Use sempre a versão mais recente
+- Use sempre a vers�o mais recente
 
 
-🔐 SEGURANÇA
-══════════════════════════════════════════════════════════════════
-Recomendações:
-✓ Use link "somente visualização" (não edição)
-✓ Compartilhe apenas com pessoas autorizadas
-✓ Considere proteger com senha se possível
-✓ Mantenha backups em outro local
+?? SEGURAN�A
+------------------------------------------------------------------
+Recomenda��es:
+? Use link "somente visualiza��o" (n�o edi��o)
+? Compartilhe apenas com pessoas autorizadas
+? Considere proteger com senha se poss�vel
+? Mantenha backups em outro local
 
 
-📞 SUPORTE
-══════════════════════════════════════════════════════════════════
+?? SUPORTE
+------------------------------------------------------------------
 Problemas?
 - Leia: COMPARTILHAR_BANCO_ONEDRIVE.md
 - Ou crie um novo banco: python manage.py migrate
 
 
-══════════════════════════════════════════════════════════════════
-Última atualização deste arquivo: 26/11/2025
+------------------------------------------------------------------
+�ltima atualiza��o deste arquivo: 26/11/2025
+
+
+

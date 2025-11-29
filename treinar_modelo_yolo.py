@@ -355,15 +355,10 @@ def main():
     
     data_yaml_path, class_names = resultado
     
-    # 3. Confirmar treinamento
+    # 3. Iniciar treinamento automaticamente
     print("\n" + "="*60)
-    print("⚠️  ATENÇÃO: O treinamento pode levar 15-30 minutos")
+    print("🚀 INICIANDO TREINAMENTO (estimativa: 15-30 minutos)")
     print("="*60)
-    resposta = input("\n▶️  Deseja continuar? (s/N): ").strip().lower()
-    
-    if resposta != 's':
-        print("❌ Treinamento cancelado pelo usuário")
-        return
     
     # 4. Treinar modelo
     model, results = treinar_modelo(data_yaml_path, class_names)

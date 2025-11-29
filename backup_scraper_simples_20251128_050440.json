@@ -1,0 +1,497 @@
+[
+  {
+    "codigo": "95406",
+    "cnpj": "04284939000186",
+    "razao": "AUTO POSTO CASA CAIADA LTDA",
+    "nome": "AP CASA CAIADA",
+    "produtos": [
+      {
+        "nome": "ETANOL COMUM",
+        "preco": "Preço: R$ 3.7527",
+        "prazo": "3 Dias",
+        "base": "Base Suape"
+      },
+      {
+        "nome": "GASOLINA COMUM",
+        "preco": "Preço: R$ 6.0097",
+        "prazo": "3 Dias",
+        "base": "Base Suape"
+      },
+      {
+        "nome": "GASOLINA ADITIVADA",
+        "preco": "Preço: R$ 6.1468",
+        "prazo": "3 Dias",
+        "base": "Base Ipojuca"
+      },
+      {
+        "nome": "DIESEL COMUM",
+        "preco": "Preço: R$ 5.5420",
+        "prazo": "3 Dias",
+        "base": "Base Ipojuca"
+      },
+      {
+        "nome": "DIESEL S10",
+        "preco": "Preço: R$ 5.5774",
+        "prazo": "3 Dias",
+        "base": "Base Recife"
+      },
+      {
+        "nome": "ARLA 32",
+        "preco": "Preço: R$ 3.2569",
+        "prazo": "3 Dias",
+        "base": "Base Ipojuca"
+      }
+    ],
+    "data_coleta": "05:04 28/11/2025"
+  },
+  {
+    "codigo": "107469",
+    "cnpj": "00338804000103",
+    "razao": "POSTO ENSEADA DO NORTE LTDA",
+    "nome": "POSTO ENSEADA DO NOR",
+    "produtos": [
+      {
+        "nome": "ETANOL COMUM",
+        "preco": "Preço: R$ 3.6939",
+        "prazo": "3 Dias",
+        "base": "Base Recife"
+      },
+      {
+        "nome": "GASOLINA COMUM",
+        "preco": "Preço: R$ 5.9304",
+        "prazo": "3 Dias",
+        "base": "Base Recife"
+      },
+      {
+        "nome": "GASOLINA ADITIVADA",
+        "preco": "Preço: R$ 6.0176",
+        "prazo": "3 Dias",
+        "base": "Base Suape"
+      },
+      {
+        "nome": "DIESEL COMUM",
+        "preco": "Preço: R$ 5.2229",
+        "prazo": "3 Dias",
+        "base": "Base Suape"
+      },
+      {
+        "nome": "DIESEL S10",
+        "preco": "Preço: R$ 5.7346",
+        "prazo": "3 Dias",
+        "base": "Base Recife"
+      },
+      {
+        "nome": "ARLA 32",
+        "preco": "Preço: R$ 3.2655",
+        "prazo": "3 Dias",
+        "base": "Base Suape"
+      }
+    ],
+    "data_coleta": "05:04 28/11/2025"
+  },
+  {
+    "codigo": "11236",
+    "cnpj": "24156978000105",
+    "razao": "REAL RECIFE LTDA",
+    "nome": "POSTO REAL",
+    "produtos": [
+      {
+        "nome": "ETANOL COMUM",
+        "preco": "Preço: R$ 3.5689",
+        "prazo": "3 Dias",
+        "base": "Base Ipojuca"
+      },
+      {
+        "nome": "GASOLINA COMUM",
+        "preco": "Preço: R$ 5.8872",
+        "prazo": "3 Dias",
+        "base": "Base Suape"
+      },
+      {
+        "nome": "GASOLINA ADITIVADA",
+        "preco": "Preço: R$ 6.1837",
+        "prazo": "3 Dias",
+        "base": "Base Ipojuca"
+      },
+      {
+        "nome": "DIESEL COMUM",
+        "preco": "Preço: R$ 5.2430",
+        "prazo": "3 Dias",
+        "base": "Base Suape"
+      },
+      {
+        "nome": "DIESEL S10",
+        "preco": "Preço: R$ 5.4095",
+        "prazo": "3 Dias",
+        "base": "Base Recife"
+      },
+      {
+        "nome": "ARLA 32",
+        "preco": "Preço: R$ 3.1138",
+        "prazo": "3 Dias",
+        "base": "Base Recife"
+      }
+    ],
+    "data_coleta": "05:04 28/11/2025"
+  },
+  {
+    "codigo": "1153963",
+    "cnpj": "05428059000280",
+    "razao": "POSTO CIDADE PATRIMONIO LTDA",
+    "nome": "POSTO AVENIDA",
+    "produtos": [
+      {
+        "nome": "ETANOL COMUM",
+        "preco": "Preço: R$ 3.6279",
+        "prazo": "3 Dias",
+        "base": "Base Recife"
+      },
+      {
+        "nome": "GASOLINA COMUM",
+        "preco": "Preço: R$ 5.9591",
+        "prazo": "3 Dias",
+        "base": "Base Ipojuca"
+      },
+      {
+        "nome": "GASOLINA ADITIVADA",
+        "preco": "Preço: R$ 5.9980",
+        "prazo": "3 Dias",
+        "base": "Base Suape"
+      },
+      {
+        "nome": "DIESEL COMUM",
+        "preco": "Preço: R$ 5.6353",
+        "prazo": "3 Dias",
+        "base": "Base Ipojuca"
+      },
+      {
+        "nome": "DIESEL S10",
+        "preco": "Preço: R$ 5.3304",
+        "prazo": "3 Dias",
+        "base": "Base Ipojuca"
+      },
+      {
+        "nome": "ARLA 32",
+        "preco": "Preço: R$ 3.1787",
+        "prazo": "3 Dias",
+        "base": "Base Ipojuca"
+      }
+    ],
+    "data_coleta": "05:04 28/11/2025"
+  },
+  {
+    "codigo": "124282",
+    "cnpj": "08726064000186",
+    "razao": "R.J. COMBUSTIVEIS E LUBRIFICANTES L",
+    "nome": "R J",
+    "produtos": [
+      {
+        "nome": "ETANOL COMUM",
+        "preco": "Preço: R$ 3.5851",
+        "prazo": "3 Dias",
+        "base": "Base Ipojuca"
+      },
+      {
+        "nome": "GASOLINA COMUM",
+        "preco": "Preço: R$ 5.8050",
+        "prazo": "3 Dias",
+        "base": "Base Recife"
+      },
+      {
+        "nome": "GASOLINA ADITIVADA",
+        "preco": "Preço: R$ 6.1223",
+        "prazo": "3 Dias",
+        "base": "Base Ipojuca"
+      },
+      {
+        "nome": "DIESEL COMUM",
+        "preco": "Preço: R$ 5.6554",
+        "prazo": "3 Dias",
+        "base": "Base Ipojuca"
+      },
+      {
+        "nome": "DIESEL S10",
+        "preco": "Preço: R$ 5.6504",
+        "prazo": "3 Dias",
+        "base": "Base Ipojuca"
+      },
+      {
+        "nome": "ARLA 32",
+        "preco": "Preço: R$ 3.1247",
+        "prazo": "3 Dias",
+        "base": "Base Ipojuca"
+      }
+    ],
+    "data_coleta": "05:04 28/11/2025"
+  },
+  {
+    "codigo": "14219",
+    "cnpj": "41043647000188",
+    "razao": "AUTO POSTO GLOBO LTDA",
+    "nome": "GLOBO105",
+    "produtos": [
+      {
+        "nome": "ETANOL COMUM",
+        "preco": "Preço: R$ 3.6515",
+        "prazo": "3 Dias",
+        "base": "Base Ipojuca"
+      },
+      {
+        "nome": "GASOLINA COMUM",
+        "preco": "Preço: R$ 5.9442",
+        "prazo": "3 Dias",
+        "base": "Base Ipojuca"
+      },
+      {
+        "nome": "GASOLINA ADITIVADA",
+        "preco": "Preço: R$ 5.9396",
+        "prazo": "3 Dias",
+        "base": "Base Suape"
+      },
+      {
+        "nome": "DIESEL COMUM",
+        "preco": "Preço: R$ 5.4410",
+        "prazo": "3 Dias",
+        "base": "Base Ipojuca"
+      },
+      {
+        "nome": "DIESEL S10",
+        "preco": "Preço: R$ 5.6583",
+        "prazo": "3 Dias",
+        "base": "Base Recife"
+      },
+      {
+        "nome": "ARLA 32",
+        "preco": "Preço: R$ 3.2440",
+        "prazo": "3 Dias",
+        "base": "Base Recife"
+      }
+    ],
+    "data_coleta": "05:04 28/11/2025"
+  },
+  {
+    "codigo": "156075",
+    "cnpj": "07018760000175",
+    "razao": "DISTRIBUIDORA R S DERIVADO DE PETRO",
+    "nome": "POSTO BR SHOPPING",
+    "produtos": [
+      {
+        "nome": "ETANOL COMUM",
+        "preco": "Preço: R$ 3.5299",
+        "prazo": "3 Dias",
+        "base": "Base Suape"
+      },
+      {
+        "nome": "GASOLINA COMUM",
+        "preco": "Preço: R$ 5.7081",
+        "prazo": "3 Dias",
+        "base": "Base Suape"
+      },
+      {
+        "nome": "GASOLINA ADITIVADA",
+        "preco": "Preço: R$ 5.8834",
+        "prazo": "3 Dias",
+        "base": "Base Suape"
+      },
+      {
+        "nome": "DIESEL COMUM",
+        "preco": "Preço: R$ 5.5311",
+        "prazo": "3 Dias",
+        "base": "Base Suape"
+      },
+      {
+        "nome": "DIESEL S10",
+        "preco": "Preço: R$ 5.3033",
+        "prazo": "3 Dias",
+        "base": "Base Ipojuca"
+      },
+      {
+        "nome": "ARLA 32",
+        "preco": "Preço: R$ 3.2633",
+        "prazo": "3 Dias",
+        "base": "Base Ipojuca"
+      }
+    ],
+    "data_coleta": "05:04 28/11/2025"
+  },
+  {
+    "codigo": "1775869",
+    "cnpj": "52308604000101",
+    "razao": "POSTO DOZE COMERCIO DE COMBUSTIVEIS",
+    "nome": "POSTO DOZE",
+    "produtos": [
+      {
+        "nome": "ETANOL COMUM",
+        "preco": "Preço: R$ 3.7373",
+        "prazo": "3 Dias",
+        "base": "Base Ipojuca"
+      },
+      {
+        "nome": "GASOLINA COMUM",
+        "preco": "Preço: R$ 5.8020",
+        "prazo": "3 Dias",
+        "base": "Base Recife"
+      },
+      {
+        "nome": "GASOLINA ADITIVADA",
+        "preco": "Preço: R$ 5.9068",
+        "prazo": "3 Dias",
+        "base": "Base Suape"
+      },
+      {
+        "nome": "DIESEL COMUM",
+        "preco": "Preço: R$ 5.2175",
+        "prazo": "3 Dias",
+        "base": "Base Ipojuca"
+      },
+      {
+        "nome": "DIESEL S10",
+        "preco": "Preço: R$ 5.5304",
+        "prazo": "3 Dias",
+        "base": "Base Suape"
+      },
+      {
+        "nome": "ARLA 32",
+        "preco": "Preço: R$ 3.1865",
+        "prazo": "3 Dias",
+        "base": "Base Recife"
+      }
+    ],
+    "data_coleta": "05:04 28/11/2025"
+  },
+  {
+    "codigo": "5039",
+    "cnpj": "03008754000186",
+    "razao": "RIO DOCE COMERCIO E SERVICOS LTDA",
+    "nome": "POSTO VIP",
+    "produtos": [
+      {
+        "nome": "ETANOL COMUM",
+        "preco": "Preço: R$ 3.5347",
+        "prazo": "3 Dias",
+        "base": "Base Suape"
+      },
+      {
+        "nome": "GASOLINA COMUM",
+        "preco": "Preço: R$ 5.7157",
+        "prazo": "3 Dias",
+        "base": "Base Recife"
+      },
+      {
+        "nome": "GASOLINA ADITIVADA",
+        "preco": "Preço: R$ 5.9215",
+        "prazo": "3 Dias",
+        "base": "Base Suape"
+      },
+      {
+        "nome": "DIESEL COMUM",
+        "preco": "Preço: R$ 5.4625",
+        "prazo": "3 Dias",
+        "base": "Base Suape"
+      },
+      {
+        "nome": "DIESEL S10",
+        "preco": "Preço: R$ 5.7296",
+        "prazo": "3 Dias",
+        "base": "Base Recife"
+      },
+      {
+        "nome": "ARLA 32",
+        "preco": "Preço: R$ 3.2678",
+        "prazo": "3 Dias",
+        "base": "Base Recife"
+      }
+    ],
+    "data_coleta": "05:04 28/11/2025"
+  },
+  {
+    "codigo": "61003",
+    "cnpj": "04274378000134",
+    "razao": "AUTO POSTO IGARASSU LTDA.",
+    "nome": "P IGARASSU",
+    "produtos": [
+      {
+        "nome": "ETANOL COMUM",
+        "preco": "Preço: R$ 3.7448",
+        "prazo": "3 Dias",
+        "base": "Base Recife"
+      },
+      {
+        "nome": "GASOLINA COMUM",
+        "preco": "Preço: R$ 6.0072",
+        "prazo": "3 Dias",
+        "base": "Base Ipojuca"
+      },
+      {
+        "nome": "GASOLINA ADITIVADA",
+        "preco": "Preço: R$ 5.9069",
+        "prazo": "3 Dias",
+        "base": "Base Ipojuca"
+      },
+      {
+        "nome": "DIESEL COMUM",
+        "preco": "Preço: R$ 5.4841",
+        "prazo": "3 Dias",
+        "base": "Base Recife"
+      },
+      {
+        "nome": "DIESEL S10",
+        "preco": "Preço: R$ 5.5942",
+        "prazo": "3 Dias",
+        "base": "Base Suape"
+      },
+      {
+        "nome": "ARLA 32",
+        "preco": "Preço: R$ 3.2131",
+        "prazo": "3 Dias",
+        "base": "Base Suape"
+      }
+    ],
+    "data_coleta": "05:04 28/11/2025"
+  },
+  {
+    "codigo": "94762",
+    "cnpj": "05428059000107",
+    "razao": "POSTO CIDADE PATRIMONIO LTDA",
+    "nome": "CIDADE PATRIMONIO",
+    "produtos": [
+      {
+        "nome": "ETANOL COMUM",
+        "preco": "Preço: R$ 3.6589",
+        "prazo": "3 Dias",
+        "base": "Base Ipojuca"
+      },
+      {
+        "nome": "GASOLINA COMUM",
+        "preco": "Preço: R$ 5.9493",
+        "prazo": "3 Dias",
+        "base": "Base Suape"
+      },
+      {
+        "nome": "GASOLINA ADITIVADA",
+        "preco": "Preço: R$ 6.0859",
+        "prazo": "3 Dias",
+        "base": "Base Ipojuca"
+      },
+      {
+        "nome": "DIESEL COMUM",
+        "preco": "Preço: R$ 5.3012",
+        "prazo": "3 Dias",
+        "base": "Base Ipojuca"
+      },
+      {
+        "nome": "DIESEL S10",
+        "preco": "Preço: R$ 5.7158",
+        "prazo": "3 Dias",
+        "base": "Base Recife"
+      },
+      {
+        "nome": "ARLA 32",
+        "preco": "Preço: R$ 3.1211",
+        "prazo": "3 Dias",
+        "base": "Base Ipojuca"
+      }
+    ],
+    "data_coleta": "05:04 28/11/2025"
+  }
+]
