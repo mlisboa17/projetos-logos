@@ -2,10 +2,48 @@ from django.contrib import admin
 from .models import (
     Funcionario, PerfilGestor, ProdutoMae, CodigoBarrasProdutoMae, OperacaoVenda, ItemVenda,
     DeteccaoProduto, Incidente, EvidenciaIncidente, Alerta,
-    Camera, CameraStatus, ImagemProduto
+    Camera, CameraStatus, ImagemProduto,
+    Categoria, Marca, Recipiente  # Novas tabelas
 )
 from .models_coleta import ImagemProdutoPendente, LoteFotos
-from .models_anotacao import ImagemAnotada, AnotacaoProduto
+from .models_anotacao import ImagemAnotada, AnotacaoProduto, ImagemUnificada, HistoricoTreino, ImagemTreino
+
+
+# ==============================================
+# 📁 CATEGORIAS, MARCAS E RECIPIENTES
+# ==============================================
+
+@admin.register(Categoria)
+class CategoriaAdmin(admin.ModelAdmin):
+    list_display = ['nome', 'descricao', 'ativo', 'total_produtos']
+    list_filter = ['ativo']
+    search_fields = ['nome', 'descricao']
+    
+    def total_produtos(self, obj):
+        return obj.produtos.count()
+    total_produtos.short_description = 'Produtos'
+
+
+@admin.register(Marca)
+class MarcaAdmin(admin.ModelAdmin):
+    list_display = ['nome', 'categoria', 'aliases', 'ativo', 'total_produtos']
+    list_filter = ['ativo', 'categoria']
+    search_fields = ['nome', 'aliases']
+    
+    def total_produtos(self, obj):
+        return obj.produtos.count()
+    total_produtos.short_description = 'Produtos'
+
+
+@admin.register(Recipiente)
+class RecipienteAdmin(admin.ModelAdmin):
+    list_display = ['nome', 'volume_ml', 'aliases', 'ativo', 'total_produtos']
+    list_filter = ['ativo', 'volume_ml']
+    search_fields = ['nome', 'aliases']
+    
+    def total_produtos(self, obj):
+        return obj.produtos.count()
+    total_produtos.short_description = 'Produtos'
 
 
 # ==============================================
@@ -45,10 +83,34 @@ class CodigoBarrasInline(admin.TabularInline):
 
 @admin.register(ProdutoMae)
 class ProdutoMaeAdmin(admin.ModelAdmin):
-    list_display = ['descricao_produto', 'marca', 'tipo', 'preco', 'ativo', 'total_imagens', 'total_codigos']
-    list_filter = ['ativo', 'tipo', 'marca']
+    list_display = ['descricao_produto', 'categoria_fk', 'marca_fk', 'recipiente_fk', 'preco', 'ativo', 
+                    'treinado', 'qtd_imagens_treino', 'taxa_acerto_display', 'precisa_treino_display']
+    list_filter = ['ativo', 'treinado', 'categoria_fk', 'marca_fk', 'recipiente_fk']
     search_fields = ['descricao_produto', 'marca', 'codigos_barras__codigo']
     inlines = [CodigoBarrasInline, ImagemProdutoInline]
+    
+    fieldsets = (
+        ('Informações Básicas', {
+            'fields': ('descricao_produto', 'preco', 'imagem_referencia', 'ativo')
+        }),
+        ('Classificação (para filtros)', {
+            'fields': ('categoria_fk', 'marca_fk', 'recipiente_fk'),
+            'description': 'Use esses campos para organizar e filtrar produtos'
+        }),
+        ('Status de Treinamento IA', {
+            'fields': ('treinado', 'data_treinamento', 'qtd_imagens_treino'),
+            'description': 'Informações sobre o treinamento da IA para este produto'
+        }),
+        ('Métricas de Desempenho IA', {
+            'fields': ('total_deteccoes', 'total_acertos', 'total_erros'),
+            'description': 'Estatísticas de acerto/erro da IA'
+        }),
+        ('Campos Legado (texto livre)', {
+            'fields': ('marca', 'tipo'),
+            'classes': ('collapse',),
+            'description': 'Campos antigos mantidos para compatibilidade'
+        }),
+    )
     
     def total_imagens(self, obj):
         return obj.imagens_treino.count()
@@ -57,6 +119,24 @@ class ProdutoMaeAdmin(admin.ModelAdmin):
     def total_codigos(self, obj):
         return obj.codigos_barras.count()
     total_codigos.short_description = 'Códigos'
+    
+    def taxa_acerto_display(self, obj):
+        taxa = obj.taxa_acerto
+        if obj.total_deteccoes == 0:
+            return "—"
+        if taxa >= 90:
+            return f"✅ {taxa}%"
+        elif taxa >= 70:
+            return f"⚠️ {taxa}%"
+        else:
+            return f"❌ {taxa}%"
+    taxa_acerto_display.short_description = 'Taxa Acerto'
+    
+    def precisa_treino_display(self, obj):
+        if obj.precisa_mais_treino:
+            return "⚠️ SIM"
+        return "✅ OK"
+    precisa_treino_display.short_description = 'Precisa Treino?'
 
 
 @admin.register(CodigoBarrasProdutoMae)
@@ -277,3 +357,69 @@ class AnotacaoProdutoAdmin(admin.ModelAdmin):
     def get_yolo_format(self, obj):
         return obj.get_yolo_format()
     get_yolo_format.short_description = "Formato YOLO"
+
+
+# ==============================================
+#  IMAGENS UNIFICADAS
+# ==============================================
+
+@admin.register(ImagemUnificada)
+class ImagemUnificadaAdmin(admin.ModelAdmin):
+    list_display = ['produto', 'tipo_imagem', 'status', 'num_treinos', 'ativa', 'created_at']
+    list_filter = ['tipo_imagem', 'status', 'ativa', 'foi_augmentada']
+    search_fields = ['produto__descricao_produto', 'descricao']
+    readonly_fields = ['created_at', 'updated_at', 'width', 'height', 'tamanho_bytes']
+    
+    fieldsets = (
+        ('Imagem', {
+            'fields': ('produto', 'arquivo', 'tipo_imagem', 'imagem_original')
+        }),
+        ('Metadados', {
+            'fields': ('descricao', 'ordem', 'width', 'height', 'tamanho_bytes')
+        }),
+        ('Processamento', {
+            'fields': ('tipo_processamento', 'foi_augmentada', 'tipo_augmentacao', 'num_augmentacoes')
+        }),
+        ('Anotacoes', {
+            'fields': ('total_anotacoes', 'bbox_x', 'bbox_y', 'bbox_width', 'bbox_height', 'confianca')
+        }),
+        ('Rastreamento de Treino', {
+            'fields': ('num_treinos', 'ultimo_treino', 'versao_modelo')
+        }),
+        ('Status', {
+            'fields': ('status', 'ativa')
+        }),
+        ('Rastreamento', {
+            'fields': ('enviado_por', 'aprovado_por', 'observacoes', 'created_at', 'updated_at', 'data_envio', 'data_aprovacao')
+        }),
+    )
+
+
+@admin.register(HistoricoTreino)
+class HistoricoTreinoAdmin(admin.ModelAdmin):
+    list_display = ['versao_modelo', 'status', 'total_imagens', 'total_produtos', 'acuracia', 'data_inicio']
+    list_filter = ['status', 'data_inicio']
+    readonly_fields = ['data_inicio', 'data_conclusao']
+    
+    fieldsets = (
+        ('Versao', {
+            'fields': ('versao_modelo', 'status')
+        }),
+        ('Dados de Treino', {
+            'fields': ('total_imagens', 'total_produtos', 'epocas')
+        }),
+        ('Resultados', {
+            'fields': ('acuracia', 'perda')
+        }),
+        ('Rastreamento', {
+            'fields': ('data_inicio', 'data_conclusao', 'parametros', 'observacoes')
+        }),
+    )
+
+
+@admin.register(ImagemTreino)
+class ImagemTreinoAdmin(admin.ModelAdmin):
+    list_display = ['imagem', 'historico_treino', 'foi_usada', 'data_adicao']
+    list_filter = ['foi_usada', 'historico_treino']
+    search_fields = ['imagem__produto__descricao_produto']
+    readonly_fields = ['data_adicao']

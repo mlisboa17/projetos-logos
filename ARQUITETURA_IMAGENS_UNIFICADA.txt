@@ -1,0 +1,170 @@
+# -*- coding: utf-8 -*-
+"""
+DOCUMENTO: Arquitetura de Imagens Unificada com Augmentation
+DATA: 30/11/2025
+"""
+
+ARQUITETURA = """
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║        TABELA UNIFICADA: ImagemUnificada (Consolidacao de todas)         ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+┌─ Campos PRINCIPAIS ─────────────────────────────────────────────────────┐
+│ • id (PK)                                                               │
+│ • produto_id (FK → ProdutoMae)                                          │
+│ • tipo_imagem: 'original', 'processada', 'anotada', 'augmentada'        │
+│ • arquivo: ImageField (arquivo da imagem)                              │
+│ • imagem_original_id (FK → ImagemUnificada, para derivadas)             │
+└─────────────────────────────────────────────────────────────────────────┘
+
+TIPOS DE IMAGEM:
+================
+
+1. ORIGINAL (tipo_imagem='original')
+   ├─ Imagem bruta de treino
+   ├─ Nao processada
+   ├─ Pode ou nao estar anotada
+   └─ Fonte: tabela legada ImagemProduto
+
+2. PROCESSADA (tipo_imagem='processada')
+   ├─ Fundo removido (RGBA com transparencia)
+   ├─ imagem_original → aponta para imagem 'original'
+   ├─ tipo_processamento='fundo_removido'
+   └─ Fonte: tabela legada ImagemProcessada
+
+3. ANOTADA (tipo_imagem='anotada')
+   ├─ Imagem com multiplos produtos marcados
+   ├─ total_anotacoes > 0
+   ├─ bbox_x, bbox_y, bbox_width, bbox_height preenchidos
+   └─ Fonte: tabela legada ImagemAnotada + AnotacaoProduto
+
+4. AUGMENTADA (tipo_imagem='augmentada') ← NOVO!
+   ├─ Transformacoes aplicadas (rotacao, flip, zoom, brightness, etc)
+   ├─ imagem_original → aponta para imagem original/processada
+   ├─ tipo_augmentacao='rotacao_45' ou 'flip_horizontal' ou 'zoom_1.2'
+   ├─ foi_augmentada=True
+   └─ GERADA PELO SCRIPT: aplicar_augmentation.py
+
+
+FLUXO DE PROCESSAMENTO:
+======================
+
+IMAGEM ORIGINAL
+    │
+    ├─→ PROCESSADA (remover fundo)
+    │   │
+    │   └─→ AUGMENTADA v1 (rotacao_45)
+    │   └─→ AUGMENTADA v2 (flip_horizontal)
+    │   └─→ AUGMENTADA v3 (zoom_1.2)
+    │   └─→ AUGMENTADA v4 (brightness_0.8)
+    │
+    └─→ ANOTADA (multiplos produtos)
+        │
+        └─→ AUGMENTADA v1 (rotacao_45)
+        └─→ AUGMENTADA v2 (flip_horizontal)
+        └─→ AUGMENTADA v3 (zoom_1.2)
+        └─→ AUGMENTADA v4 (brightness_0.8)
+
+
+RASTREAMENTO DE TREINO:
+=======================
+
+Campos importantes para treino:
+├─ num_treinos: Quantas vezes a imagem foi usada em treino
+├─ ultimo_treino: Timestamp do ultimo treino
+├─ versao_modelo: Qual versao do modelo (yolov8n_v1, yolov8n_v2, etc)
+│
+└─ Relacionamento com HistoricoTreino:
+   ├─ ImagemTreino (muitos-para-muitos)
+   ├─ Rastreia cada imagem em cada treino
+   └─ foi_usada: boolean para saber se foi incluida ou excluida
+
+
+EXEMPLO DE DADOS:
+=================
+
+┌───────┬───────────────┬──────────┬────────────────────────────┬──────────┐
+│ id    │ produto_id    │ tipo_img │ tipo_augmentacao           │ num_trein│
+├───────┼───────────────┼──────────┼────────────────────────────┼──────────┤
+│ 1     │ 3 (Amstel)    │ original │ '' (nenhuma)               │ 5        │
+│ 2     │ 3 (Amstel)    │ processad│ '' (fundo_removido)        │ 4        │
+│ 3     │ 3 (Amstel)    │ augment  │ 'rotacao_45'               │ 3        │
+│ 4     │ 3 (Amstel)    │ augment  │ 'flip_horizontal'          │ 3        │
+│ 5     │ 3 (Amstel)    │ augment  │ 'zoom_1.2'                 │ 3        │
+│ 6     │ 3 (Amstel)    │ augment  │ 'brightness_0.8'           │ 3        │
+│ 7     │ 3 (Amstel)    │ augment  │ 'rotacao_45,flip_h'        │ 3        │
+└───────┴───────────────┴──────────┴────────────────────────────┴──────────┘
+
+
+SCRIPT DE AUGMENTATION:
+=======================
+
+Nome: aplicar_augmentation.py
+Entrada: ImagemUnificada (tipo_imagem IN ['original', 'processada'])
+Saida: Novas linhas em ImagemUnificada (tipo_imagem='augmentada')
+
+Transformacoes:
+├─ rotacao_45: Rotacao de 45 graus
+├─ rotacao_90: Rotacao de 90 graus
+├─ flip_horizontal: Espelhamento horizontal
+├─ flip_vertical: Espelhamento vertical
+├─ zoom_1.2: Zoom de 1.2x (aproxima 20%)
+├─ zoom_0.8: Zoom de 0.8x (afasta 20%)
+├─ brightness_1.2: Aumenta brilho em 20%
+├─ brightness_0.8: Diminui brilho em 20%
+├─ contrast_1.2: Aumenta contraste em 20%
+└─ contrast_0.8: Diminui contraste em 20%
+
+Combinacoes:
+├─ rotacao_45,flip_h
+├─ zoom_1.2,brightness_1.2
+└─ ... (ate N combinacoes)
+
+
+TABELA AUXILIAR: HistoricoTreino
+=================================
+
+Rastreia cada sessao de treinamento:
+├─ versao_modelo: 'yolov8n_v1', 'yolov8n_v2', etc
+├─ status: 'iniciado', 'processando', 'concluido', 'erro'
+├─ total_imagens: Quantas imagens foram usadas
+├─ total_produtos: Quantos produtos diferentes
+├─ epocas: Numero de epocas de treino
+├─ acuracia: Resultado final do treino
+├─ perda: Loss final
+└─ parametros: JSON com todos os parametros
+
+
+TABELA AUXILIAR: ImagemTreino
+=============================
+
+Vincula ImagemUnificada com HistoricoTreino (muitos-para-muitos):
+├─ imagem_id: FK para ImagemUnificada
+├─ historico_treino_id: FK para HistoricoTreino
+├─ foi_usada: True se foi incluida no treino, False se excluida
+└─ data_adicao: Quando foi adicionada
+
+
+INDICES CRIADOS:
+================
+
+Para performance de queries:
+├─ (produto, tipo_imagem)
+├─ (status)
+├─ (ativa)
+└─ (num_treinos)
+
+
+CONCLUSAO:
+==========
+
+✓ Uma tabela unificada simplifica tudo
+✓ Tipo de imagem permite filtrar facilmente
+✓ Rastreamento de treino impede reutilizacao desnecessaria
+✓ Augmentation gera automaticamente novas linhas
+✓ Todos os atributos sao NULL/ZERO quando nao aplicaveis
+✓ Historico de treino completo para reproducibilidade
+"""
+
+print(ARQUITETURA)

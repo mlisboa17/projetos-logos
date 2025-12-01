@@ -1,0 +1,10 @@
+=== PIPELINE FINAL: YOLO + ZOOM SUPER FOCADO ===
+
+Imagem: imagens_teste/corona_produtos.jpeg
+Data: 30/11/2025 15:40:57
+
+DETECÇÕES YOLO:
+
+TOTAL DE REGIÕES DE TEXTO: 0
+
+RESULTADOS COMBINADOS (YOLO + OCR):

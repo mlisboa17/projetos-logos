@@ -149,9 +149,12 @@
     <div class="card">
         <h2>🚀 Ações Rápidas</h2>
         <a href="{% url 'verifik_produtos_lista' %}" class="btn" style="margin-right: 1rem;">Ver Produtos</a>
+        <a href="{% url 'verifik_deteccao_inteligente' %}" class="btn" style="background: #ff6b6b; margin-right: 1rem;">🤖 Detecção Inteligente</a>
         <a href="{% url 'enviar_fotos' %}" class="btn" style="background: #667eea; margin-right: 1rem;">📸 Enviar Fotos</a>
         <a href="{% url 'anotar_imagem' %}" class="btn" style="background: #11998e; margin-right: 1rem;">📦 Anotar Produtos</a>
         {% if user.is_staff %}
+        <a href="/verifik/coleta/lotes/" class="btn" style="background: #9b59b6; margin-right: 1rem;">📋 Lotes de Imagens</a>
+        <a href="{% url 'visualizar_anotacoes' %}" class="btn" style="background: #e67e22; margin-right: 1rem;">🎯 Ver Anotações</a>
         <a href="{% url 'revisar_fotos' %}" class="btn" style="background: #f39c12; margin-right: 1rem;">🔍 Revisar Fotos</a>
         <a href="{% url 'importar_pasta_standalone' %}" class="btn" style="background: #e67e22; margin-right: 1rem;">📁 Importar Pasta</a>
         <a href="{% url 'importar_dataset' %}" class="btn" style="background: #27ae60;">📥 Importar Dataset</a>

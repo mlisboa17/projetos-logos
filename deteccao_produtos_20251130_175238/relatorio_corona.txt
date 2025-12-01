@@ -1,0 +1,66 @@
+RELATÓRIO DE DETECÇÃO DE PRODUTOS
+========================================
+
+Data/Hora: 30/11/2025 17:52:38
+Método: Detecção HSV + Análise de Forma
+
+ESTATÍSTICAS GERAIS:
+- Total de produtos detectados: 5
+- Confiança média: 0.84
+- Área média: 107444 pixels
+
+CONTAGEM POR TIPO:
+- GARRAFA: 4 produto(s)
+- LATA: 1 produto(s)
+
+CONTAGEM POR COR:
+- DOURADO: 3 produto(s)
+- BRANCO: 2 produto(s)
+
+DETALHES DOS PRODUTOS:
+-------------------------
+
+Produto 62:
+  Tipo: GARRAFA
+  Cor dominante: DOURADO
+  Área: 187566 pixels
+  Proporção (W/H): 0.46
+  Confiança: 1.00
+  Posição (x,y,w,h): (302, 518, 390, 846)
+  Centro: (497, 941)
+
+Produto 79:
+  Tipo: GARRAFA
+  Cor dominante: DOURADO
+  Área: 173683 pixels
+  Proporção (W/H): 0.43
+  Confiança: 1.00
+  Posição (x,y,w,h): (1099, 425, 413, 960)
+  Centro: (1305, 905)
+
+Produto 86:
+  Tipo: GARRAFA
+  Cor dominante: DOURADO
+  Área: 157160 pixels
+  Proporção (W/H): 0.29
+  Confiança: 1.00
+  Posição (x,y,w,h): (742, 378, 282, 978)
+  Centro: (883, 867)
+
+Produto 140:
+  Tipo: LATA
+  Cor dominante: BRANCO
+  Área: 9724 pixels
+  Proporção (W/H): 1.45
+  Confiança: 0.60
+  Posição (x,y,w,h): (1377, 46, 173, 119)
+  Centro: (1463, 105)
+
+Produto 139:
+  Tipo: GARRAFA
+  Cor dominante: BRANCO
+  Área: 9086 pixels
+  Proporção (W/H): 0.31
+  Confiança: 0.59
+  Posição (x,y,w,h): (297, 47, 76, 244)
+  Centro: (335, 169)

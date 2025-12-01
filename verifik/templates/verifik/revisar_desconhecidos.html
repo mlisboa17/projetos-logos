@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revisar Produtos Desconhecidos - VerifiK</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .stats {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .stats-number {
+            font-size: 3em;
+            font-weight: bold;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 30px;
+        }
+        .card {
+            border: 3px solid #e0e0e0;
+            border-radius: 15px;
+            overflow: hidden;
+            background: white;
+            transition: all 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .card-image {
+            width: 100%;
+            height: 300px;
+            object-fit: contain;
+            background: #f5f5f5;
+            padding: 10px;
+        }
+        .card-content {
+            padding: 20px;
+        }
+        .produto-atual {
+            background: #ffe0e0;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #dc3545;
+        }
+        .analise {
+            background: #e8f4f8;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+        .confianca-alta {
+            background: #d4edda;
+            border-left-color: #28a745;
+        }
+        .confianca-media {
+            background: #fff3cd;
+            border-left-color: #ffc107;
+        }
+        .confianca-baixa {
+            background: #f8d7da;
+            border-left-color: #dc3545;
+        }
+        .info-row {
+            margin: 8px 0;
+            font-size: 0.9em;
+        }
+        .info-row strong {
+            display: inline-block;
+            width: 100px;
+        }
+        .sugestao {
+            background: #d4edda;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #28a745;
+        }
+        .sugestao h4 {
+            color: #28a745;
+            margin-bottom: 10px;
+        }
+        .confianca-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-left: 10px;
+        }
+        .confianca-alta-badge {
+            background: #28a745;
+            color: white;
+        }
+        .confianca-media-badge {
+            background: #ffc107;
+            color: #000;
+        }
+        .confianca-baixa-badge {
+            background: #dc3545;
+            color: white;
+        }
+        .btn {
+            padding: 12px 25px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1em;
+            transition: all 0.3s;
+            margin: 5px;
+            display: inline-block;
+        }
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        .btn-warning {
+            background: #ffc107;
+            color: #000;
+        }
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+        .form-select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            font-size: 1em;
+            margin-bottom: 10px;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            margin: 2px;
+        }
+        .tag-forma {
+            background: #667eea;
+            color: white;
+        }
+        .tag-ocr {
+            background: #764ba2;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{% url 'listar_lotes' %}" class="back-link">← Voltar aos Lotes</a>
+        
+        <h1>🤖 Revisão Inteligente de Produtos</h1>
+        <p class="subtitle">A IA analisou as imagens e sugeriu produtos automaticamente. Revise e aceite/rejeite as sugestões.</p>
+
+        <div class="stats">
+            <div class="stats-number">{{ total }}</div>
+            <div>Imagens aguardando classificação</div>
+        </div>
+
+        <div class="grid">
+            {% for item in imagens_analisadas %}
+            <div class="card">
+                <img src="{{ item.imagem.imagem.url }}" alt="Produto" class="card-image">
+                
+                <div class="card-content">
+                    <div class="produto-atual">
+                        <strong>❌ Produto Atual:</strong><br>
+                        {{ item.imagem.produto.descricao_produto }}
+                    </div>
+
+                    <div class="analise {% if item.confianca >= 70 %}confianca-alta{% elif item.confianca >= 40 %}confianca-media{% else %}confianca-baixa{% endif %}">
+                        <div class="info-row">
+                            <strong>🔍 Forma:</strong> 
+                            <span class="tag tag-forma">{{ item.forma|upper }}</span>
+                        </div>
+                        <div class="info-row">
+                            <strong>📝 OCR:</strong><br>
+                            {% if item.ocr_texto %}
+                                {% for palavra in item.ocr_texto %}
+                                    <span class="tag tag-ocr">{{ palavra }}</span>
+                                {% endfor %}
+                            {% else %}
+                                <em>Nenhum texto detectado</em>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    {% if item.produto_sugerido %}
+                    <div class="sugestao">
+                        <h4>
+                            🎯 Sugestão da IA
+                            <span class="confianca-badge {% if item.confianca >= 70 %}confianca-alta-badge{% elif item.confianca >= 40 %}confianca-media-badge{% else %}confianca-baixa-badge{% endif %}">
+                                {{ item.confianca|floatformat:0 }}%
+                            </span>
+                        </h4>
+                        <div class="info-row">
+                            <strong>Produto:</strong><br>
+                            {{ item.produto_sugerido.descricao_produto }}
+                        </div>
+                        <div class="info-row">
+                            <strong>💡 Razão:</strong><br>
+                            {{ item.razao }}
+                        </div>
+
+                        <form method="post" action="{% url 'reclassificar_imagem' item.imagem.id %}" style="margin-top: 15px;">
+                            {% csrf_token %}
+                            <input type="hidden" name="produto_id" value="{{ item.produto_sugerido.id }}">
+                            <button type="submit" class="btn btn-success" onclick="return confirm('Aceitar sugestão da IA e reclassificar esta imagem?')">
+                                ✅ Aceitar Sugestão
+                            </button>
+                        </form>
+                    </div>
+                    {% else %}
+                    <div class="analise confianca-baixa">
+                        <strong>⚠️ Nenhuma sugestão</strong><br>
+                        {{ item.razao }}
+                    </div>
+                    {% endif %}
+
+                    <details>
+                        <summary style="cursor: pointer; padding: 10px; background: #f5f5f5; border-radius: 5px; margin: 10px 0;">
+                            🔧 Reclassificar Manualmente
+                        </summary>
+                        <form method="post" action="{% url 'reclassificar_imagem' item.imagem.id %}" style="margin-top: 15px;">
+                            {% csrf_token %}
+                            <select name="produto_id" class="form-select" required>
+                                <option value="">Selecione o produto correto...</option>
+                                {% for produto in produtos %}
+                                    <option value="{{ produto.id }}">{{ produto.descricao_produto }}</option>
+                                {% endfor %}
+                            </select>
+                            <button type="submit" class="btn btn-warning">
+                                🔄 Reclassificar
+                            </button>
+                        </form>
+                    </details>
+
+                    <form method="post" action="{% url 'rejeitar_imagem' item.imagem.id %}" style="margin-top: 10px;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Rejeitar esta imagem permanentemente?')">
+                            ❌ Rejeitar Imagem
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% empty %}
+            <div style="grid-column: 1/-1; text-align: center; padding: 60px; color: #666;">
+                <h2>✅ Nenhuma imagem precisa de revisão!</h2>
+                <p style="margin-top: 20px;">Todas as imagens estão classificadas corretamente.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

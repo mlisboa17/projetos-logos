@@ -1,0 +1,789 @@
+=== PIPELINE PREPROCESSAMENTO COMPLETO ===
+
+Imagem processada: C:\Users\gabri\Downloads\OneDrive_2025-11-30\BRUNO SENA CASA CAIADA\ProdutosParaImportar\Marca_Spaten (2).jpeg
+Data/Hora: 30/11/2025 17:04:28
+
+CONFIGURAÇÕES DE ZOOM:
+- Zoom Menor (conservador): 1.5x
+- Zoom Maior (agressivo): 3.0x
+- Limite máximo de imagem: 2000px
+
+PRODUTOS PROCESSADOS: 20
+- Produto 1: Área=3041, Ratio=1.98
+- Produto 2: Área=3522, Ratio=3.26
+- Produto 3: Área=18076, Ratio=2.17
+- Produto 4: Área=3875, Ratio=0.39
+- Produto 5: Área=8914, Ratio=1.22
+- Produto 6: Área=20892, Ratio=0.44
+- Produto 7: Área=11891, Ratio=1.72
+- Produto 8: Área=6527, Ratio=0.53
+- Produto 9: Área=44269, Ratio=0.60
+- Produto 10: Área=37384, Ratio=0.81
+- Produto 11: Área=4362, Ratio=0.53
+- Produto 12: Área=27979, Ratio=0.58
+- Produto 13: Área=3752, Ratio=0.66
+- Produto 14: Área=14572, Ratio=0.76
+- Produto 15: Área=38018, Ratio=0.74
+- Produto 16: Área=26401, Ratio=0.75
+- Produto 17: Área=7574, Ratio=0.35
+- Produto 18: Área=22433, Ratio=0.94
+- Produto 19: Área=63817, Ratio=0.83
+- Produto 20: Área=7072, Ratio=2.18
+
+PREPROCESSAMENTO APLICADO:
+- NORMALIZAÇÃO: RGB → Cinza (3 canais → 1 canal)
+- BINARIZAÇÃO: 5 técnicas testadas
+  • Otsu (threshold automático)
+  • Adaptativo Gaussiano
+  • Adaptativo por Média
+  • Manual (threshold 128)
+  • Cinza original (referência)
+- ZOOM DUPLO: testa 2 níveis para cada produto
+- Zoom conservador (1.5x) vs Zoom agressivo (3.0x)
+- Limitado a 2000px para evitar problemas de memória
+- OCR com timeout de 10 segundos
+- TOTAL: 200 versões preprocessadas testadas
+
+TEXTOS DETECTADOS:
+- Produto 1 - MENOR (1.5x) - ADAPTATIVA_GAUSS - Geral: me Pe
+- Produto 1 - MENOR (1.5x) - ADAPTATIVA_MEAN - Palavra: Se
+- Produto 1 - MENOR (1.5x) - CINZA_ORIGINAL - Palavra: te
+- Produto 1 - MAIOR (3.0x) - OTSU - Linha: | = ~. - 2
+- Produto 1 - MAIOR (3.0x) - OTSU - Geral: * ial “a '
+ae is
+~s: ; ~
+4 2 Sage
+s = “ ‘ ra . .
+. - A,
+@ aad
+- Produto 1 - MAIOR (3.0x) - ADAPTATIVA_GAUSS - Palavra: cow
+- Produto 1 - MAIOR (3.0x) - ADAPTATIVA_GAUSS - Geral: av
+wy gf
+
+Ls fi ee jes od
+
+- or. a?
+- Produto 1 - MAIOR (3.0x) - ADAPTATIVA_MEAN - Palavra: aS
+- Produto 1 - MAIOR (3.0x) - ADAPTATIVA_MEAN - Geral: cairn
+- Produto 1 - MAIOR (3.0x) - MANUAL_128 - Linha: | = ~. - 2
+- Produto 1 - MAIOR (3.0x) - MANUAL_128 - Geral: * ial “a '
+ae is
+~s: ; ~
+4 2 Sage
+s = “ ‘ ra . .
+. - A,
+@ aad
+- Produto 1 - MAIOR (3.0x) - CINZA_ORIGINAL - Palavra: ew
+- Produto 1 - MAIOR (3.0x) - CINZA_ORIGINAL - Linha: is ~~ 3 |
+- Produto 1 - MAIOR (3.0x) - CINZA_ORIGINAL - Geral: ba. r a ‘
+fd 4
+= ' , -
+7 oe aie
+. = . ; — . .
+. _ 3
+os Poa
+- Produto 2 - MENOR (1.5x) - OTSU - Geral: —" : |
+- Produto 2 - MENOR (1.5x) - ADAPTATIVA_GAUSS - Palavra: (ema
+- Produto 2 - MENOR (1.5x) - ADAPTATIVA_GAUSS - Geral: PN ECM LN oH
+- Produto 2 - MENOR (1.5x) - ADAPTATIVA_MEAN - Palavra: ema
+- Produto 2 - MENOR (1.5x) - ADAPTATIVA_MEAN - Geral: A ATTTTTITTTL \ Aiepeaeeysens cc
+eae eee s
+- Produto 2 - MENOR (1.5x) - MANUAL_128 - Palavra: oe
+- Produto 2 - MENOR (1.5x) - MANUAL_128 - Geral: gf, "PAM at
+- Produto 2 - MENOR (1.5x) - CINZA_ORIGINAL - Palavra: ee
+- Produto 2 - MENOR (1.5x) - CINZA_ORIGINAL - Geral: ah \ :
+- Produto 2 - MAIOR (3.0x) - OTSU - Geral: \
+i
+- Produto 2 - MAIOR (3.0x) - ADAPTATIVA_GAUSS - Palavra: Nema
+- Produto 2 - MAIOR (3.0x) - ADAPTATIVA_MEAN - Palavra: (Namal
+- Produto 2 - MAIOR (3.0x) - ADAPTATIVA_MEAN - Geral: il ¥ ah gb a eh VA 1 ene tess boy
+a ier ara ama
+\ ete i K =
+Ay ca
+- Produto 2 - MAIOR (3.0x) - MANUAL_128 - Palavra: ol
+- Produto 2 - MAIOR (3.0x) - MANUAL_128 - Geral: ‘af, "PAT at
+- Produto 2 - MAIOR (3.0x) - CINZA_ORIGINAL - Palavra: ee
+- Produto 2 - MAIOR (3.0x) - CINZA_ORIGINAL - Geral: i
+rm
+- Produto 3 - MENOR (1.5x) - OTSU - Palavra: PATEN
+- Produto 3 - MENOR (1.5x) - ADAPTATIVA_GAUSS - Palavra: DRT EN
+- Produto 3 - MENOR (1.5x) - ADAPTATIVA_GAUSS - Geral: Sos same:
+ee | ry eee eee feat Nae
+, Nye, jo eh Ses ca en
+ma ea a Ve Le hs) ee
+oe te Fe ee el m4 oA
+ee COPA CoMd EO n CNEL
+Ae leant ar
+- Produto 3 - MENOR (1.5x) - ADAPTATIVA_MEAN - Palavra: ATEN
+- Produto 3 - MENOR (1.5x) - ADAPTATIVA_MEAN - Geral: a Bre Si ery, {
+- Produto 3 - MENOR (1.5x) - MANUAL_128 - Palavra: PATEN
+- Produto 3 - MENOR (1.5x) - CINZA_ORIGINAL - Palavra: ATEN)
+- Produto 3 - MAIOR (3.0x) - OTSU - Palavra: PATEN
+- Produto 3 - MAIOR (3.0x) - ADAPTATIVA_GAUSS - Palavra: ee TEN
+- Produto 3 - MAIOR (3.0x) - ADAPTATIVA_GAUSS - Geral: aq RC le BA ep in
+- Produto 3 - MAIOR (3.0x) - ADAPTATIVA_MEAN - Palavra: oer Eny
+- Produto 3 - MAIOR (3.0x) - ADAPTATIVA_MEAN - Geral: cha eet Vg yee: aa Tare Tea
+” RN ay rr ic FA | men
+THAR Vea ged = 10}, li wed Ay
+AL (REN “al I ae ee
+RRS av Uh as pasl ion Se
+- Produto 3 - MAIOR (3.0x) - MANUAL_128 - Palavra: PATEN
+- Produto 3 - MAIOR (3.0x) - CINZA_ORIGINAL - Palavra: ATEN)
+- Produto 4 - MENOR (1.5x) - OTSU - Palavra: ut
+- Produto 4 - MENOR (1.5x) - OTSU - Geral: 1.
+- Produto 4 - MENOR (1.5x) - ADAPTATIVA_GAUSS - Palavra: i,
+- Produto 4 - MENOR (1.5x) - ADAPTATIVA_GAUSS - Geral: HN
+- Produto 4 - MENOR (1.5x) - ADAPTATIVA_MEAN - Geral: Hi
+- Produto 4 - MENOR (1.5x) - MANUAL_128 - Palavra: ut
+- Produto 4 - MENOR (1.5x) - MANUAL_128 - Geral: 1.
+- Produto 4 - MENOR (1.5x) - CINZA_ORIGINAL - Palavra: ii
+- Produto 4 - MAIOR (3.0x) - OTSU - Palavra: ut
+- Produto 4 - MAIOR (3.0x) - OTSU - Linha: ut
+- Produto 4 - MAIOR (3.0x) - OTSU - Geral: ut
+- Produto 4 - MAIOR (3.0x) - ADAPTATIVA_GAUSS - Geral: foe | Manne ta
+oo a wan Bi pan he
+Cen en oe ee al
+_o a rane Re 1
+ay ae, i” ee yt
+
+we Fatlee eee te
+- Produto 4 - MAIOR (3.0x) - ADAPTATIVA_MEAN - Geral: dues | Vere i
+Cea BE ER bay 1
+A : WAG. a
+- Produto 4 - MAIOR (3.0x) - MANUAL_128 - Palavra: ut
+- Produto 4 - MAIOR (3.0x) - MANUAL_128 - Linha: ut
+- Produto 4 - MAIOR (3.0x) - MANUAL_128 - Geral: ut
+- Produto 5 - MENOR (1.5x) - OTSU - Palavra: FI
+- Produto 5 - MENOR (1.5x) - OTSU - Linha: FI
+- Produto 5 - MENOR (1.5x) - OTSU - Geral: FI
+- Produto 5 - MENOR (1.5x) - ADAPTATIVA_GAUSS - Palavra: oe.
+- Produto 5 - MENOR (1.5x) - ADAPTATIVA_GAUSS - Geral: bal (cotati
+i rl Ss gurl her
+- Produto 5 - MENOR (1.5x) - ADAPTATIVA_MEAN - Palavra: eo.
+- Produto 5 - MENOR (1.5x) - ADAPTATIVA_MEAN - Geral: a4 v = “0
+- Produto 5 - MENOR (1.5x) - MANUAL_128 - Palavra: FI
+- Produto 5 - MENOR (1.5x) - MANUAL_128 - Linha: FI
+- Produto 5 - MENOR (1.5x) - MANUAL_128 - Geral: FI
+- Produto 5 - MENOR (1.5x) - CINZA_ORIGINAL - Palavra: ho
+- Produto 5 - MENOR (1.5x) - CINZA_ORIGINAL - Linha: ho
+- Produto 5 - MENOR (1.5x) - CINZA_ORIGINAL - Geral: ho
+- Produto 5 - MAIOR (3.0x) - OTSU - Palavra: FJ
+- Produto 5 - MAIOR (3.0x) - OTSU - Linha: FJ
+- Produto 5 - MAIOR (3.0x) - OTSU - Geral: FJ
+- Produto 5 - MAIOR (3.0x) - ADAPTATIVA_GAUSS - Palavra: fea.
+- Produto 5 - MAIOR (3.0x) - ADAPTATIVA_GAUSS - Geral: peel Poy pM
+- Produto 5 - MAIOR (3.0x) - ADAPTATIVA_MEAN - Palavra: oe.
+- Produto 5 - MAIOR (3.0x) - ADAPTATIVA_MEAN - Geral: TM Fete aes a pus
+- Produto 5 - MAIOR (3.0x) - MANUAL_128 - Palavra: ww:
+- Produto 5 - MAIOR (3.0x) - MANUAL_128 - Linha: ww:
+- Produto 5 - MAIOR (3.0x) - MANUAL_128 - Geral: ww:
+- Produto 5 - MAIOR (3.0x) - CINZA_ORIGINAL - Palavra: ho
+- Produto 5 - MAIOR (3.0x) - CINZA_ORIGINAL - Linha: ho
+- Produto 5 - MAIOR (3.0x) - CINZA_ORIGINAL - Geral: ho
+- Produto 6 - MENOR (1.5x) - ADAPTATIVA_GAUSS - Geral: al
+- Produto 6 - MENOR (1.5x) - ADAPTATIVA_MEAN - Geral: eg
+RUINS:
+vy Ny
+ee eas N
+- Produto 6 - MENOR (1.5x) - MANUAL_128 - Geral: _ r
+4
+- Produto 6 - MENOR (1.5x) - CINZA_ORIGINAL - Palavra: al
+- Produto 6 - MENOR (1.5x) - CINZA_ORIGINAL - Linha: al
+- Produto 6 - MAIOR (3.0x) - ADAPTATIVA_GAUSS - Palavra: ‘i
+- Produto 6 - MAIOR (3.0x) - ADAPTATIVA_GAUSS - Geral: . : merit .
+AE tee De eth
+eS Ci PSU Pall
+cantons) eas) aS a fies
+UAT RY 2
+SE SE,
+- Produto 6 - MAIOR (3.0x) - ADAPTATIVA_MEAN - Linha: by
+- Produto 6 - MAIOR (3.0x) - MANUAL_128 - Geral: as ae
+BJ
+;.
+oe |
+‘
+'
+- Produto 6 - MAIOR (3.0x) - CINZA_ORIGINAL - Palavra: al
+- Produto 7 - MENOR (1.5x) - OTSU - Palavra: 'E
+- Produto 7 - MENOR (1.5x) - OTSU - Linha: |e
+- Produto 7 - MENOR (1.5x) - OTSU - Geral: |e
+- Produto 7 - MENOR (1.5x) - ADAPTATIVA_GAUSS - Palavra: 1 _.
+- Produto 7 - MENOR (1.5x) - ADAPTATIVA_GAUSS - Geral: =.
+Way Ate) Af
+fa ee a
+- Produto 7 - MENOR (1.5x) - ADAPTATIVA_MEAN - Palavra: ‘O_.
+- Produto 7 - MENOR (1.5x) - ADAPTATIVA_MEAN - Geral: 7H
+¢,4, te il
+Af t= =
+eae Viren OL eer EB
+- Produto 7 - MENOR (1.5x) - MANUAL_128 - Palavra: 'E
+- Produto 7 - MENOR (1.5x) - MANUAL_128 - Linha: |e
+- Produto 7 - MENOR (1.5x) - MANUAL_128 - Geral: |e
+- Produto 7 - MENOR (1.5x) - CINZA_ORIGINAL - Palavra: ID
+- Produto 7 - MENOR (1.5x) - CINZA_ORIGINAL - Linha: ID
+- Produto 7 - MENOR (1.5x) - CINZA_ORIGINAL - Geral: ID
+- Produto 7 - MAIOR (3.0x) - OTSU - Palavra: 'E
+- Produto 7 - MAIOR (3.0x) - ADAPTATIVA_GAUSS - Palavra: 1p.
+- Produto 7 - MAIOR (3.0x) - ADAPTATIVA_GAUSS - Geral: gah ron . “saat a 3 if! iF \
+- Produto 7 - MAIOR (3.0x) - ADAPTATIVA_MEAN - Palavra: 1.
+- Produto 7 - MAIOR (3.0x) - ADAPTATIVA_MEAN - Geral: OPUEND po 1
+" ral Ly a ee pret po “|
+aca) i Pty, ae ee
+ave cA NReE ey |
+Wop Pep A Na et ; =
+yea vdaa. ee ~ by! ! i ey MSG
+ae PS Teo Nie BY
+- Produto 7 - MAIOR (3.0x) - MANUAL_128 - Palavra: 'E
+- Produto 7 - MAIOR (3.0x) - CINZA_ORIGINAL - Palavra: 1D
+- Produto 7 - MAIOR (3.0x) - CINZA_ORIGINAL - Linha: iD
+- Produto 7 - MAIOR (3.0x) - CINZA_ORIGINAL - Geral: iD
+- Produto 8 - MENOR (1.5x) - ADAPTATIVA_GAUSS - Palavra: ts
+- Produto 8 - MENOR (1.5x) - ADAPTATIVA_GAUSS - Geral: . Rae A
+a ole
+i TMS
+aA [Ge4
+} alt
+ch
+23S
+- Produto 8 - MENOR (1.5x) - ADAPTATIVA_MEAN - Palavra: to
+- Produto 8 - MENOR (1.5x) - ADAPTATIVA_MEAN - Geral: aq P - 4 ; ‘. oy
+
+aN BH):
+
+Bl! ,
+of ‘tH
+
+rll
+
+if P /
+
+f ‘te NS yt it :
+fa SDATEN
+- Produto 8 - MENOR (1.5x) - CINZA_ORIGINAL - Palavra: he
+- Produto 8 - MENOR (1.5x) - CINZA_ORIGINAL - Linha: he
+- Produto 8 - MENOR (1.5x) - CINZA_ORIGINAL - Geral: he
+- Produto 8 - MAIOR (3.0x) - ADAPTATIVA_GAUSS - Geral: 7 Asay a i
+ce fi gh Sf
+| nim eg
+; 2 te BG ra
+a aS el
+’ yo ol F. . —
+; : ms : Leo Sy : | le a
+UP ae pee i at ee . | AE “fe fe ay =
+ee oe  eamconea eS
+- Produto 8 - MAIOR (3.0x) - ADAPTATIVA_MEAN - Palavra: (s
+- Produto 8 - MAIOR (3.0x) - ADAPTATIVA_MEAN - Geral: aaa Fy a | ee
+- | 2 ti | es
+rb fi ge -F
+: y V ayy
+sh Baa 2 y. ’
+TUL VL ear
+i LHL UNA ey ed Uf ee
+- Produto 8 - MAIOR (3.0x) - MANUAL_128 - Palavra: te
+- Produto 8 - MAIOR (3.0x) - MANUAL_128 - Geral: ] }
+od
+4
+4 ‘
+sf ’,
+re
+- Produto 8 - MAIOR (3.0x) - CINZA_ORIGINAL - Palavra: he
+- Produto 8 - MAIOR (3.0x) - CINZA_ORIGINAL - Geral: ‘a
+- Produto 9 - MENOR (1.5x) - OTSU - Geral: ) in
+- Produto 9 - MENOR (1.5x) - ADAPTATIVA_GAUSS - Geral: ee! |
+arid fue enn, e
+FT ages perros Oe gl
+
+z gle WEP ore 9h i
+- Produto 9 - MENOR (1.5x) - ADAPTATIVA_MEAN - Geral: BE i ;
+SPST SS Sysilt Bai)
+ee ve |i
+adi fi; 77
+WN ea re
+Ne SUT NS | pea
+- Produto 9 - MENOR (1.5x) - MANUAL_128 - Geral: a" i’ ft 7 nee
+TS:
+,
+Rll
+r
+a *
+4
+se Paez -
+- Produto 9 - MENOR (1.5x) - CINZA_ORIGINAL - Palavra: iB
+- Produto 9 - MENOR (1.5x) - CINZA_ORIGINAL - Geral: : -
+- Produto 9 - MAIOR (3.0x) - OTSU - Geral: = 4
+Lo
+- Produto 9 - MAIOR (3.0x) - ADAPTATIVA_GAUSS - Palavra: ie
+- Produto 9 - MAIOR (3.0x) - ADAPTATIVA_GAUSS - Geral: aed me eet
+ed fee Foe se
+{ yee Ter asec al
+ae OP ae raps cA Wy geal! ib
+i 1 i 1 Beeaghl DS oF ma an ME q gas alt i
+- Produto 9 - MAIOR (3.0x) - ADAPTATIVA_MEAN - Geral: a dt aa ———- 2 rte.
+“ reo fe y- ben 2 : i " wes
+= FARTS Ee | vy. Yi
+Vir Jie lite mite 7 ,
+
+Pee | eid bs oP meet A. ‘
+
+| roth SI oom At
+A Seite Cees sel nt
+it o~ - Gian THES ie ee
+mal te 7 $ 7S Sac eo oy sala ea — f
+_ ay im ee r ited Wei if ‘ i ; WH WY 2 iH , l ue
+
+-_ in Ve Re ca ar a rt Mi | Woda | C
+
+- 4 ian \ei 1 ia, Dw ne, | | 1 oes” 8 yet
+- Produto 9 - MAIOR (3.0x) - MANUAL_128 - Palavra: 1g
+- Produto 9 - MAIOR (3.0x) - MANUAL_128 - Geral: ; J Y i ~bd |
+rs q
+»
+
+r
+ry
+
+a
+
+4
+’ \
+= \ - x < ~ .
+- Produto 9 - MAIOR (3.0x) - CINZA_ORIGINAL - Palavra: ig
+- Produto 9 - MAIOR (3.0x) - CINZA_ORIGINAL - Geral: - -
+ae
+- Produto 10 - MENOR (1.5x) - OTSU - Palavra: I~
+- Produto 10 - MENOR (1.5x) - ADAPTATIVA_GAUSS - Palavra: [=
+- Produto 10 - MENOR (1.5x) - ADAPTATIVA_GAUSS - Geral: \ aay aes cumeeee
+fw =<Sb Sg mA: y
+- Produto 10 - MENOR (1.5x) - ADAPTATIVA_MEAN - Palavra: [=
+- Produto 10 - MENOR (1.5x) - ADAPTATIVA_MEAN - Linha: =: =
+- Produto 10 - MENOR (1.5x) - ADAPTATIVA_MEAN - Geral: My. : 4 “
+: ih ayy
+ae fF
+qt.
+up! Re
+aah Sats Woe a iy a
+Eee OS ee
+- Produto 10 - MENOR (1.5x) - MANUAL_128 - Palavra: I~
+- Produto 10 - MENOR (1.5x) - CINZA_ORIGINAL - Palavra: [—
+- Produto 10 - MAIOR (3.0x) - OTSU - Palavra: I~
+- Produto 10 - MAIOR (3.0x) - OTSU - Linha: im
+- Produto 10 - MAIOR (3.0x) - OTSU - Geral: -
+,
+
+‘
+
+‘
+
+a r
+
+1 (
+
+h
+
+1 ’
+- Produto 10 - MAIOR (3.0x) - ADAPTATIVA_GAUSS - Geral: ; 3 Oey
+J: pS rs es eran oer on jl rier is
+ny, Han ae yh jr
+Jf I; sy asd SOP ai woe gh {WE | : 1
+- Produto 10 - MAIOR (3.0x) - ADAPTATIVA_MEAN - Linha: [=
+- Produto 10 - MAIOR (3.0x) - ADAPTATIVA_MEAN - Geral: rn ; 7. be -
+} Mt Boke
+. ee NEE BR er mi) an ee pean FAY
+4 Nene Cn fice ae EY! } na
+: | SR SS ue Neo a fd eee j*,
+PNR Ta.
+~~ 0s 1 | tf a a ee a he .
+: Tee te an i he, a SS i aos,
+- Produto 10 - MAIOR (3.0x) - MANUAL_128 - Palavra: I~
+- Produto 10 - MAIOR (3.0x) - MANUAL_128 - Linha: im
+- Produto 10 - MAIOR (3.0x) - MANUAL_128 - Geral: -
+,
+
+‘
+
+‘
+
+a r
+
+1 (
+
+h
+
+1 ’
+- Produto 10 - MAIOR (3.0x) - CINZA_ORIGINAL - Palavra: I~
+- Produto 10 - MAIOR (3.0x) - CINZA_ORIGINAL - Linha: im
+- Produto 10 - MAIOR (3.0x) - CINZA_ORIGINAL - Geral: x
+,
+
+‘
+
+‘
+
+J r
+
+1 (
+
+b
+
+' ’
+- Produto 11 - MENOR (1.5x) - ADAPTATIVA_GAUSS - Geral: , ES ae aaene fi a
+| oe i
+OSAP:
+- Produto 11 - MENOR (1.5x) - ADAPTATIVA_MEAN - Geral: ae i
+- Produto 11 - MENOR (1.5x) - CINZA_ORIGINAL - Palavra: Ps
+- Produto 11 - MAIOR (3.0x) - OTSU - Geral: fo
+> ..
+a,
+me
+|
+. -
+- Produto 11 - MAIOR (3.0x) - ADAPTATIVA_GAUSS - Geral: rao) ee ae
+Log
+- Produto 11 - MAIOR (3.0x) - MANUAL_128 - Geral: fo
+> ..
+a,
+me
+|
+. -
+- Produto 11 - MAIOR (3.0x) - CINZA_ORIGINAL - Palavra: Ps
+- Produto 11 - MAIOR (3.0x) - CINZA_ORIGINAL - Geral: sg
+‘ >:
+a
+»
+|
+\ ‘sy
+- Produto 12 - MENOR (1.5x) - ADAPTATIVA_GAUSS - Geral: coe, teen Madea! ai arn ie
+se) ES aE. Ve ,
+AY Be {
+FPN
+res ya OR oul ort
+- Produto 12 - MENOR (1.5x) - ADAPTATIVA_MEAN - Geral: | OT Tee
+‘AN ANE
+HIN
+: — + BN
+- Produto 12 - MENOR (1.5x) - MANUAL_128 - Geral: ol
+- Produto 12 - MAIOR (3.0x) - ADAPTATIVA_GAUSS - Geral: 1 ae pL ee a oe en
+Jopéiationy Vp upon
+.! fe Tb SR ee Boe
+WY Po ee
+oe Fo OS a orci 1 LSD) ee |f
+coe Ls. me i): 17 a! La NY | i i! he fia 2 fy |
+aH MG TU ee aM Hf, eb | ‘ Ie q "
+wr ese ah OE Et fee MES oy A a Wide do. wd
+wath Ne RSE ee IS
+yt * ‘. ee eee
+- Produto 12 - MAIOR (3.0x) - ADAPTATIVA_MEAN - Geral: Moh Sr pean) eee * a oat
+lbs t | ;
+Led ie
+CNT QB ee
+? y : V4 He
+}- F Fenn & soi — aan |. . 2
+- Produto 12 - MAIOR (3.0x) - MANUAL_128 - Geral: —_
+- Produto 13 - MENOR (1.5x) - ADAPTATIVA_GAUSS - Palavra: Sf
+- Produto 13 - MENOR (1.5x) - ADAPTATIVA_GAUSS - Geral: ee Ny
+\
+an
+is
+!
+- Produto 13 - MENOR (1.5x) - ADAPTATIVA_MEAN - Palavra: if
+- Produto 13 - MENOR (1.5x) - ADAPTATIVA_MEAN - Geral: i
+Ne
+- Produto 13 - MAIOR (3.0x) - ADAPTATIVA_GAUSS - Palavra: iS
+- Produto 13 - MAIOR (3.0x) - ADAPTATIVA_GAUSS - Geral: f ot Sete
+° . af 5
+
+4 ope py
+J . N,
+1 *
+"y
+- Produto 13 - MAIOR (3.0x) - ADAPTATIVA_MEAN - Geral: . : I >, mm
+r }
+2 &
+: Vee sg.g
+Poy t, i t
+! 2K,
+;
+4 ’
+1 wot
+- Produto 14 - MENOR (1.5x) - OTSU - Palavra: 4.
+- Produto 14 - MENOR (1.5x) - OTSU - Linha: 4.
+- Produto 14 - MENOR (1.5x) - OTSU - Geral: 4.
+- Produto 14 - MENOR (1.5x) - ADAPTATIVA_MEAN - Geral: i 1
+\ 1 Meee
+- Produto 14 - MENOR (1.5x) - MANUAL_128 - Palavra: ll
+- Produto 14 - MENOR (1.5x) - MANUAL_128 - Geral: |, {
+q (
+- Produto 14 - MAIOR (3.0x) - OTSU - Palavra: 4.
+- Produto 14 - MAIOR (3.0x) - OTSU - Linha: 4.
+- Produto 14 - MAIOR (3.0x) - OTSU - Geral: 4.
+- Produto 14 - MAIOR (3.0x) - ADAPTATIVA_GAUSS - Geral: y |: ! to “s sae Sf eras i pt i H me
+oc 0 Sen) oer 2 em. wie pe Uh {
+- Produto 14 - MAIOR (3.0x) - ADAPTATIVA_MEAN - Palavra: \ |
+- Produto 14 - MAIOR (3.0x) - ADAPTATIVA_MEAN - Geral: \ at nineteen. ”
+4416 a Milo eee 247)’. “, {
+WAT a: ct tet
+Hoh Cn Oe en
+. * wl } '
+aan Ea |
+ty { A) cw “LV? - =
+- Produto 14 - MAIOR (3.0x) - MANUAL_128 - Geral: +, 7 7— 4
+
+q _——
+
+b
+L.
+{
+
+(
+|
+*
+- Produto 15 - MENOR (1.5x) - OTSU - Palavra: Sf
+- Produto 15 - MENOR (1.5x) - OTSU - Linha: Sf
+- Produto 15 - MENOR (1.5x) - OTSU - Geral: Sf
+- Produto 15 - MENOR (1.5x) - ADAPTATIVA_GAUSS - Palavra: a:
+- Produto 15 - MENOR (1.5x) - ADAPTATIVA_GAUSS - Geral: b ey
+i) uy
+Es Bs 1 aa
+SANE Athy 2
+Soe Bere fut
+; “ ” ay iene
+- Produto 15 - MENOR (1.5x) - ADAPTATIVA_MEAN - Palavra: a:
+- Produto 15 - MENOR (1.5x) - ADAPTATIVA_MEAN - Geral: ey amr,
+- Produto 15 - MENOR (1.5x) - MANUAL_128 - Palavra: Sf
+- Produto 15 - MENOR (1.5x) - MANUAL_128 - Linha: Sf
+- Produto 15 - MENOR (1.5x) - MANUAL_128 - Geral: Sf
+- Produto 15 - MENOR (1.5x) - CINZA_ORIGINAL - Palavra: S§
+- Produto 15 - MENOR (1.5x) - CINZA_ORIGINAL - Linha: S§
+- Produto 15 - MENOR (1.5x) - CINZA_ORIGINAL - Geral: S§
+- Produto 15 - MAIOR (3.0x) - OTSU - Geral: ‘
+‘
+
+‘
+
+‘
+a r
+1 (
+h
+e
+
+| ra
+- Produto 15 - MAIOR (3.0x) - ADAPTATIVA_GAUSS - Palavra: a:
+- Produto 15 - MAIOR (3.0x) - ADAPTATIVA_GAUSS - Geral: = rR} ao a
+{. oF “a “at was , wt
+Poti, CRE G :
+a brass eae
+
+oy ‘¢, “4
+: ot te) wtp
+
+; “fou an an
+
+aR eee Dt ee a ee
+- Produto 15 - MAIOR (3.0x) - ADAPTATIVA_MEAN - Palavra: a:
+- Produto 15 - MAIOR (3.0x) - ADAPTATIVA_MEAN - Geral: Ss. —
+
+4 —_ 3 bars ; 503 .
+- AOG5 * Ly re
+1 ned} a . Y. vd
+, ‘ z: eee it —_
+xX S : ; if —ae
+
+= _ ist 2 eee ~ -
+
+ees ey rel Hy =
+
+(ORS Spectr
+- Produto 15 - MAIOR (3.0x) - MANUAL_128 - Geral: ‘
+‘
+
+‘
+
+‘
+a r
+1 (
+h
+e
+
+| ra
+- Produto 15 - MAIOR (3.0x) - CINZA_ORIGINAL - Palavra: S§
+- Produto 15 - MAIOR (3.0x) - CINZA_ORIGINAL - Geral: ‘
+¥
+
+‘
+
+‘
+J r
+1 (
+i
+e
+
+: ra
+- Produto 16 - MENOR (1.5x) - OTSU - Palavra: (gt
+- Produto 16 - MENOR (1.5x) - ADAPTATIVA_GAUSS - Palavra: (ee
+- Produto 16 - MENOR (1.5x) - ADAPTATIVA_GAUSS - Linha: i )
+- Produto 16 - MENOR (1.5x) - ADAPTATIVA_GAUSS - Geral: =o 5 et io
+me ed HICH
+- Produto 16 - MENOR (1.5x) - ADAPTATIVA_MEAN - Palavra: ie
+- Produto 16 - MENOR (1.5x) - ADAPTATIVA_MEAN - Geral: " 4 ihe Bess
+alent hs
+mo lie The Ud 8a
+oy | Oh Seale
+ae q i eid
+- Produto 16 - MENOR (1.5x) - MANUAL_128 - Palavra: (go
+- Produto 16 - MENOR (1.5x) - MANUAL_128 - Geral: (eu
+- Produto 16 - MENOR (1.5x) - CINZA_ORIGINAL - Palavra: lel
+- Produto 16 - MAIOR (3.0x) - OTSU - Palavra: (go
+- Produto 16 - MAIOR (3.0x) - ADAPTATIVA_GAUSS - Palavra: ar
+- Produto 16 - MAIOR (3.0x) - ADAPTATIVA_GAUSS - Geral: Pk hee — 4s a i ae
+rt ) Neu ce
+- Produto 16 - MAIOR (3.0x) - ADAPTATIVA_MEAN - Palavra: (ee
+- Produto 16 - MAIOR (3.0x) - ADAPTATIVA_MEAN - Linha: (ee
+- Produto 16 - MAIOR (3.0x) - ADAPTATIVA_MEAN - Geral: b 8 J in . Tay, i Bi a aes :
+ia H el we YS
+HH ) ey ithe
+| +4, ama et *y foe Zz matte Soe
+- Produto 16 - MAIOR (3.0x) - MANUAL_128 - Palavra: (go
+- Produto 16 - MAIOR (3.0x) - MANUAL_128 - Geral: 1 7
+- Produto 16 - MAIOR (3.0x) - CINZA_ORIGINAL - Palavra: lel
+- Produto 17 - MENOR (1.5x) - ADAPTATIVA_GAUSS - Geral: AVE | i
+- Produto 17 - MENOR (1.5x) - ADAPTATIVA_MEAN - Geral: healed ae
+
+HB TQ i:
+—, ; Ih iw i
+ap ca
+- Produto 17 - MAIOR (3.0x) - ADAPTATIVA_GAUSS - Geral: hb AUS ay) |
+4 ie | (3 |? a |
+on I i 1 wig Nd db
+- Produto 17 - MAIOR (3.0x) - ADAPTATIVA_MEAN - Geral: | nel i" 5 ie ; i (4
+
+Bee EL bad & j i
+
+on en, 1 AL Be tei d iis '
+=! AN Jou |
+1 i Hg ie ~ Ba ~ We ' |
+28 aaa LULU
+- Produto 18 - MENOR (1.5x) - OTSU - Palavra: F al
+- Produto 18 - MENOR (1.5x) - OTSU - Linha: g”
+- Produto 18 - MENOR (1.5x) - OTSU - Geral: g”
+- Produto 18 - MENOR (1.5x) - ADAPTATIVA_GAUSS - Palavra: ‘”
+- Produto 18 - MENOR (1.5x) - ADAPTATIVA_GAUSS - Geral: ees
+er alae
+SEF ay NS
+repeat =
+Ne A)
+Bee
+bas
+- Produto 18 - MENOR (1.5x) - ADAPTATIVA_MEAN - Linha: g z Ec ie f
+- Produto 18 - MENOR (1.5x) - ADAPTATIVA_MEAN - Geral: SeAnVvAS
+ae,
+ye Ke =
+a
+RR 4 .
+cr Ae
+faces ih
+i bh 7.
+- Produto 18 - MENOR (1.5x) - MANUAL_128 - Palavra: F al
+- Produto 18 - MENOR (1.5x) - MANUAL_128 - Linha: g”
+- Produto 18 - MENOR (1.5x) - MANUAL_128 - Geral: g”
+- Produto 18 - MENOR (1.5x) - CINZA_ORIGINAL - Palavra: F a
+- Produto 18 - MAIOR (3.0x) - OTSU - Palavra: F al
+- Produto 18 - MAIOR (3.0x) - ADAPTATIVA_GAUSS - Palavra: il
+- Produto 18 - MAIOR (3.0x) - ADAPTATIVA_GAUSS - Geral: atte LE pe tae 2
+ay staat st gt grt T tee
+Te a PES ee 4 , :
+PFA
+- Produto 18 - MAIOR (3.0x) - ADAPTATIVA_MEAN - Palavra: i”
+- Produto 18 - MAIOR (3.0x) - ADAPTATIVA_MEAN - Geral: ads
+Sesto et ALA gi -_
+Pe SANT =
++ URES NGA La
+J ve Ye
+- Produto 18 - MAIOR (3.0x) - MANUAL_128 - Palavra: F al
+- Produto 18 - MAIOR (3.0x) - CINZA_ORIGINAL - Palavra: F al
+- Produto 18 - MAIOR (3.0x) - CINZA_ORIGINAL - Linha: ge
+- Produto 18 - MAIOR (3.0x) - CINZA_ORIGINAL - Geral: ge
+- Produto 19 - MENOR (1.5x) - OTSU - Palavra: of
+- Produto 19 - MENOR (1.5x) - OTSU - Geral: -*
+iol
+[—
+- Produto 19 - MENOR (1.5x) - ADAPTATIVA_GAUSS - Palavra: on
+- Produto 19 - MENOR (1.5x) - ADAPTATIVA_GAUSS - Linha: : | fi a
+- Produto 19 - MENOR (1.5x) - ADAPTATIVA_GAUSS - Geral: a
+evi. de
+- Produto 19 - MENOR (1.5x) - ADAPTATIVA_MEAN - Palavra: ae
+- Produto 19 - MENOR (1.5x) - ADAPTATIVA_MEAN - Geral: i
+Pt reel lorem | att SSEERLY ry
+: real iy) ead BS 1 ty lacey mae A hel I
+oo h | ae . wa Ke
+ez Hl os -. —eiwe _— y bate 7 ane - (Eee
+- Produto 19 - MENOR (1.5x) - MANUAL_128 - Palavra: iis
+- Produto 19 - MENOR (1.5x) - MANUAL_128 - Geral: | |
+
+a
+
+Wey, ‘sete: ; ~:
+DN, RE ,
+‘| a :"
+- Produto 19 - MENOR (1.5x) - CINZA_ORIGINAL - Palavra: af
+- Produto 19 - MENOR (1.5x) - CINZA_ORIGINAL - Geral: a
+val
+=
+- Produto 19 - MAIOR (2.5x) - OTSU - Palavra: of
+- Produto 19 - MAIOR (2.5x) - ADAPTATIVA_GAUSS - Geral: : ci ie Rin ie rE -& |! ke 7 1 ay ae iT! “exe |
+CY oh) | pe a de J Pee Me
+{ . : i om | J } 5 f “ ry,
+es you ty ve x
+- Produto 19 - MAIOR (2.5x) - ADAPTATIVA_MEAN - Palavra: oe
+- Produto 19 - MAIOR (2.5x) - ADAPTATIVA_MEAN - Geral: ag |
+: ; Me et - fet y
+{ i Vee gl Gott az a \ ; = : q ere oN
+ite a? aeerrs —: ian To Yeeretey. oT 2
+4 HAR oe pe PoP D ceed RD PE
+i NY AS eT ay Ay! ae ped Raelel. Ee) roa
+tf ss ene ine is one | pea esa P| ped
+0 fen ey Ere oy t . 4 ; a 9 Ra =< a ty one an aon A .
+gion mht ‘ : i, od Ole * oy pee Cow | Ps Sat oe . J ; Dr pe its. nee,
+, Lary 4d eS eae ; ry We Wt ayo ak to
+- Produto 19 - MAIOR (2.5x) - MANUAL_128 - Geral: ee sel
+
+” —=_
+\) tef.. ‘ete. ~
+‘| ' ss : |
+- Produto 19 - MAIOR (2.5x) - CINZA_ORIGINAL - Palavra: af
+- Produto 20 - MENOR (1.5x) - ADAPTATIVA_GAUSS - Palavra: _ fies
+- Produto 20 - MENOR (1.5x) - ADAPTATIVA_GAUSS - Geral: se
+- Produto 20 - MENOR (1.5x) - ADAPTATIVA_MEAN - Palavra: _fies
+- Produto 20 - MENOR (1.5x) - ADAPTATIVA_MEAN - Geral: ‘FE
+Vt AR
+BRAM ys: <n Gees MA ‘
+
+et: |, P Le aR a S8 S  e i
+
+— a ae . — *: oy kes oa
+
+wT ye betel ‘ . po TL _ :
+- Produto 20 - MENOR (1.5x) - MANUAL_128 - Palavra: ES
+- Produto 20 - MENOR (1.5x) - CINZA_ORIGINAL - Palavra: Be]
+- Produto 20 - MENOR (1.5x) - CINZA_ORIGINAL - Linha: Be.
+- Produto 20 - MENOR (1.5x) - CINZA_ORIGINAL - Geral: | =e
+- Produto 20 - MAIOR (2.8x) - ADAPTATIVA_GAUSS - Palavra: ies
+- Produto 20 - MAIOR (2.8x) - ADAPTATIVA_GAUSS - Linha: af = , ,
+- Produto 20 - MAIOR (2.8x) - ADAPTATIVA_GAUSS - Geral: STIL HERP Te ee GN \
+EAT CERRA poansememnn |;
+
+ee bn ee ;
+Lee gy peste ; ‘ 7 at
+- Produto 20 - MAIOR (2.8x) - ADAPTATIVA_MEAN - Palavra: _fies
+- Produto 20 - MAIOR (2.8x) - ADAPTATIVA_MEAN - Geral: 7 aa
+be ‘af Ai
+be i ; -
+OP a i a AS wea pte oe Sfp
+bc tar ener ne ar freee - ES I wae rn rn So | ©
+- Produto 20 - MAIOR (2.8x) - MANUAL_128 - Palavra: ES
+- Produto 20 - MAIOR (2.8x) - MANUAL_128 - Geral: _ s —-y
+- Produto 20 - MAIOR (2.8x) - CINZA_ORIGINAL - Palavra: Be]
+
+=== PRODUTOS IDENTIFICADOS PELO SISTEMA ===
+Baseado na análise de texto e contexto:
+
+• Cerveja Spaten (identificada pelo nome da imagem)

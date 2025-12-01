@@ -1,0 +1,24 @@
+{
+  "arquivo": "WhatsApp Image 2025-11-30 at 22.25.20.jpeg",
+  "caminho": "C:\\Users\\gabri\\Downloads\\WhatsApp Image 2025-11-30 at 22.25.20.jpeg",
+  "timestamp": "2025-11-30T23:27:50.082300",
+  "tempo_processamento": 8.099623,
+  "regioes_processadas": 1,
+  "textos_extraidos": 2,
+  "textos_detalhes": [
+    {
+      "texto": "DMA ESET o ——S Sea\no: SEE TES cei É\nE, gs ee Laie\ne EEE TE CNE, Rana\nacim 1 frsSEso eee Foil aye Tag\nMe eee LESÃO)\nphe el ee\nshe's Sa ele Ev (a\nCASS ew Bee fato\n— ess. ED Ba\nDER Sy ene Ee\nHe ee face ay\n“as EN 7, SRS. Laie if",
+      "versao": "threshold",
+      "config": "bloco_uniforme",
+      "confianca": 178
+    },
+    {
+      "texto": "Lo ASE oe ee\nal VERDE tas A ji,\nPE ey Lot\no Oe ae .",
+      "versao": "morfologia",
+      "config": "bloco_uniforme",
+      "confianca": 39
+    }
+  ],
+  "marcas_detectadas": [],
+  "total_marcas_unicas": 0
+}

@@ -1,0 +1,41 @@
+{
+  "arquivo": "WhatsApp Image 2025-11-30 at 22.25.20.jpeg",
+  "caminho": "C:\\Users\\gabri\\Downloads\\WhatsApp Image 2025-11-30 at 22.25.20.jpeg",
+  "timestamp": "2025-11-30T23:25:57.519023",
+  "tempo_processamento": 4.001862,
+  "textos_extraidos": 5,
+  "textos_completos": [
+    {
+      "texto": "cd = a",
+      "versao_img": 0,
+      "config_ocr": 0,
+      "confianca": 30
+    },
+    {
+      "texto": "| F | :",
+      "versao_img": 0,
+      "config_ocr": 2,
+      "confianca": 21
+    },
+    {
+      "texto": "@ —<s5 Sy) |\n’ a\n7 =\n; |\n' =,",
+      "versao_img": 1,
+      "config_ocr": 0,
+      "confianca": 145
+    },
+    {
+      "texto": "Vv",
+      "versao_img": 2,
+      "config_ocr": 1,
+      "confianca": 8
+    },
+    {
+      "texto": "Vv",
+      "versao_img": 2,
+      "config_ocr": 3,
+      "confianca": 4
+    }
+  ],
+  "marcas_detectadas": [],
+  "total_marcas": 0
+}

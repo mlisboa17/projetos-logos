@@ -1,0 +1,71 @@
+=== PIPELINE ZOOM DUPLO CONFIGURÁVEL ===
+
+Imagem processada: C:\Users\gabri\Downloads\OneDrive_2025-11-30\BRUNO SENA CASA CAIADA\ProdutosParaImportar\Marca_Spaten (2).jpeg
+Data/Hora: 30/11/2025 16:46:16
+
+CONFIGURAÇÕES DE ZOOM:
+- Zoom Menor (conservador): 1.5x
+- Zoom Maior (agressivo): 3.0x
+- Limite máximo de imagem: 2000px
+
+PRODUTOS PROCESSADOS: 4
+- Produto 1: Área=56770, Ratio=0.82
+- Produto 2: Área=19139, Ratio=0.74
+- Produto 3: Área=402598, Ratio=1.40
+- Produto 4: Área=34422, Ratio=0.94
+
+OTIMIZAÇÕES APLICADAS:
+- ZOOM DUPLO: testa 2 níveis para cada produto
+- Zoom conservador (1.5x) vs Zoom agressivo (3.0x)
+- Limitado a 2000px para evitar problemas de memória
+- OCR com timeout de 10 segundos
+- Redimensionamento automático para OCR
+- Seleção automática do melhor resultado
+
+TEXTOS DETECTADOS:
+- Produto 1 - MENOR (1.5x) - Rápido - Palavra: at
+- Produto 1 - MAIOR (3.0x) - Rápido - Linha: mt
+- Produto 2 - MAIOR (3.0x) - Rápido - Geral: a
+  A E
+- Produto 3 - MENOR (1.5x) - Rápido - Palavra: ae
+- Produto 3 - MENOR (1.5x) - Rápido - Geral: 7  ret e
+VPATE re SPAT
+- Produto 3 - MAIOR (1.7x) - Rápido - Palavra: ae
+- Produto 3 - MAIOR (1.7x) - Rápido - Geral: O À ado E 4 ma E
+Bec  7 is 
+mr  RR 
+ 3 
+na A É oF
+- Produto 4 - MENOR (1.5x) - Rápido - Palavra: ra
+- Produto 4 - MENOR (1.5x) - Rápido - Geral: ed i
+a 2 a ee 7
+a  we
+AS Ae d
+E
+  
+RR
+a
+
+by
+- Produto 4 - MAIOR (3.0x) - Rápido - Palavra: ra
+- Produto 4 - MAIOR (3.0x) - Rápido - Geral: DN 7
+ne 3
+ Ase ane 
+Res y vw yy 
+ é cá  a
+pw e
+Ase
+7 es A 
+  AY bs
+are 1
+
+=== PRODUTOS IDENTIFICADOS PELO SISTEMA ===
+Baseado na análise de texto e contexto:
+
+• Cerveja Spaten (identificada pelo nome da imagem)
+
+=== ARQUIVOS GERADOS ===
+1_sem_fundo.jpg - Imagem com fundo removido
+2_produto_X_zoom.jpg - Produtos com zoom controlado
+3_produto_X_ocr.jpg - Produtos otimizados para OCR
+4_relatorio_otimizado.txt - Este relatório

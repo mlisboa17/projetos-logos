@@ -1,0 +1,83 @@
+=== RESULTADOS DO PIPELINE OCR ===
+
+Imagem processada: imagens_teste/corona_produtos.jpeg
+Data/Hora: 30/11/2025 14:59:05
+
+=== TEXTOS DETECTADOS ===
+EasyOCR: Jpromo (conf: 0.43)
+EasyOCR: Qrmno (conf: 0.30)
+EasyOCR: Voronito; ` (conf: 0.23)
+EasyOCR: Éxtra (conf: 0.79)
+EasyOCR: [4lPa (conf: 0.01)
+EasyOCR: ERv (conf: 0.65)
+EasyOCR: Je (conf: 0.06)
+EasyOCR: @ (conf: 0.48)
+EasyOCR: @9@" (conf: 0.06)
+EasyOCR: Liodeo,s (conf: 0.15)
+EasyOCR: GGico (conf: 0.04)
+EasyOCR: 40a0d (conf: 0.01)
+EasyOCR: [ero (conf: 0.71)
+EasyOCR: Extra (conf: 1.00)
+EasyOCR: (65ub (conf: 0.03)
+EasyOCR: Exytcoia (conf: 0.10)
+EasyOCR: curib (conf: 0.00)
+EasyOCR: Deacc (conf: 0.17)
+EasyOCR: Giu (conf: 0.34)
+EasyOCR: rslugs _ (conf: 0.03)
+Tesseract (Padrão): rea
+
+so
+
+Rd
+
+Reta
+Tesseract (Português): Nr Ma o CE | A OS
+Meme Rapto ODE ENG aa
+Ema si 2 | E e IN . as . E e o B i vi e E = EN pm
+NE A a a PA
+Ro Y qu Diria a t. RR Cr ans A RE tas
+Ram 4 15! 4 | E Beje: 15d É SAE EN a, A AI A
+AN nã Vos es [li ac na
+dee: a ma LATA pi Rc | É ARO TE ts ça o) !
+er RÉ lroma | N Corondz=
+A ENNRAS Gar: ans ER) A ris Ya : isca ea espiga, Se
+O UT (À pista: Extra Rae RR a PAR
+Eh VA ES E ti oto Epa. | is RE Cs
+da E Níêneo] tas TES (read
+SAE a DE rg PESA E RA E E RURE Sae
+ER LIS TE ac nçA y d areia Ne , " SA NS n CM SE . RR A
+ea ET O UBS a ES
+E mm [re ENIO TO
+Cd SA a
+sc dc
+re San RESP RR TAN ces AÇO RAS SRD NRO RENA
+Sue Pan ERR UE RENA SORO doa aaa ERAS
+Tesseract (Inglês): Rp Rei OTE: | ERR MaRine
+ome a OEE TESS
+coaer etka | .° > JS . Mah ; Be re at F Le Sout = Sa a
+SAESN VRAIN RIS ey ea pee Vile BE
+a a me Haga (es ig Pa Clip Ee aS Rel
+Bat 4 ‘S fey an Bie: onde Cae SEN s peak ae
+“oN Q. WS rea [Ay os a
+he as ae “A ‘a cet] | iE SE ett ee i
+ee Ae ee) treme! | NN Goronts
+“auth Voys oy i an Ont Pane) WV ett Ve : HSS ea opine, egies
+a oT LN eet: Extra o, eeesty ks Pee a eg Tey see
+Bee) EN Gy We Ne | See sae) OP SSS
+ane Ce a eS
+sete. ra Pe EEN oe Ree H Reeaesnee
+LS AIS Y f Teed ’ =a oS . “oy Sah Pai . ee ‘
+eee ee eet Ghee
+aw SS SD Sa
+Se ee
+ee eo
+Bivens ean es Se eee ee ea eS ae
+Sie re PEON ES Ne DN CR Mee Re Se re ae
+Tesseract (Texto livre): ih:
+
+=== ARQUIVOS GERADOS ===
+1. 1_escala_cinza.jpg - Imagem em escala de cinza
+2. 2_binarizada.jpg - Após binarização adaptativa
+3. 3_sem_ruido.jpg - Após remoção de ruído
+4. 4_preprocessada_final.jpg - Versão final para OCR
+5. 5_resultados_ocr.txt - Este arquivo de resultados

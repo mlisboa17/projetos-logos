@@ -61,10 +61,10 @@
                     <div style="border: 2px solid #e9ecef; border-radius: 8px; overflow: hidden; transition: transform 0.2s;">
                         <img src="{{ imagem.imagem.url }}" alt="{{ imagem.produto.descricao_produto }}" 
                              style="width: 100%; height: 150px; object-fit: cover; cursor: pointer;"
-                             onclick="abrirModal('{{ imagem.imagem.url }}', '{{ imagem.produto.descricao_produto }}', '{{ imagem.enviado_por.get_full_name|default:imagem.enviado_por.username }}')">
+                             onclick="abrirModal('{{ imagem.imagem.url }}', '{{ imagem.produto.descricao_produto }}', '{% if imagem.enviado_por %}{{ imagem.enviado_por.get_full_name|default:imagem.enviado_por.username }}{% else %}Sistema{% endif %}')">
                         <div style="padding: 0.5rem; background: #f8f9fa;">
                             <div style="font-size: 0.85rem; font-weight: 600; color: #2c3e50; margin-bottom: 0.25rem;">{{ imagem.produto.descricao_produto }}</div>
-                            <div style="font-size: 0.75rem; color: #7f8c8d;">por {{ imagem.enviado_por.get_full_name|default:imagem.enviado_por.username }}</div>
+                            <div style="font-size: 0.75rem; color: #7f8c8d;">por {% if imagem.enviado_por %}{{ imagem.enviado_por.get_full_name|default:imagem.enviado_por.username }}{% else %}Sistema{% endif %}</div>
                         </div>
                     </div>
                     {% endfor %}
@@ -121,10 +121,10 @@
                     <div style="border: 2px solid #e9ecef; border-radius: 8px; overflow: hidden; transition: transform 0.2s;">
                         <img src="{{ imagem.imagem.url }}" alt="Imagem Anotada" 
                              style="width: 100%; height: 150px; object-fit: cover; cursor: pointer;"
-                             onclick="abrirModal('{{ imagem.imagem.url }}', 'Imagem Anotada ({{ imagem.total_anotacoes }} produtos)', '{{ imagem.enviado_por.get_full_name|default:imagem.enviado_por.username }}')">
+                             onclick="abrirModal('{{ imagem.imagem.url }}', 'Imagem Anotada ({{ imagem.total_anotacoes }} produtos)', '{% if imagem.enviado_por %}{{ imagem.enviado_por.get_full_name|default:imagem.enviado_por.username }}{% else %}Sistema{% endif %}')">
                         <div style="padding: 0.5rem; background: #f0fff4;">
                             <div style="font-size: 0.85rem; font-weight: 600; color: #2c3e50; margin-bottom: 0.25rem;">{{ imagem.total_anotacoes }} produto(s) marcado(s)</div>
-                            <div style="font-size: 0.75rem; color: #7f8c8d;">por {{ imagem.enviado_por.get_full_name|default:imagem.enviado_por.username }}</div>
+                            <div style="font-size: 0.75rem; color: #7f8c8d;">por {% if imagem.enviado_por %}{{ imagem.enviado_por.get_full_name|default:imagem.enviado_por.username }}{% else %}Sistema{% endif %}</div>
                         </div>
                     </div>
                     {% endfor %}

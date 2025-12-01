@@ -239,6 +239,186 @@ class PerfilGestor(models.Model):
 # 📦 SEÇÃO 2: PRODUTOS (CATÁLOGO GLOBAL)
 # ============================================================
 
+class Categoria(models.Model):
+    """
+    Categorias de produtos (Cerveja, Refrigerante, Água, etc.)
+    
+    ╔══════════════════════════════════════════════════════════╗
+    ║  EXEMPLOS DE CATEGORIAS:                                 ║
+    ║  - Cerveja                                               ║
+    ║  - Refrigerante                                          ║
+    ║  - Água                                                  ║
+    ║  - Energético                                            ║
+    ║  - Suco                                                  ║
+    ║  - Chocolate                                             ║
+    ║  - Salgadinho                                            ║
+    ║  - Cigarro                                               ║
+    ╚══════════════════════════════════════════════════════════╝
+    """
+    
+    nome = models.CharField(
+        max_length=100,
+        unique=True,
+        help_text='Nome da categoria (ex: Cerveja, Refrigerante)'
+    )
+    
+    descricao = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        help_text='Descrição da categoria'
+    )
+    
+    ativo = models.BooleanField(
+        default=True,
+        help_text='Se está ativo no sistema'
+    )
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Categoria'
+        verbose_name_plural = 'Categorias'
+        ordering = ['nome']
+
+    def __str__(self):
+        return self.nome
+
+
+class Marca(models.Model):
+    """
+    Marcas de produtos (Heineken, Coca-Cola, Amstel, etc.)
+    
+    ╔══════════════════════════════════════════════════════════╗
+    ║  EXEMPLOS DE MARCAS:                                     ║
+    ║                                                          ║
+    ║  CERVEJAS:                                               ║
+    ║  - Heineken, Amstel, Stella Artois, Budweiser            ║
+    ║  - Brahma, Skol, Antarctica, Bohemia                     ║
+    ║  - Corona, Devassa, Eisenbahn, Lokal                     ║
+    ║                                                          ║
+    ║  REFRIGERANTES:                                          ║
+    ║  - Coca-Cola, Pepsi, Guaraná Antarctica                  ║
+    ║  - Fanta, Sprite, Schweppes, Sukita, Kuat                ║
+    ╚══════════════════════════════════════════════════════════╝
+    """
+    
+    nome = models.CharField(
+        max_length=100,
+        unique=True,
+        help_text='Nome da marca (ex: Heineken, Coca-Cola)'
+    )
+    
+    aliases = models.TextField(
+        blank=True,
+        null=True,
+        help_text='Aliases separados por vírgula para OCR (ex: COCA,COLA,COCA-COLA)'
+    )
+    
+    categoria = models.ForeignKey(
+        'Categoria',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='marcas',
+        help_text='Categoria principal desta marca'
+    )
+    
+    ativo = models.BooleanField(
+        default=True,
+        help_text='Se está ativo no sistema'
+    )
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Marca'
+        verbose_name_plural = 'Marcas'
+        ordering = ['nome']
+
+    def __str__(self):
+        return self.nome
+    
+    def get_aliases_list(self):
+        """Retorna lista de aliases para busca OCR"""
+        if self.aliases:
+            return [a.strip().upper() for a in self.aliases.split(',')]
+        return []
+
+
+class Recipiente(models.Model):
+    """
+    Tipos de recipientes/embalagens para produtos
+    
+    ╔══════════════════════════════════════════════════════════╗
+    ║  EXEMPLOS DE RECIPIENTES:                                ║
+    ║                                                          ║
+    ║  CERVEJAS:                                               ║
+    ║  - LATA (350ml)                                          ║
+    ║  - LATÃO (473ml, 550ml)                                  ║
+    ║  - LONG NECK (330ml, 355ml)                              ║
+    ║  - GARRAFA (600ml, 1L)                                   ║
+    ║                                                          ║
+    ║  REFRIGERANTES:                                          ║
+    ║  - LATA (350ml)                                          ║
+    ║  - PET 600ML                                             ║
+    ║  - PET 1L                                                ║
+    ║  - PET 2L                                                ║
+    ╚══════════════════════════════════════════════════════════╝
+    """
+    
+    nome = models.CharField(
+        max_length=100,
+        unique=True,
+        help_text='Nome do recipiente (ex: LATA, LONG NECK, PET 1L)'
+    )
+    
+    volume_ml = models.IntegerField(
+        null=True,
+        blank=True,
+        help_text='Volume em mililitros (ex: 350, 473, 600, 1000, 2000)'
+    )
+    
+    aliases = models.TextField(
+        blank=True,
+        null=True,
+        help_text='Aliases separados por vírgula para OCR (ex: LT,CAN,LATINHA)'
+    )
+    
+    descricao = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        help_text='Descrição do recipiente'
+    )
+    
+    ativo = models.BooleanField(
+        default=True,
+        help_text='Se está ativo no sistema'
+    )
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Recipiente'
+        verbose_name_plural = 'Recipientes'
+        ordering = ['nome']
+
+    def __str__(self):
+        if self.volume_ml:
+            return f"{self.nome} ({self.volume_ml}ml)"
+        return self.nome
+    
+    def get_aliases_list(self):
+        """Retorna lista de aliases para busca OCR"""
+        if self.aliases:
+            return [a.strip().upper() for a in self.aliases.split(',')]
+        return []
+
+
 class ProdutoMae(models.Model):
     """
     Produto do catálogo MESTRE (compartilhado globalmente)
@@ -274,18 +454,47 @@ class ProdutoMae(models.Model):
         help_text='Nome/descrição do produto (ex: Coca-Cola 350ml)'
     )
     
+    # === FKs para filtros e organização ===
+    categoria_fk = models.ForeignKey(
+        'Categoria',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='produtos',
+        help_text='Categoria do produto (Cerveja, Refrigerante, etc.)'
+    )
+    
+    marca_fk = models.ForeignKey(
+        'Marca',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='produtos',
+        help_text='Marca do produto (Heineken, Coca-Cola, etc.)'
+    )
+    
+    recipiente_fk = models.ForeignKey(
+        'Recipiente',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='produtos',
+        help_text='Recipiente/embalagem (Lata, Long Neck, PET, etc.)'
+    )
+    
+    # === Campos texto (legado - manter para compatibilidade) ===
     marca = models.CharField(
         max_length=100,
         blank=True,
         null=True,
-        help_text='Marca do produto (ex: Coca-Cola, Pepsi)'
+        help_text='Marca do produto (texto livre - legado)'
     )
     
     tipo = models.CharField(
         max_length=100,
         blank=True,
         null=True,
-        help_text='Categoria (ex: Refrigerante, Chocolate, Cerveja)'
+        help_text='Categoria (texto livre - legado)'
     )
     
     preco = models.DecimalField(
@@ -306,6 +515,58 @@ class ProdutoMae(models.Model):
         default=True,
         help_text='Se False, produto descontinuado'
     )
+    
+    # === Campos de Treinamento da IA ===
+    treinado = models.BooleanField(
+        default=False,
+        help_text='Se a IA já foi treinada para reconhecer este produto'
+    )
+    
+    data_treinamento = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text='Data/hora do último treinamento'
+    )
+    
+    qtd_imagens_treino = models.IntegerField(
+        default=0,
+        help_text='Quantidade de imagens usadas no treino'
+    )
+    
+    # === Métricas de Desempenho da IA ===
+    total_deteccoes = models.IntegerField(
+        default=0,
+        help_text='Quantas vezes a IA detectou este produto'
+    )
+    
+    total_acertos = models.IntegerField(
+        default=0,
+        help_text='Quantas vezes a detecção foi confirmada como correta'
+    )
+    
+    total_erros = models.IntegerField(
+        default=0,
+        help_text='Quantas vezes a detecção foi corrigida (estava errada)'
+    )
+    
+    @property
+    def taxa_acerto(self):
+        """Retorna a taxa de acerto em porcentagem"""
+        if self.total_deteccoes == 0:
+            return 0
+        return round((self.total_acertos / self.total_deteccoes) * 100, 2)
+    
+    @property
+    def precisa_mais_treino(self):
+        """Indica se o produto precisa de mais treinamento"""
+        # Precisa treinar se: não treinado OU taxa de acerto < 80% OU poucas imagens
+        if not self.treinado:
+            return True
+        if self.qtd_imagens_treino < 5:
+            return True
+        if self.total_deteccoes > 10 and self.taxa_acerto < 80:
+            return True
+        return False
     
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

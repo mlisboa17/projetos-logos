@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lote #{{ lote.id }} - VerifiK</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1B4D3E 0%, #D4AF37 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        h1 {
+            color: #1B4D3E;
+            font-size: 2em;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #1B4D3E 0%, #2a6b54 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            display: block;
+        }
+        .stat-label {
+            font-size: 0.85em;
+            opacity: 0.9;
+        }
+        .produto-group {
+            margin: 40px 0;
+            border: 3px solid #1B4D3E;
+            border-radius: 20px;
+            padding: 30px;
+            background: linear-gradient(to bottom, #f8f9fa 0%, white 100%);
+        }
+        .produto-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #D4AF37;
+        }
+        .produto-title {
+            font-size: 1.8em;
+            color: #1B4D3E;
+            font-weight: bold;
+        }
+        .produto-stats {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .mini-stat {
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+        .mini-stat-warning { background: #ffc107; color: #000; }
+        .mini-stat-success { background: #28a745; color: white; }
+        .mini-stat-danger { background: #dc3545; color: white; }
+        .images-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .image-card {
+            border: 2px solid #ddd;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s;
+            background: white;
+        }
+        .image-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .image-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            cursor: pointer;
+        }
+        .image-wrapper {
+            position: relative;
+            width: 100%;
+            height: 200px;
+        }
+        .image-wrapper canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .image-info {
+            padding: 15px;
+        }
+        .image-meta {
+            font-size: 0.85em;
+            color: #666;
+            margin: 5px 0;
+        }
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 0.9em;
+        }
+        .btn-primary {
+            background: #D4AF37;
+            color: #1B4D3E;
+        }
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        .btn-lg {
+            padding: 15px 30px;
+            font-size: 1.1em;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+        .badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            display: inline-block;
+        }
+        .badge-warning { background: #ffc107; color: #000; }
+        .badge-success { background: #28a745; color: white; }
+        .badge-danger { background: #dc3545; color: white; }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #1B4D3E;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .bulk-actions {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .alert {
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .alert-success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .alert-warning {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            color: #856404;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+        }
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 90%;
+            max-height: 90%;
+            margin-top: 50px;
+        }
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{% url 'listar_lotes' %}" class="back-link">← Voltar aos Lotes</a>
+        
+        <div class="header">
+            <div>
+                <h1>📦 Lote #{{ lote.id }}</h1>
+                <p style="color: #666; margin-top: 10px;">{{ lote.nome }}</p>
+                <p style="color: #999; font-size: 0.9em;">
+                    Enviado por 
+                    {% if lote.enviado_por %}
+                        {{ lote.enviado_por.get_full_name|default:lote.enviado_por.username }}
+                    {% else %}
+                        Sistema
+                    {% endif %}
+                    em {{ lote.data_criacao|date:"d/m/Y H:i" }}
+                </p>
+            </div>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="stats">
+            <div class="stat-card">
+                <span class="stat-number">{{ stats.total }}</span>
+                <span class="stat-label">Total de Imagens</span>
+            </div>
+            <div class="stat-card" style="background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%);">
+                <span class="stat-number">{{ stats.pendentes }}</span>
+                <span class="stat-label">Pendentes</span>
+            </div>
+            <div class="stat-card" style="background: linear-gradient(135deg, #28a745 0%, #218838 100%);">
+                <span class="stat-number">{{ stats.aprovadas }}</span>
+                <span class="stat-label">Aprovadas</span>
+            </div>
+            <div class="stat-card" style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);">
+                <span class="stat-number">{{ stats.rejeitadas }}</span>
+                <span class="stat-label">Rejeitadas</span>
+            </div>
+        </div>
+
+        {% if stats.pendentes > 0 %}
+        <div class="bulk-actions">
+            <h3 style="margin-bottom: 15px; color: #1B4D3E;">⚡ Ação Rápida</h3>
+            <a href="{% url 'aprovar_lote_completo' lote.id %}" class="btn btn-success btn-lg" onclick="return confirm('Aprovar TODAS as {{ stats.pendentes }} imagens pendentes de TODOS os produtos e adicioná-las ao dataset de treinamento?')">
+                ✅ Aprovar TUDO ({{ stats.pendentes }} imagens)
+            </a>
+        </div>
+        {% endif %}
+
+        <h2 style="color: #1B4D3E; margin: 40px 0 20px 0;">📋 Imagens Agrupadas por Produto</h2>
+
+        <!-- Filtro de Status -->
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 30px; text-align: center;">
+            <label style="font-weight: 600; margin-right: 15px; color: #1B4D3E;">🔍 Filtrar por Status:</label>
+            <select id="filtroStatus" onchange="filtrarPorStatus()" style="padding: 10px 20px; border-radius: 8px; border: 2px solid #1B4D3E; font-size: 1em; cursor: pointer; background: white;">
+                <option value="todas">📋 Todas</option>
+                <option value="pendente" selected>⏳ Apenas Pendentes</option>
+                <option value="aprovada">✅ Apenas Aprovadas</option>
+                <option value="rejeitada">❌ Apenas Rejeitadas</option>
+            </select>
+        </div>
+
+        {% for grupo in grupos_produtos %}
+        <div class="produto-group">
+            <div class="produto-header">
+                <div>
+                    <div class="produto-title">🏷️ {{ grupo.produto.descricao_produto }}</div>
+                    <div class="produto-stats" style="margin-top: 10px;">
+                        <span class="mini-stat mini-stat-warning">⏳ {{ grupo.pendentes }} Pendente{{ grupo.pendentes|pluralize }}</span>
+                        <span class="mini-stat mini-stat-success">✅ {{ grupo.aprovadas }} Aprovada{{ grupo.aprovadas|pluralize }}</span>
+                        {% if grupo.rejeitadas > 0 %}
+                        <span class="mini-stat mini-stat-danger">❌ {{ grupo.rejeitadas }} Rejeitada{{ grupo.rejeitadas|pluralize }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% if grupo.pendentes > 0 %}
+                <a href="{% url 'aprovar_produto_lote' lote.id grupo.produto.id %}" 
+                   class="btn btn-success btn-lg" 
+                   onclick="return confirm('Aprovar todas as {{ grupo.pendentes }} imagens PENDENTES de \'{{ grupo.produto.descricao_produto }}\' e adicioná-las ao dataset de treinamento?')">
+                    ✅ Aprovar este Produto ({{ grupo.pendentes }})
+                </a>
+                {% endif %}
+            </div>
+
+            <div class="images-grid">
+                {% for imagem in grupo.imagens %}
+                <div class="image-card" data-status="{{ imagem.status }}">
+                    <div class="image-wrapper">
+                        <canvas id="canvas-{{ imagem.id }}" 
+                                data-src="{{ imagem.imagem.url }}"
+                                data-bbox="{{ imagem.bbox_data|default:'' }}"
+                                onclick="abrirModal('{{ imagem.imagem.url }}')">
+                        </canvas>
+                    </div>
+                    <div class="image-info">
+                        <div class="image-meta">
+                            Status: 
+                            {% if imagem.status == 'pendente' %}
+                                <span class="badge badge-warning">⏳ Pendente</span>
+                            {% elif imagem.status == 'aprovada' %}
+                                <span class="badge badge-success">✅ Aprovada</span>
+                            {% else %}
+                                <span class="badge badge-danger">❌ Rejeitada</span>
+                            {% endif %}
+                        </div>
+                        
+                        {% if imagem.status == 'pendente' %}
+                        <div style="margin-top: 15px;">
+                            <a href="{% url 'aprovar_imagem' imagem.id %}" class="btn btn-success">✅ Aprovar</a>
+                            <a href="{% url 'rejeitar_imagem' imagem.id %}" class="btn btn-danger">❌ Rejeitar</a>
+                        </div>
+                        {% endif %}
+                        
+                        {% if imagem.aprovado_por %}
+                        <div class="image-meta" style="margin-top: 10px;">
+                            Por: 
+                            {% if imagem.aprovado_por %}
+                                {{ imagem.aprovado_por.get_full_name|default:imagem.aprovado_por.username }}
+                            {% else %}
+                                Sistema
+                            {% endif %}
+                            <br>
+                            Em: {{ imagem.data_aprovacao|date:"d/m/Y H:i" }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Modal para visualizar imagem em tamanho grande -->
+    <div id="imageModal" class="modal" onclick="fecharModal()">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
+    <script>
+        // Filtrar imagens por status
+        function filtrarPorStatus() {
+            const filtro = document.getElementById('filtroStatus').value;
+            const cards = document.querySelectorAll('.image-card');
+            
+            cards.forEach(card => {
+                if (filtro === 'todas') {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = card.dataset.status === filtro ? 'block' : 'none';
+                }
+            });
+        }
+        
+        // Desenhar bboxes em todos os canvas
+        document.addEventListener('DOMContentLoaded', function() {
+            // Aplicar filtro inicial (pendentes)
+            filtrarPorStatus();
+            
+            const canvases = document.querySelectorAll('canvas[data-src]');
+            
+            canvases.forEach(canvas => {
+                const imgSrc = canvas.dataset.src;
+                const bboxData = canvas.dataset.bbox;
+                
+                if (!bboxData) return;
+                
+                const img = new Image();
+                img.onload = function() {
+                    const ctx = canvas.getContext('2d');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    
+                    // Desenhar imagem
+                    ctx.drawImage(img, 0, 0);
+                    
+                    // Parsear e desenhar bbox
+                    try {
+                        const bboxes = JSON.parse(bboxData);
+                        if (bboxes && bboxes.length > 0) {
+                            const bbox = bboxes[0]; // Primeiro bbox
+                            
+                            // Converter coordenadas normalizadas para pixels
+                            const xCenter = bbox.x * img.width;
+                            const yCenter = bbox.y * img.height;
+                            const width = bbox.width * img.width;
+                            const height = bbox.height * img.height;
+                            
+                            const x1 = xCenter - width / 2;
+                            const y1 = yCenter - height / 2;
+                            
+                            // Desenhar retângulo MAGENTA DESTACADO
+                            ctx.strokeStyle = '#FF00FF';
+                            ctx.lineWidth = 4;
+                            ctx.strokeRect(x1, y1, width, height);
+                            
+                            // Adicionar sombra para destaque
+                            ctx.shadowColor = '#FF00FF';
+                            ctx.shadowBlur = 10;
+                            ctx.strokeRect(x1, y1, width, height);
+                            ctx.shadowBlur = 0;
+                            
+                            // Label com fundo
+                            ctx.fillStyle = '#FF00FF';
+                            ctx.fillRect(x1, y1 - 25, 150, 25);
+                            ctx.fillStyle = '#000';
+                            ctx.font = 'bold 14px Arial';
+                            ctx.fillText('ESTE PRODUTO ✓', x1 + 5, y1 - 7);
+                        }
+                    } catch (e) {
+                        console.error('Erro ao desenhar bbox:', e);
+                    }
+                };
+                img.src = imgSrc;
+            });
+        });
+        
+        function abrirModal(src) {
+            document.getElementById('imageModal').style.display = 'block';
+            document.getElementById('modalImage').src = src;
+        }
+        
+        function fecharModal() {
+            document.getElementById('imageModal').style.display = 'none';
+        }
+        
+        // Fechar com ESC
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                fecharModal();
+            }
+        });
+    </script>
+</body>
+</html>

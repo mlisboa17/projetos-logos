@@ -1,0 +1,377 @@
+{% extends 'verifik/base.html' %}
+
+{% block title %}Enviar Fotos com Detecção - VerifiK{% endblock %}
+
+{% block content %}
+<style>
+    .bbox-container {
+        position: relative;
+        display: inline-block;
+        max-width: 100%;
+    }
+    .bbox-canvas {
+        border: 2px solid #667eea;
+        border-radius: 8px;
+        cursor: crosshair;
+        max-width: 100%;
+        height: auto;
+    }
+    .bbox-info {
+        margin-top: 10px;
+        padding: 10px;
+        background: #f0f0f0;
+        border-radius: 5px;
+        font-size: 0.9em;
+    }
+    .bbox-rect {
+        border: 3px solid #FF00FF;
+        position: absolute;
+        pointer-events: none;
+        box-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+    }
+    .btn-detect {
+        background: linear-gradient(135deg, #FF00FF 0%, #FF69B4 100%);
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        margin: 5px;
+    }
+    .btn-detect:hover {
+        opacity: 0.9;
+    }
+    .loading {
+        display: none;
+        color: #667eea;
+        font-weight: bold;
+    }
+</style>
+
+<div class="container" style="max-width: 1400px; margin: 2rem auto; padding: 0 1rem;">
+    <div class="card" style="background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 2rem;">
+        <div class="card-header" style="border-bottom: 2px solid #667eea; padding-bottom: 1rem; margin-bottom: 2rem;">
+            <h2 style="color: #667eea; margin: 0;">🤖 Enviar Fotos com Detecção Automática</h2>
+            <p style="color: #7f8c8d; margin-top: 0.5rem;">Nossa IA detecta automaticamente latas e garrafas nas fotos</p>
+        </div>
+
+        <form method="post" enctype="multipart/form-data" id="uploadForm">
+            {% csrf_token %}
+            
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+                <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #2c3e50;">
+                    Produto *
+                </label>
+                <select name="produto_id" id="id_produto" required style="width: 100%; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem;">
+                    <option value="">Selecione um produto...</option>
+                    {% for produto in produtos %}
+                        <option value="{{ produto.id }}">{{ produto.descricao_produto }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+                <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #2c3e50;">
+                    Imagens * (Múltiplas imagens aceitas)
+                </label>
+                <input type="file" name="fotos" id="id_imagens" accept="image/*" multiple required style="width: 100%; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 8px;">
+                <small style="color: #7f8c8d; margin-top: 0.5rem; display: block;">
+                    📌 Nossa IA irá detectar automaticamente latas e garrafas. Você pode ajustar os bboxes manualmente se necessário.
+                </small>
+            </div>
+
+            <!-- Campo oculto para enviar bboxes -->
+            <input type="hidden" name="bboxes_data" id="bboxes_data" value="[]">
+
+            <!-- Preview com detecção -->
+            <div id="imagePreviewContainer"></div>
+
+            <div class="form-actions" style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;">
+                <a href="{% url 'listar_lotes' %}" class="btn btn-secondary" style="padding: 0.75rem 2rem; border: none; border-radius: 8px; text-decoration: none; background: #95a5a6; color: white;">
+                    Cancelar
+                </a>
+                <button type="submit" class="btn btn-primary" style="padding: 0.75rem 2rem; border: none; border-radius: 8px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; cursor: pointer;">
+                    📤 Enviar Fotos
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+let imageData = [];  // Array para armazenar dados de cada imagem
+
+document.getElementById('id_imagens').addEventListener('change', async function(e) {
+    const container = document.getElementById('imagePreviewContainer');
+    container.innerHTML = '';
+    imageData = [];
+    
+    if (!this.files.length) return;
+    
+    for (let i = 0; i < this.files.length; i++) {
+        const file = this.files[i];
+        const reader = new FileReader();
+        
+        reader.onload = async function(event) {
+            const imgElement = await createImagePreview(file, event.target.result, i);
+            container.appendChild(imgElement);
+            
+            // Detectar automaticamente
+            await detectarProdutosAuto(file, i);
+        };
+        
+        reader.readAsDataURL(file);
+        
+        // Inicializar dados da imagem
+        imageData[i] = {
+            file: file,
+            bboxes: [],
+            currentBbox: null,
+            canvas: null,
+            ctx: null
+        };
+    }
+});
+
+async function createImagePreview(file, dataUrl, index) {
+    const div = document.createElement('div');
+    div.style.cssText = 'margin-bottom: 2rem; padding: 1.5rem; border: 2px solid #e0e0e0; border-radius: 12px; background: #fafafa;';
+    
+    div.innerHTML = `
+        <h4 style="color: #667eea; margin-bottom: 1rem;">📷 ${file.name}</h4>
+        <div class="bbox-container">
+            <canvas id="canvas_${index}" class="bbox-canvas"></canvas>
+        </div>
+        <div class="bbox-info">
+            <div id="loading_${index}" class="loading">🔍 Detectando produtos...</div>
+            <div id="info_${index}">
+                <strong>Instruções:</strong><br>
+                • Clique em "🤖 Detectar Auto" para detecção automática<br>
+                • Ou desenhe manualmente: clique e arraste na imagem<br>
+                • <span style="color: #FF00FF; font-weight: bold;">Retângulo magenta</span> indica o produto detectado
+            </div>
+            <div style="margin-top: 10px;">
+                <button type="button" class="btn-detect" onclick="detectarProdutosAuto(imageData[${index}].file, ${index})">
+                    🤖 Detectar Auto
+                </button>
+                <button type="button" class="btn-detect" onclick="limparBboxes(${index})" style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);">
+                    🗑️ Limpar Bbox
+                </button>
+            </div>
+        </div>
+    `;
+    
+    setTimeout(() => {
+        const canvas = document.getElementById(`canvas_${index}`);
+        const ctx = canvas.getContext('2d');
+        const img = new Image();
+        
+        img.onload = function() {
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+            
+            imageData[index].canvas = canvas;
+            imageData[index].ctx = ctx;
+            imageData[index].img = img;
+            
+            setupCanvasDrawing(canvas, index);
+        };
+        
+        img.src = dataUrl;
+    }, 100);
+    
+    return div;
+}
+
+async function detectarProdutosAuto(file, index) {
+    const loading = document.getElementById(`loading_${index}`);
+    const info = document.getElementById(`info_${index}`);
+    
+    if (!file) {
+        file = imageData[index].file;
+    }
+    
+    loading.style.display = 'block';
+    info.style.display = 'none';
+    
+    try {
+        const formData = new FormData();
+        formData.append('image', file);
+        
+        const response = await fetch('/verifik/coleta/api/detectar-produtos/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: formData
+        });
+        
+        const data = await response.json();
+        
+        if (data.success && data.bboxes.length > 0) {
+            imageData[index].bboxes = data.bboxes;
+            redesenharCanvas(index);
+            
+            // Mostrar análise inteligente
+            let html = `✅ <strong>${data.count} produto(s) detectado(s)!</strong><br>`;
+            
+            data.bboxes.forEach((bbox, i) => {
+                html += `<div style="margin-top: 10px; padding: 10px; background: #f0f8ff; border-left: 4px solid #FF00FF; border-radius: 5px;">`;
+                html += `<strong>Produto ${i + 1}:</strong><br>`;
+                html += `🔍 Forma: <strong>${bbox.forma}</strong> (${(bbox.confidence * 100).toFixed(1)}%)<br>`;
+                
+                if (bbox.ocr_texto && bbox.ocr_texto.length > 0) {
+                    html += `📝 OCR: ${bbox.ocr_texto.slice(0, 5).join(', ')}<br>`;
+                }
+                
+                if (bbox.produto_sugerido_id) {
+                    html += `🎯 Sugestão: <strong style="color: #28a745;">Produto ID ${bbox.produto_sugerido_id}</strong> `;
+                    html += `(${bbox.confianca_sugestao.toFixed(0)}% confiança)<br>`;
+                    html += `💡 Motivo: ${bbox.razao_sugestao}<br>`;
+                    
+                    // Botão para aplicar sugestão
+                    html += `<button type="button" onclick="aplicarSugestao(${bbox.produto_sugerido_id})" 
+                             style="margin-top: 5px; padding: 5px 10px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                             ✓ Aplicar Sugestão
+                             </button>`;
+                } else {
+                    html += `⚠️ Nenhum produto sugerido (baixa confiança)<br>`;
+                }
+                
+                html += `</div>`;
+            });
+            
+            info.innerHTML = html;
+        } else {
+            info.innerHTML = '⚠️ Nenhum produto detectado. Tente desenhar manualmente.';
+        }
+    } catch (error) {
+        console.error('Erro na detecção:', error);
+        info.innerHTML = '❌ Erro na detecção automática. Desenhe manualmente.';
+    } finally {
+        loading.style.display = 'none';
+        info.style.display = 'block';
+    }
+}
+
+function aplicarSugestao(produtoId) {
+    document.getElementById('id_produto').value = produtoId;
+    alert('✅ Produto selecionado automaticamente! Confira se está correto antes de enviar.');
+}
+
+function setupCanvasDrawing(canvas, index) {
+    let isDrawing = false;
+    let startX, startY;
+    
+    canvas.addEventListener('mousedown', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        startX = (e.clientX - rect.left) * (canvas.width / rect.width);
+        startY = (e.clientY - rect.top) * (canvas.height / rect.height);
+        isDrawing = true;
+        
+        imageData[index].currentBbox = { x: startX, y: startY, width: 0, height: 0 };
+    });
+    
+    canvas.addEventListener('mousemove', (e) => {
+        if (!isDrawing) return;
+        
+        const rect = canvas.getBoundingClientRect();
+        const currentX = (e.clientX - rect.left) * (canvas.width / rect.width);
+        const currentY = (e.clientY - rect.top) * (canvas.height / rect.height);
+        
+        imageData[index].currentBbox.width = currentX - startX;
+        imageData[index].currentBbox.height = currentY - startY;
+        
+        redesenharCanvas(index);
+    });
+    
+    canvas.addEventListener('mouseup', () => {
+        if (isDrawing && imageData[index].currentBbox) {
+            const bbox = imageData[index].currentBbox;
+            
+            // Converter para formato normalizado (center, width, height)
+            const x_center = (bbox.x + bbox.width / 2) / canvas.width;
+            const y_center = (bbox.y + bbox.height / 2) / canvas.height;
+            const width = Math.abs(bbox.width) / canvas.width;
+            const height = Math.abs(bbox.height) / canvas.height;
+            
+            imageData[index].bboxes = [{
+                x: x_center,
+                y: y_center,
+                width: width,
+                height: height,
+                confidence: 1.0
+            }];
+            
+            redesenharCanvas(index);
+            
+            document.getElementById(`info_${index}`).innerHTML = '✅ <strong>Bbox manual criado!</strong>';
+        }
+        isDrawing = false;
+    });
+}
+
+function redesenharCanvas(index) {
+    const data = imageData[index];
+    if (!data.ctx || !data.img) return;
+    
+    // Limpar e redesenhar imagem
+    data.ctx.clearRect(0, 0, data.canvas.width, data.canvas.height);
+    data.ctx.drawImage(data.img, 0, 0);
+    
+    // Desenhar bboxes
+    data.bboxes.forEach(bbox => {
+        const x = (bbox.x - bbox.width / 2) * data.canvas.width;
+        const y = (bbox.y - bbox.height / 2) * data.canvas.height;
+        const w = bbox.width * data.canvas.width;
+        const h = bbox.height * data.canvas.height;
+        
+        data.ctx.strokeStyle = '#FF00FF';
+        data.ctx.lineWidth = 4;
+        data.ctx.strokeRect(x, y, w, h);
+        
+        // Sombra para destaque
+        data.ctx.shadowColor = '#FF00FF';
+        data.ctx.shadowBlur = 10;
+        data.ctx.strokeRect(x, y, w, h);
+        data.ctx.shadowBlur = 0;
+        
+        // Label
+        data.ctx.fillStyle = '#FF00FF';
+        data.ctx.fillRect(x, y - 30, 180, 30);
+        data.ctx.fillStyle = '#FFF';
+        data.ctx.font = 'bold 16px Arial';
+        data.ctx.fillText('PRODUTO DETECTADO', x + 5, y - 8);
+    });
+    
+    // Desenhar bbox atual (durante desenho)
+    if (data.currentBbox && data.currentBbox.width !== 0) {
+        data.ctx.strokeStyle = '#00FF00';
+        data.ctx.lineWidth = 2;
+        data.ctx.setLineDash([5, 5]);
+        data.ctx.strokeRect(
+            data.currentBbox.x,
+            data.currentBbox.y,
+            data.currentBbox.width,
+            data.currentBbox.height
+        );
+        data.ctx.setLineDash([]);
+    }
+}
+
+function limparBboxes(index) {
+    imageData[index].bboxes = [];
+    imageData[index].currentBbox = null;
+    redesenharCanvas(index);
+    document.getElementById(`info_${index}`).innerHTML = '🗑️ Bboxes removidos. Desenhe novamente.';
+}
+
+// Antes de enviar o formulário, coletar todos os bboxes
+document.getElementById('uploadForm').addEventListener('submit', function(e) {
+    const allBboxes = imageData.map(data => data.bboxes);
+    document.getElementById('bboxes_data').value = JSON.stringify(allBboxes);
+});
+</script>
+{% endblock %}

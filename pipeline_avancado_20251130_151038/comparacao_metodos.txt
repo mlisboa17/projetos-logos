@@ -1,0 +1,17 @@
+=== COMPARAÇÃO MÉTODOS SEGMENTAÇÃO ===
+
+MASK R-CNN:
+- Status: ❌ Não instalado
+- Vantagens: Segmentação precisa, detecta produtos específicos
+- Instalação: pip install detectron2
+
+SAM (Segment Anything):
+- Status: ❌ Não instalado
+- Vantagens: Segmenta qualquer coisa, estado da arte
+- Instalação: pip install segment-anything
+- Modelo: Baixar sam_vit_h_4b8939.pth (2.5GB)
+
+OpenCV Tradicional:
+- Status: ✓ Sempre disponível
+- Vantagens: Rápido, sem dependências pesadas
+- Desvantagens: Menos preciso

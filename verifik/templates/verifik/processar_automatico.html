@@ -1,0 +1,1238 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🤖 Processamento Automático com IA</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        h1 { color: #fff; margin-bottom: 10px; }
+        .subtitle { color: #aaa; margin-bottom: 20px; }
+        
+        /* Config */
+        .config-section {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .config-section label { color: #fff; font-weight: 600; }
+        .config-section input {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            width: 80px;
+        }
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-primary { background: #667eea; color: white; }
+        .btn-primary:hover { background: #5a6fd6; transform: scale(1.02); }
+        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-skip { background: #6c757d; color: white; }
+        
+        /* Loading */
+        .loading { display: none; text-align: center; padding: 60px; color: #fff; }
+        .loading.active { display: block; }
+        .spinner {
+            border: 4px solid rgba(255,255,255,0.2);
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 60px; height: 60px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        /* Stats */
+        .stats {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.1);
+            padding: 15px 25px;
+            border-radius: 10px;
+            text-align: center;
+            border-left: 4px solid;
+        }
+        .stat-card.total { border-color: #667eea; }
+        .stat-card.aprovados { border-color: #28a745; }
+        .stat-card.pendentes { border-color: #ffc107; }
+        .stat-card.rejeitados { border-color: #dc3545; }
+        .stat-number { font-size: 2em; font-weight: bold; color: #fff; }
+        .stat-label { color: #aaa; font-size: 0.85em; }
+        
+        /* Main Layout - Grid de produtos */
+        .produtos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+        
+        /* Header da imagem */
+        .imagem-header {
+            grid-column: 1 / -1;
+            background: rgba(102,126,234,0.2);
+            padding: 15px 20px;
+            border-radius: 12px;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .imagem-header h3 { margin: 0; }
+        .imagem-header .nav-btns { display: flex; gap: 10px; }
+        .imagem-header .btn { padding: 8px 15px; font-size: 0.9em; }
+        
+        /* Product Card com imagem própria */
+        .produto-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 15px;
+            border-left: 5px solid;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+        .produto-card .canvas-wrapper {
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 12px;
+            position: relative;
+        }
+        .produto-card canvas {
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
+            display: block;
+        }
+        .produto-card .numero-badge {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: bold;
+            font-size: 1em;
+        }
+        .produto-card.ativo {
+            background: rgba(102,126,234,0.3);
+            border-left-color: #667eea;
+            box-shadow: 0 0 20px rgba(102,126,234,0.3);
+        }
+        .produto-card.concluido {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        .produto-card.aprovado { border-left-color: #28a745; }
+        .produto-card.rejeitado { border-left-color: #dc3545; }
+        
+        /* Cores dos bboxes */
+        .cor-0 { border-left-color: #FF6B6B !important; }
+        .cor-1 { border-left-color: #4ECDC4 !important; }
+        .cor-2 { border-left-color: #45B7D1 !important; }
+        .cor-3 { border-left-color: #96CEB4 !important; }
+        .cor-4 { border-left-color: #FFEAA7 !important; }
+        .cor-5 { border-left-color: #DDA0DD !important; }
+        .cor-6 { border-left-color: #98D8C8 !important; }
+        .cor-7 { border-left-color: #F7DC6F !important; }
+        
+        .produto-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .produto-numero {
+            width: 35px; height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        .produto-numero.cor-0 { background: #FF6B6B; }
+        .produto-numero.cor-1 { background: #4ECDC4; }
+        .produto-numero.cor-2 { background: #45B7D1; }
+        .produto-numero.cor-3 { background: #96CEB4; }
+        .produto-numero.cor-4 { background: #FFEAA7; color: #333; }
+        .produto-numero.cor-5 { background: #DDA0DD; }
+        .produto-numero.cor-6 { background: #98D8C8; }
+        .produto-numero.cor-7 { background: #F7DC6F; color: #333; }
+        
+        .confianca {
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        .confianca.alta { background: #28a745; color: #fff; }
+        .confianca.media { background: #ffc107; color: #000; }
+        .confianca.baixa { background: #dc3545; color: #fff; }
+        .confianca.perfeita { background: linear-gradient(135deg, #FFD700, #FFA500); color: #000; }
+        
+        .produto-info { color: #ccc; font-size: 0.9em; margin-bottom: 10px; }
+        .produto-info p { margin: 5px 0; }
+        .produto-info strong { color: #fff; }
+        
+        .barcode-tag {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            padding: 8px 12px;
+            border-radius: 8px;
+            color: #000;
+            font-weight: bold;
+            margin: 8px 0;
+            text-align: center;
+        }
+        
+        .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.75em;
+            margin: 2px;
+            background: rgba(102,126,234,0.5);
+            color: #fff;
+        }
+        
+        .produto-select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            margin: 10px 0;
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+            font-size: 0.9em;
+        }
+        .produto-select option { background: #1a1a2e; color: #fff; }
+        
+        .produto-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .produto-actions .btn {
+            flex: 1;
+            padding: 10px;
+            font-size: 0.9em;
+        }
+        
+        .status-badge {
+            text-align: center;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        .status-badge.aprovado { background: rgba(40,167,69,0.3); color: #28a745; }
+        .status-badge.rejeitado { background: rgba(220,53,69,0.3); color: #dc3545; }
+        
+        .results { display: none; }
+        .results.active { display: block; }
+        
+        .progress-bar {
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #28a745, #20c997);
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+        
+        .config-row {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .config-row label {
+            font-weight: 600;
+            min-width: 200px;
+        }
+        .config-row input, .config-row select {
+            padding: 10px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            flex: 1;
+        }
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            color: #667eea;
+        }
+        .loading.active {
+            display: block;
+        }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .results {
+            display: none;
+        }
+        .results.active {
+            display: block;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            border: 3px solid;
+        }
+        .stat-card.dourado { border-color: #FFD700; background: #FFF9E6; }
+        .stat-card.verde { border-color: #28a745; background: #e8f5e9; }
+        .stat-card.amarelo { border-color: #ffc107; background: #fff8e1; }
+        .stat-card.vermelho { border-color: #dc3545; background: #ffebee; }
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+        }
+        .result-grid {
+            display: grid;
+            gap: 20px;
+        }
+        .result-item {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            border: 3px solid;
+            display: grid;
+            grid-template-columns: 300px 1fr auto;
+            gap: 20px;
+            align-items: center;
+        }
+        .result-item.dourado { border-color: #FFD700; background: #FFF9E6; }
+        .result-item.verde { border-color: #28a745; }
+        .result-item.amarelo { border-color: #ffc107; }
+        .result-item.vermelho { border-color: #dc3545; }
+        .canvas-container {
+            position: relative;
+        }
+        canvas {
+            max-width: 100%;
+            border-radius: 10px;
+            display: block;
+        }
+        .info-panel {
+            flex: 1;
+        }
+        .info-row {
+            margin-bottom: 12px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .info-row strong {
+            display: inline-block;
+            min-width: 150px;
+            color: #667eea;
+        }
+        .confianca-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: white;
+            font-size: 1.2em;
+        }
+        .confianca-badge.dourado { background: linear-gradient(135deg, #FFD700, #FFA500); }
+        .confianca-badge.alta { background: #28a745; }
+        .confianca-badge.media { background: #ffc107; color: #000; }
+        .confianca-badge.baixa { background: #dc3545; }
+        .tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            margin: 2px;
+            background: #667eea;
+            color: white;
+        }
+        .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        .btn-warning {
+            background: #ffc107;
+            color: #000;
+        }
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .barcode-highlight {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            padding: 12px;
+            border-radius: 10px;
+            margin: 10px 0;
+            color: #000;
+            font-weight: bold;
+        }
+        select.produto-manual {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 Processamento Automático com IA</h1>
+        <p class="subtitle">Detecta MÚLTIPLOS produtos por imagem • YOLO + OCR + Código de Barras</p>
+
+        <div class="config-section">
+            <label>📊 Pendentes: <strong style="color: #667eea;">{{ total_pendentes }}</strong></label>
+            <label>🔢 Processar: <input type="number" id="limite" value="5" min="1" max="50"></label>
+            <button class="btn btn-primary" onclick="iniciarProcessamento()" id="btnProcessar">
+                🚀 Iniciar Processamento
+            </button>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <h2>⏳ Processando imagens com IA...</h2>
+            <p>Detectando: YOLO → Código de Barras → OCR → Forma</p>
+        </div>
+
+        <div class="results" id="results">
+            <div class="progress-bar">
+                <div class="progress-bar-fill" id="progressBar" style="width: 0%"></div>
+            </div>
+            
+            <div class="stats" id="stats"></div>
+            
+            <div class="produtos-grid" id="produtosGrid"></div>
+        </div>
+    </div>
+
+    <script>
+        console.log('🔄 Script carregando...');
+        
+        let produtos = [];
+        try {
+            produtos = {{ produtos_json|safe }};
+            console.log('✅ Produtos carregados:', produtos.length);
+        } catch(e) {
+            console.error('❌ Erro ao carregar produtos:', e);
+        }
+        
+        const csrfToken = '{{ csrf_token }}';
+        
+        const CORES = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#98D8C8', '#F7DC6F'];
+        
+        let resultadosGlobais = [];
+        let imagensAgrupadas = {};
+        let imagensCarregadas = {}; // Cache das imagens
+        let estatisticas = { total: 0, aprovados: 0, rejeitados: 0, pendentes: 0 };
+
+        async function iniciarProcessamento() {
+            console.log('🚀 Iniciando processamento...');
+            const limite = document.getElementById('limite').value;
+            console.log('Limite:', limite);
+            
+            document.getElementById('btnProcessar').disabled = true;
+            document.getElementById('loading').classList.add('active');
+            document.getElementById('results').classList.remove('active');
+
+            try {
+                console.log('📡 Chamando API...');
+                const response = await fetch('/verifik/coleta/api/processar-automatico/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrfToken },
+                    body: JSON.stringify({ limite: parseInt(limite), auto_folder: true })
+                });
+                console.log('📥 Resposta recebida:', response.status);
+                const data = await response.json();
+                console.log('📊 Dados:', data);
+                if (data.success) {
+                    resultadosGlobais = data.resultados;
+                    console.log('✅ Total resultados:', resultadosGlobais.length);
+                    processarResultados();
+                } else {
+                    alert('Erro: ' + data.error);
+                }
+            } catch (error) {
+                console.error('❌ Erro:', error);
+                alert('Erro: ' + error.message);
+            } finally {
+                document.getElementById('loading').classList.remove('active');
+                document.getElementById('btnProcessar').disabled = false;
+            }
+        }
+
+        function processarResultados() {
+            // Agrupar por imagem
+            imagensAgrupadas = {};
+            resultadosGlobais.forEach((r, idx) => {
+                r._idx = idx;
+                r._status = 'pendente';
+                if (!imagensAgrupadas[r.imagem_id]) {
+                    imagensAgrupadas[r.imagem_id] = { id: r.imagem_id, url: r.imagem_url, produtos: [] };
+                }
+                imagensAgrupadas[r.imagem_id].produtos.push(r);
+            });
+            
+            // Estatísticas
+            estatisticas.total = resultadosGlobais.length;
+            estatisticas.pendentes = estatisticas.total;
+            estatisticas.aprovados = 0;
+            estatisticas.rejeitados = 0;
+            
+            atualizarStats();
+            renderizarGrid();
+            
+            document.getElementById('results').classList.add('active');
+        }
+
+        function atualizarStats() {
+            const concluidos = estatisticas.aprovados + estatisticas.rejeitados;
+            const progresso = estatisticas.total > 0 ? (concluidos / estatisticas.total * 100) : 0;
+            
+            document.getElementById('progressBar').style.width = progresso + '%';
+            document.getElementById('stats').innerHTML = `
+                <div class="stat-card total">
+                    <div class="stat-number">${estatisticas.total}</div>
+                    <div class="stat-label">Total</div>
+                </div>
+                <div class="stat-card aprovados">
+                    <div class="stat-number">${estatisticas.aprovados}</div>
+                    <div class="stat-label">Aprovados ✅</div>
+                </div>
+                <div class="stat-card pendentes">
+                    <div class="stat-number">${estatisticas.pendentes}</div>
+                    <div class="stat-label">Pendentes ⏳</div>
+                </div>
+                <div class="stat-card rejeitados">
+                    <div class="stat-number">${estatisticas.rejeitados}</div>
+                    <div class="stat-label">Rejeitados ❌</div>
+                </div>
+            `;
+        }
+
+        function renderizarGrid() {
+            const grid = document.getElementById('produtosGrid');
+            let html = '';
+            
+            Object.keys(imagensAgrupadas).forEach((imgId) => {
+                const imgData = imagensAgrupadas[imgId];
+                const pendentes = imgData.produtos.filter(p => p._status === 'pendente').length;
+                const concluidos = imgData.produtos.length - pendentes;
+                
+                // Header da imagem
+                html += `
+                    <div class="imagem-header">
+                        <h3>🖼️ Imagem #${imgId} (${imgData.produtos.length} produtos)</h3>
+                        <span style="color: ${pendentes > 0 ? '#ffc107' : '#28a745'}">
+                            ${concluidos}/${imgData.produtos.length} processados
+                        </span>
+                    </div>
+                `;
+                
+                // Cards dos produtos
+                imgData.produtos.forEach((p, idx) => {
+                    html += criarCardProduto(p, idx, imgId);
+                });
+            });
+            
+            grid.innerHTML = html;
+            
+            // Desenhar as imagens recortadas nos canvas
+            setTimeout(() => {
+                Object.keys(imagensAgrupadas).forEach((imgId) => {
+                    const imgData = imagensAgrupadas[imgId];
+                    carregarEDesenharRecortes(imgData);
+                });
+            }, 100);
+        }
+
+        function carregarEDesenharRecortes(imgData) {
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            img.onload = function() {
+                imagensCarregadas[imgData.id] = img;
+                imgData.produtos.forEach((p, idx) => {
+                    desenharRecorte(img, p, idx);
+                });
+            };
+            img.onerror = function() {
+                imgData.produtos.forEach((p, idx) => {
+                    const canvas = document.getElementById(`canvas-${p._idx}`);
+                    if (canvas) {
+                        const ctx = canvas.getContext('2d');
+                        canvas.width = 300;
+                        canvas.height = 200;
+                        ctx.fillStyle = '#333';
+                        ctx.fillRect(0, 0, 300, 200);
+                        ctx.fillStyle = '#fff';
+                        ctx.font = '14px Arial';
+                        ctx.textAlign = 'center';
+                        ctx.fillText('Erro ao carregar', 150, 100);
+                    }
+                });
+            };
+            img.src = imgData.url || '';
+        }
+
+        function desenharRecorte(img, p, idx) {
+            const canvas = document.getElementById(`canvas-${p._idx}`);
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            
+            const bbox = p.bbox;
+            // Converter coordenadas normalizadas para pixels
+            const x = (bbox.x - bbox.width / 2) * img.width;
+            const y = (bbox.y - bbox.height / 2) * img.height;
+            const w = bbox.width * img.width;
+            const h = bbox.height * img.height;
+            
+            // Mostrar TODA a imagem com bbox destacado
+            const maxWidth = 320;
+            const maxHeight = 220;
+            const ratio = Math.min(maxWidth / img.width, maxHeight / img.height);
+            canvas.width = img.width * ratio;
+            canvas.height = img.height * ratio;
+            
+            // Desenhar imagem completa
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            
+            // Escurecer TUDO exceto o bbox
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Recortar e mostrar apenas a área do bbox (limpa e brilhante)
+            const bx = x * ratio;
+            const by = y * ratio;
+            const bw = w * ratio;
+            const bh = h * ratio;
+            
+            // Desenhar a área do produto clara (sem escurecimento)
+            ctx.drawImage(img, x, y, w, h, bx, by, bw, bh);
+            
+            // Desenhar bbox com borda grossa colorida
+            const cor = CORES[idx % CORES.length];
+            ctx.strokeStyle = cor;
+            ctx.lineWidth = 4;
+            ctx.strokeRect(bx, by, bw, bh);
+            
+            // Adicionar sombra/glow no bbox
+            ctx.shadowColor = cor;
+            ctx.shadowBlur = 10;
+            ctx.strokeRect(bx, by, bw, bh);
+            ctx.shadowBlur = 0;
+            
+            // Número grande no canto do bbox
+            ctx.fillStyle = cor;
+            ctx.fillRect(bx, by - 25, 30, 25);
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 16px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(idx + 1, bx + 15, by - 7);
+            
+            // Se já processado, overlay
+            if (p._status !== 'pendente') {
+                ctx.fillStyle = p._status === 'aprovado' ? 'rgba(40,167,69,0.5)' : 'rgba(220,53,69,0.5)';
+                ctx.fillRect(bx, by, bw, bh);
+                ctx.fillStyle = '#fff';
+                ctx.font = 'bold 40px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(p._status === 'aprovado' ? '✓' : '✗', bx + bw/2, by + bh/2 + 15);
+            }
+        }
+
+        function criarCardProduto(p, idx, imgId) {
+            const cor = idx % CORES.length;
+            const confClasse = p.confianca >= 99.9 ? 'perfeita' : p.confianca >= 70 ? 'alta' : p.confianca >= 40 ? 'media' : 'baixa';
+            const statusClass = p._status !== 'pendente' ? `concluido ${p._status}` : '';
+            
+            return `
+                <div class="produto-card ${statusClass} cor-${cor}" id="card-${p._idx}">
+                    <div class="canvas-wrapper">
+                        <canvas id="canvas-${p._idx}"></canvas>
+                        <div class="numero-badge" style="background: ${CORES[cor]}">${idx + 1}</div>
+                    </div>
+                    
+                    <div class="produto-header">
+                        <span class="confianca ${confClasse}">${p.confianca.toFixed(1)}%</span>
+                        <span style="color: #aaa; font-size: 0.8em;">IMG #${imgId}</span>
+                    </div>
+                    
+                    ${p.codigo_barras ? `<div class="barcode-tag">🔥 ${p.codigo_barras}</div>` : ''}
+                    
+                    <div class="produto-info">
+                        <p><strong>🎯 Sugestão:</strong> ${getProdutoNome(p.produto_sugerido_id)}</p>
+                        <p><strong>📦 Forma:</strong> <span class="tag">${p.forma}</span></p>
+                        <p><strong>📝 OCR:</strong> ${(p.ocr_texto || []).slice(0, 3).map(t => `<span class="tag">${t}</span>`).join('')}</p>
+                    </div>
+                    
+                    ${p._status === 'pendente' ? `
+                        <select class="produto-select" id="select-${p._idx}">
+                            <option value="">-- Selecionar --</option>
+                            ${produtos.map(prod => `
+                                <option value="${prod.id}" ${prod.id == p.produto_sugerido_id ? 'selected' : ''}>
+                                    ${prod.nome}
+                                </option>
+                            `).join('')}
+                        </select>
+                        
+                        <div class="produto-actions">
+                            <button class="btn btn-success" onclick="aprovar(${p._idx})">✅</button>
+                            <button class="btn btn-danger" onclick="rejeitar(${p._idx})">❌</button>
+                        </div>
+                    ` : `
+                        <div class="status-badge ${p._status}">
+                            ${p._status === 'aprovado' ? '✅ APROVADO' : '❌ REJEITADO'}
+                        </div>
+                    `}
+                </div>
+            `;
+        }
+
+        function getProdutoNome(id) {
+            if (!id) return 'NÃO IDENTIFICADO';
+            const p = produtos.find(x => x.id == id);
+            return p ? p.nome : 'DESCONHECIDO';
+        }
+
+        async function aprovar(idx) {
+            const r = resultadosGlobais[idx];
+            const select = document.getElementById(`select-${idx}`);
+            const produtoId = select ? select.value : r.produto_sugerido_id;
+            
+            if (!produtoId) {
+                alert('Selecione um produto!');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/verifik/coleta/api/aprovar-processamento/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrfToken },
+                    body: JSON.stringify({
+                        imagem_id: r.imagem_id,
+                        produto_id: produtoId,
+                        bbox: r.bbox,
+                        metodo_deteccao: r.metodo_deteccao || ''
+                    })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    marcarComoConcluido(idx, 'aprovado');
+                } else {
+                    alert('Erro: ' + data.error);
+                }
+            } catch (error) {
+                alert('Erro: ' + error.message);
+            }
+        }
+
+        function rejeitar(idx) {
+            const r = resultadosGlobais[idx];
+            r._status = 'rejeitado';
+            
+            estatisticas.pendentes--;
+            estatisticas.rejeitados++;
+            
+            atualizarStats();
+            
+            // Abrir modal para seleção manual
+            abrirSelecaoManual(r);
+        }
+        
+        // Modal de seleção manual
+        function abrirSelecaoManual(resultado) {
+            // Criar modal se não existir
+            let modal = document.getElementById('modalSelecao');
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.id = 'modalSelecao';
+                modal.innerHTML = `
+                    <div class="modal-overlay" onclick="fecharModal()"></div>
+                    <div class="modal-content">
+                        <h2>🎯 Seleção Manual de Produtos</h2>
+                        <p class="modal-subtitle">Clique na imagem para marcar os produtos. Você pode adicionar quantos quiser!</p>
+                        
+                        <div class="modal-layout">
+                            <div class="modal-canvas-area">
+                                <canvas id="canvasSelecao"></canvas>
+                                <div class="canvas-instructions">
+                                    👆 Clique e arraste para desenhar bbox
+                                </div>
+                            </div>
+                            <div class="modal-produtos-area">
+                                <h3>📦 Produtos Marcados: <span id="contadorProdutos">0</span></h3>
+                                <div id="listaProdutosManuais"></div>
+                                <button class="btn btn-primary" onclick="adicionarMaisProduto()">➕ Adicionar Produto</button>
+                            </div>
+                        </div>
+                        
+                        <div class="modal-actions">
+                            <button class="btn btn-success" onclick="salvarSelecaoManual()">💾 Salvar Todos</button>
+                            <button class="btn btn-danger" onclick="fecharModal()">❌ Cancelar</button>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(modal);
+                
+                // Adicionar estilos do modal
+                const style = document.createElement('style');
+                style.textContent = `
+                    #modalSelecao {
+                        display: none;
+                        position: fixed;
+                        top: 0; left: 0; right: 0; bottom: 0;
+                        z-index: 9999;
+                    }
+                    #modalSelecao.active { display: block; }
+                    .modal-overlay {
+                        position: absolute;
+                        top: 0; left: 0; right: 0; bottom: 0;
+                        background: rgba(0,0,0,0.8);
+                    }
+                    .modal-content {
+                        position: absolute;
+                        top: 50%; left: 50%;
+                        transform: translate(-50%, -50%);
+                        background: #1a1a2e;
+                        border-radius: 20px;
+                        padding: 30px;
+                        width: 95%;
+                        max-width: 1200px;
+                        max-height: 90vh;
+                        overflow-y: auto;
+                        color: #fff;
+                    }
+                    .modal-content h2 { margin-bottom: 10px; }
+                    .modal-subtitle { color: #aaa; margin-bottom: 20px; }
+                    .modal-layout {
+                        display: grid;
+                        grid-template-columns: 2fr 1fr;
+                        gap: 20px;
+                        margin-bottom: 20px;
+                    }
+                    .modal-canvas-area {
+                        background: #000;
+                        border-radius: 12px;
+                        overflow: hidden;
+                        position: relative;
+                    }
+                    #canvasSelecao {
+                        width: 100%;
+                        cursor: crosshair;
+                        display: block;
+                    }
+                    .canvas-instructions {
+                        position: absolute;
+                        bottom: 10px; left: 50%;
+                        transform: translateX(-50%);
+                        background: rgba(102,126,234,0.9);
+                        padding: 8px 20px;
+                        border-radius: 20px;
+                        font-size: 0.9em;
+                    }
+                    .modal-produtos-area {
+                        background: rgba(255,255,255,0.05);
+                        border-radius: 12px;
+                        padding: 15px;
+                        max-height: 500px;
+                        overflow-y: auto;
+                    }
+                    .modal-produtos-area h3 { margin-bottom: 15px; color: #667eea; }
+                    .produto-manual-item {
+                        background: rgba(255,255,255,0.1);
+                        border-radius: 10px;
+                        padding: 12px;
+                        margin-bottom: 10px;
+                        border-left: 4px solid #667eea;
+                    }
+                    .produto-manual-item select {
+                        width: 100%;
+                        padding: 8px;
+                        border-radius: 6px;
+                        border: none;
+                        background: #333;
+                        color: #fff;
+                        margin-top: 8px;
+                    }
+                    .produto-manual-item .remove-btn {
+                        background: #dc3545;
+                        color: #fff;
+                        border: none;
+                        padding: 5px 10px;
+                        border-radius: 5px;
+                        cursor: pointer;
+                        float: right;
+                        font-size: 0.8em;
+                    }
+                    .modal-actions {
+                        display: flex;
+                        gap: 15px;
+                        justify-content: center;
+                    }
+                    .modal-actions .btn {
+                        padding: 15px 40px;
+                        font-size: 1.1em;
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            // Configurar para esta imagem
+            window.selecaoAtual = {
+                resultado: resultado,
+                imagemId: resultado.imagem_id,
+                produtos: [],
+                desenhando: false,
+                startX: 0, startY: 0
+            };
+            
+            // Carregar imagem no canvas
+            const canvas = document.getElementById('canvasSelecao');
+            const ctx = canvas.getContext('2d');
+            
+            const img = imagensCarregadas[resultado.imagem_id] || new Image();
+            if (!imagensCarregadas[resultado.imagem_id]) {
+                img.crossOrigin = 'anonymous';
+                img.src = imagensAgrupadas[resultado.imagem_id].url;
+            }
+            
+            const setupCanvas = () => {
+                const maxW = 800;
+                const ratio = Math.min(maxW / img.width, 600 / img.height);
+                canvas.width = img.width * ratio;
+                canvas.height = img.height * ratio;
+                window.selecaoAtual.ratio = ratio;
+                window.selecaoAtual.img = img;
+                
+                redesenharCanvasSelecao();
+                
+                // Eventos de desenho
+                canvas.onmousedown = iniciarDesenho;
+                canvas.onmousemove = desenhandoBbox;
+                canvas.onmouseup = finalizarDesenho;
+                canvas.onmouseleave = finalizarDesenho;
+            };
+            
+            if (img.complete) setupCanvas();
+            else img.onload = setupCanvas;
+            
+            // Mostrar modal
+            modal.classList.add('active');
+            document.getElementById('listaProdutosManuais').innerHTML = '';
+            document.getElementById('contadorProdutos').textContent = '0';
+        }
+        
+        function redesenharCanvasSelecao() {
+            const canvas = document.getElementById('canvasSelecao');
+            const ctx = canvas.getContext('2d');
+            const sel = window.selecaoAtual;
+            
+            ctx.drawImage(sel.img, 0, 0, canvas.width, canvas.height);
+            
+            // Desenhar bboxes já marcados
+            sel.produtos.forEach((p, i) => {
+                const cor = CORES[i % CORES.length];
+                ctx.strokeStyle = cor;
+                ctx.lineWidth = 3;
+                ctx.strokeRect(p.x, p.y, p.w, p.h);
+                
+                // Número
+                ctx.fillStyle = cor;
+                ctx.fillRect(p.x, p.y - 22, 25, 22);
+                ctx.fillStyle = '#fff';
+                ctx.font = 'bold 14px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(i + 1, p.x + 12, p.y - 6);
+            });
+        }
+        
+        function iniciarDesenho(e) {
+            const rect = e.target.getBoundingClientRect();
+            const scaleX = e.target.width / rect.width;
+            const scaleY = e.target.height / rect.height;
+            
+            window.selecaoAtual.desenhando = true;
+            window.selecaoAtual.startX = (e.clientX - rect.left) * scaleX;
+            window.selecaoAtual.startY = (e.clientY - rect.top) * scaleY;
+        }
+        
+        function desenhandoBbox(e) {
+            if (!window.selecaoAtual.desenhando) return;
+            
+            const canvas = e.target;
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            
+            const currentX = (e.clientX - rect.left) * scaleX;
+            const currentY = (e.clientY - rect.top) * scaleY;
+            
+            redesenharCanvasSelecao();
+            
+            // Desenhar bbox temporário
+            const ctx = canvas.getContext('2d');
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 5]);
+            ctx.strokeRect(
+                window.selecaoAtual.startX,
+                window.selecaoAtual.startY,
+                currentX - window.selecaoAtual.startX,
+                currentY - window.selecaoAtual.startY
+            );
+            ctx.setLineDash([]);
+        }
+        
+        function finalizarDesenho(e) {
+            if (!window.selecaoAtual.desenhando) return;
+            window.selecaoAtual.desenhando = false;
+            
+            const canvas = document.getElementById('canvasSelecao');
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            
+            const endX = (e.clientX - rect.left) * scaleX;
+            const endY = (e.clientY - rect.top) * scaleY;
+            
+            const x = Math.min(window.selecaoAtual.startX, endX);
+            const y = Math.min(window.selecaoAtual.startY, endY);
+            const w = Math.abs(endX - window.selecaoAtual.startX);
+            const h = Math.abs(endY - window.selecaoAtual.startY);
+            
+            // Ignorar cliques sem arraste (muito pequeno)
+            if (w < 20 || h < 20) {
+                redesenharCanvasSelecao();
+                return;
+            }
+            
+            // Adicionar produto
+            const idx = window.selecaoAtual.produtos.length;
+            window.selecaoAtual.produtos.push({ x, y, w, h, produtoId: null });
+            
+            // Adicionar na lista
+            adicionarItemLista(idx);
+            redesenharCanvasSelecao();
+        }
+        
+        function adicionarItemLista(idx) {
+            const lista = document.getElementById('listaProdutosManuais');
+            const cor = CORES[idx % CORES.length];
+            
+            const div = document.createElement('div');
+            div.className = 'produto-manual-item';
+            div.id = `manual-${idx}`;
+            div.style.borderLeftColor = cor;
+            div.innerHTML = `
+                <button class="remove-btn" onclick="removerProdutoManual(${idx})">🗑️</button>
+                <strong style="color: ${cor}">Produto #${idx + 1}</strong>
+                <select onchange="window.selecaoAtual.produtos[${idx}].produtoId = this.value">
+                    <option value="">-- Selecione o produto --</option>
+                    ${produtos.map(p => `<option value="${p.id}">${p.nome}</option>`).join('')}
+                </select>
+            `;
+            lista.appendChild(div);
+            
+            document.getElementById('contadorProdutos').textContent = window.selecaoAtual.produtos.length;
+        }
+        
+        function removerProdutoManual(idx) {
+            window.selecaoAtual.produtos.splice(idx, 1);
+            
+            // Reconstruir lista
+            const lista = document.getElementById('listaProdutosManuais');
+            lista.innerHTML = '';
+            window.selecaoAtual.produtos.forEach((_, i) => adicionarItemLista(i));
+            
+            redesenharCanvasSelecao();
+        }
+        
+        function adicionarMaisProduto() {
+            alert('👆 Clique e arraste na imagem para marcar o produto!');
+        }
+        
+        async function salvarSelecaoManual() {
+            const sel = window.selecaoAtual;
+            
+            if (sel.produtos.length === 0) {
+                alert('Nenhum produto marcado! Clique e arraste na imagem para marcar.');
+                return;
+            }
+            
+            // Verificar se todos têm produto selecionado
+            const semProduto = sel.produtos.filter(p => !p.produtoId);
+            if (semProduto.length > 0) {
+                alert(`${semProduto.length} produto(s) sem seleção! Selecione o produto para cada marcação.`);
+                return;
+            }
+            
+            // Salvar cada produto
+            let salvos = 0;
+            for (const p of sel.produtos) {
+                // Converter coordenadas do canvas para normalizadas
+                const ratio = sel.ratio;
+                const img = sel.img;
+                const bbox = {
+                    x: (p.x / ratio + p.w / ratio / 2) / img.width,
+                    y: (p.y / ratio + p.h / ratio / 2) / img.height,
+                    width: (p.w / ratio) / img.width,
+                    height: (p.h / ratio) / img.height
+                };
+                
+                try {
+                    const response = await fetch('/verifik/coleta/api/aprovar-processamento/', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrfToken },
+                        body: JSON.stringify({
+                            imagem_id: sel.imagemId,
+                            produto_id: p.produtoId,
+                            bbox: bbox,
+                            metodo_deteccao: 'manual'
+                        })
+                    });
+                    const data = await response.json();
+                    if (data.success) salvos++;
+                } catch (error) {
+                    console.error('Erro ao salvar:', error);
+                }
+            }
+            
+            alert(`✅ ${salvos} produto(s) salvo(s) com sucesso!`);
+            fecharModal();
+            renderizarGrid();
+        }
+        
+        function fecharModal() {
+            const modal = document.getElementById('modalSelecao');
+            if (modal) modal.classList.remove('active');
+        }
+        
+        function marcarComoConcluido(idx, status) {
+            const r = resultadosGlobais[idx];
+            r._status = status;
+            
+            estatisticas.pendentes--;
+            if (status === 'aprovado') estatisticas.aprovados++;
+            else estatisticas.rejeitados++;
+            
+            atualizarStats();
+            renderizarGrid();
+            
+            // Scroll para próximo pendente
+            setTimeout(() => {
+                const proximoPendente = document.querySelector('.produto-card:not(.concluido)');
+                if (proximoPendente) {
+                    proximoPendente.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                } else if (estatisticas.pendentes === 0) {
+                    alert('🎉 Todos os produtos foram processados!');
+                }
+            }, 200);
+        }
+    </script>
+</body>
+</html>

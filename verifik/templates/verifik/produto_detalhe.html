@@ -91,7 +91,7 @@
             </div>
             
             <div style="margin-top: 2rem;">
-                <a href="/admin/verifik/produto/{{ produto.pk }}/change/" class="btn" style="margin-right: 1rem;">
+                <a href="/admin/verifik/produtomae/{{ produto.pk }}/change/" class="btn" style="margin-right: 1rem;">
                     ✏️ Editar Produto
                 </a>
                 <a href="{% url 'verifik_produtos_lista' %}" class="btn" style="background: #95a5a6;">
@@ -531,9 +531,13 @@
         <p style="margin: 0; font-size: 0.85rem; color: #7f8c8d;">
             <strong>📦 Produto:</strong> {{ produto.descricao_produto }}<br>
             <strong>🖼️ Imagens novas:</strong> <span id="countNovas">{{ imagens_nao_treinadas }}</span><br>
-            <strong>🎨 Com augmentation:</strong> <span id="countTotal">{{ imagens_nao_treinadas|default:0|add:0|mul:8 }}</span> imagens
+            <strong>🎨 Com augmentation:</strong> <span id="countTotal">0</span> imagens
         </p>
     </div>
+    <script>
+        const countNovas = {{ imagens_nao_treinadas|default:0 }};
+        document.getElementById('countTotal').textContent = (countNovas * 8);
+    </script>
     <button onclick="fecharStatus()" style="position: absolute; top: 10px; right: 10px; background: none; border: none; cursor: pointer; font-size: 1.5rem; color: #95a5a6;">✕</button>
 </div>
 

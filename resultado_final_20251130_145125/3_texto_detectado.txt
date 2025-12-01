@@ -1,0 +1,19 @@
+Texto detectado pelo OCR:
+Config 1: W
+Config 3: C
+
+J
+N RT
+H9DEA DEG I MEXICO
+N
+Config 4: wis
+Gray Config 1: W
+Gray Config 3: S
+L
+I
+7
+I 4 A
+SN
+9 DEALDECY VECER
+Gray Config 4: wis
+

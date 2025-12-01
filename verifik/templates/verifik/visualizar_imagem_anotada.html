@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Visualizar Imagem Anotada - VerifiK{% endblock %}
+
+{% block content %}
+<style>
+    .image-container {
+        position: relative;
+        display: inline-block;
+        max-width: 800px;
+        margin: 20px auto;
+    }
+    
+    .image-container img {
+        max-width: 100%;
+        height: auto;
+        border: 2px solid #667eea;
+        border-radius: 8px;
+    }
+    
+    .annotations-list {
+        margin-top: 30px;
+    }
+    
+    .annotation-item {
+        background: #f8f9fa;
+        border-left: 4px solid #667eea;
+        padding: 15px;
+        margin-bottom: 10px;
+        border-radius: 4px;
+    }
+    
+    .annotation-item strong {
+        color: #667eea;
+    }
+    
+    .bbox-coords {
+        font-family: monospace;
+        font-size: 0.9em;
+        color: #666;
+        margin-top: 8px;
+    }
+    
+    .btn-back {
+        margin-bottom: 20px;
+    }
+</style>
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-md-12">
+            <a href="{% url 'verifik_imagens_anotadas' %}" class="btn btn-secondary btn-back">← Voltar para galeria</a>
+            
+            <h1>🖼️ Imagem Anotada #{{ imagem.id }}</h1>
+            <p class="text-muted">
+                Status: <span class="badge bg-success">{{ imagem.status }}</span>
+                Total de anotações: <span class="badge bg-primary">{{ total_anotacoes }}</span>
+            </p>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-8">
+            <div class="image-container">
+                <img src="/media/{{ imagem.imagem }}" alt="Imagem anotada" onerror="this.src='https://via.placeholder.com/800'">
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="annotations-list">
+                <h3>📍 Anotações ({{ total_anotacoes }})</h3>
+                
+                {% if anotacoes %}
+                    {% for anotacao in anotacoes %}
+                        <div class="annotation-item">
+                            <strong>🔹 {{ anotacao.produto.descricao_produto }}</strong>
+                            <div class="bbox-coords">
+                                <p>X: {{ anotacao.bbox_x|floatformat:4 }}</p>
+                                <p>Y: {{ anotacao.bbox_y|floatformat:4 }}</p>
+                                <p>W: {{ anotacao.bbox_width|floatformat:4 }}</p>
+                                <p>H: {{ anotacao.bbox_height|floatformat:4 }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="alert alert-info">
+                        Nenhuma anotação encontrada.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <h3>📋 Informações da Imagem</h3>
+            <table class="table table-sm">
+                <tr>
+                    <td><strong>ID:</strong></td>
+                    <td>{{ imagem.id }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Arquivo:</strong></td>
+                    <td>{{ imagem.imagem }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Status:</strong></td>
+                    <td>{{ imagem.status }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Enviado por:</strong></td>
+                    <td>{{ imagem.enviado_por|default:"N/A" }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Data de criação:</strong></td>
+                    <td>{{ imagem.created_at|date:"d/m/Y H:i" }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

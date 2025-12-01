@@ -1,0 +1,28 @@
+[
+  {
+    "arquivo": "WhatsApp Image 2025-11-30 at 22.25.20.jpeg",
+    "caminho": "C:\\Users\\gabri\\Downloads\\WhatsApp Image 2025-11-30 at 22.25.20.jpeg",
+    "timestamp": "2025-11-30T23:25:07.936618",
+    "deteccoes_yolo": [
+      {
+        "bbox": [
+          217,
+          57,
+          696,
+          1028
+        ],
+        "confianca": 0.7613735198974609,
+        "classe": 41
+      }
+    ],
+    "textos_ocr": [
+      {
+        "versao": 0,
+        "texto": "cd a",
+        "confianca": 4
+      }
+    ],
+    "marcas_identificadas": [],
+    "tempo_processamento": 3.249907
+  }
+]

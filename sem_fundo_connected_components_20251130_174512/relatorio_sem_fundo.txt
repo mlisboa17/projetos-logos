@@ -1,0 +1,23 @@
+MÉTODO: REMOÇÃO DE FUNDO + CONNECTED COMPONENTS
+==================================================
+
+TÉCNICA:
+1. Remoção automática de fundo (GrabCut ou cor)
+2. Conversão para escala de cinza
+3. Binarização (pixel ≠ 0 = produto)
+4. Connected Components
+5. Filtragem e classificação por forma
+
+RESULTADO:
+Total: 1 produtos
+Garrafas: 0
+Latas: 1
+Outros: 0
+Status: AJUSTAR
+
+PRODUTOS DETECTADOS:
+ID 1 - LATA:
+  Área: 754235 pixels
+  Proporção: 1.05
+  Posição: (776, 756)
+

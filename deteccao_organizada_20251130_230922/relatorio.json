@@ -1,0 +1,32 @@
+{
+  "timestamp": "20251130_230922",
+  "total_produtos": 1,
+  "marcas_encontradas": {
+    "MARCA_NAO_IDENTIFICADA": 1
+  },
+  "deteccoes": [
+    {
+      "id": 1,
+      "bbox": [
+        5,
+        0,
+        960,
+        1280
+      ],
+      "confianca": 0.9660729169845581,
+      "classe_generica": "PILSEN CERVEJA PILSEN LOKAL LATA 473ML",
+      "area_percentual": 99.47916666666666,
+      "marca": "MARCA_NAO_IDENTIFICADA",
+      "ocr_confianca": 0
+    }
+  ],
+  "arquivos_gerados": [
+    "deteccao_organizada_20251130_230922\\1_deteccoes.jpg",
+    "deteccao_organizada_20251130_230922\\produto_1.jpg",
+    "deteccao_organizada_20251130_230922\\resultado_final.jpg",
+    "deteccao_organizada_20251130_230922\\rotulo_1_centro_meio.jpg",
+    "deteccao_organizada_20251130_230922\\rotulo_1_centro_superior.jpg",
+    "deteccao_organizada_20251130_230922\\rotulo_1_meio_completo.jpg",
+    "deteccao_organizada_20251130_230922\\rotulo_1_superior_completo.jpg"
+  ]
+}

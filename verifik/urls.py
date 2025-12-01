@@ -1,6 +1,10 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from . import views
+from .views_visualizacao import visualizar_anotacoes
+from django.views.static import serve
+from django.conf import settings
+from pathlib import Path
 
 router = DefaultRouter()
 router.register(r'funcionarios', views.FuncionarioViewSet)
@@ -25,6 +29,10 @@ urlpatterns = [
     path('produtos/<int:produto_id>/adicionar-imagem/', views.adicionar_imagem, name='verifik_adicionar_imagem'),
     path('imagens/<int:imagem_id>/remover/', views.remover_imagem, name='verifik_remover_imagem'),
     
+    # Visualizar imagens anotadas
+    path('imagens-anotadas/', views.listar_imagens_anotadas, name='verifik_imagens_anotadas'),
+    path('imagens-anotadas/<int:img_id>/', views.visualizar_imagem_anotada, name='verifik_visualizar_anotada'),
+    
     # API REST
     path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls')),
@@ -33,4 +41,11 @@ urlpatterns = [
     path('coleta/', include('verifik.urls_coleta')),
     path('coleta/', include('verifik.urls_anotacao')),
     path('coleta/', include('verifik.urls_importacao')),
+    
+    # Visualização de anotações
+    path('visualizar-anotacoes/', visualizar_anotacoes, name='visualizar_anotacoes'),
+    
+    # Interface de Detecção Inteligente
+    path('deteccao-inteligente/', views.deteccao_inteligente, name='verifik_deteccao_inteligente'),
+    path('api/detectar-imagem/', views.api_detectar_imagem, name='verifik_api_detectar_imagem'),
 ]

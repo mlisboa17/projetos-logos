@@ -269,6 +269,9 @@
         <a href="{% url 'verifik_home' %}">🔍 VerifiK</a>
         <a href="{% url 'verifik_produtos_lista' %}">📦 Produtos</a>
         {% if user.is_staff %}
+            <a href="/verifik/coleta/lotes/">📋 Lotes de Imagens</a>
+            <a href="{% url 'revisar_desconhecidos' %}">🤖 Revisar IA</a>
+            <a href="{% url 'visualizar_anotacoes' %}">🎯 Ver Anotações</a>
             <a href="{% url 'importar_pasta_standalone' %}">📁 Importar Pasta</a>
         {% endif %}
         <a href="/api/">🔌 API</a>

@@ -1,0 +1,27 @@
+=== PIPELINE COMPLETO COM REMOÇÃO DE FUNDO ===
+
+ETAPAS EXECUTADAS:
+1. ✓ Captura da imagem
+2. ✓ Pré-processamento inicial
+3. ✓ Remoção de fundo (manteve apenas produtos)
+4. ✓ Detecção YOLO em região limpa
+5. ✓ OCR sem interferência do fundo
+
+PRODUTOS DETECTADOS PELO YOLO: 0
+
+TEXTOS DETECTADOS PELO OCR:
+- Texto geral: —— |
+: q io
+| i
+| | 7
+E i
+Ê
+| Ii | |
+q —"
+/ l d =.
+| | É , É.
+Ee [so i,
+Ê 7 MR E ks 4
+— a
+congo 7
+- Palavra única: Hal

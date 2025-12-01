@@ -1,0 +1,49 @@
+=== PIPELINE COM FOCO NO PRODUTO ===
+
+Imagem processada: imagens_teste/corona_produtos.jpeg
+Data/Hora: 30/11/2025 15:17:01
+
+PRODUTOS DETECTADOS: 6
+- Produto 1: Área=43877.5, Ratio=1.10
+- Produto 2: Área=34787.0, Ratio=1.14
+- Produto 3: Área=12453.5, Ratio=0.90
+- Produto 4: Área=48667.5, Ratio=0.41
+- Produto 5: Área=94324.5, Ratio=0.53
+- Produto 6: Área=84551.5, Ratio=0.37
+
+TEXTOS DETECTADOS:
+- Produto 1 - Texto geral: E à 
+E iara ay vec I
+EN Cae
+- Produto 1 - Palavra única: Ww
+- Produto 2 - Texto geral:  sa
+ ey Ww
+À ra RE
+RR Re
+NL eee oe
+- Produto 2 - Caracteres únicos: wW
+- Produto 3 - Palavra única: Gg
+- Produto 4 - Texto geral: i
+al
+ 4
+
+Pi 1 
+ipa
+- Produto 4 - Palavra única: i
+- Produto 4 - Caracteres únicos: i
+- Produto 5 - Texto geral: E
+i a a
+a I
+ao 
+- Produto 6 - Texto geral: fe ole E
+ 
+
+IR a
+E NE
+
+=== ARQUIVOS GERADOS ===
+1_sem_fundo.jpg - Imagem com fundo removido
+2_produtos_detectados.jpg - Produtos detectados e marcados
+3_produto_X_focado.jpg - Cada produto focado individualmente
+4_produto_X_ocr.jpg - Cada produto otimizado para OCR
+5_relatorio_focado.txt - Este relatório

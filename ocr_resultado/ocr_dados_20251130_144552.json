@@ -1,0 +1,12 @@
+{
+  "timestamp": "20251130_144552",
+  "imagem_original": "processamento_completo_20251130_143852\\01_preprocessamento_final.jpg",
+  "total_textos": 8,
+  "total_marcas": 0,
+  "textos_encontrados": [
+    {
+      "texto": "1925",
+      "confianca": 0.9815205335617065,
+      "bbox": [
+        [
+          

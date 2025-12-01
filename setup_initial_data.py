@@ -40,12 +40,26 @@ if not User.objects.filter(username='admin').exists():
         username='admin',
         email='marcio@grupolisboa.com.br',
         password='M@rcio1309',
-        organization=org,
         first_name='Márcio',
         last_name='Lisboa',
-        is_org_admin=True,
         is_super_admin=True
     )
+    admin.active_organization = org
+    admin.save()
+    
+    # Criar relação UserOrganization
+    from accounts.models import UserOrganization
+    UserOrganization.objects.create(
+        user=admin,
+        organization=org,
+        is_org_admin=True,
+        can_access_verifik=True,
+        can_access_erp_hub=True,
+        can_access_fuel_prices=True,
+        can_manage_users=True,
+        can_view_reports=True
+    )
+    
     print(f"✅ Superusuário criado: {admin.username}")
     print(f"   Email: marcio@grupolisboa.com.br")
     print(f"   Senha: M@rcio1309")
@@ -55,6 +69,7 @@ else:
     admin.set_password('M@rcio1309')
     admin.first_name = 'Márcio'
     admin.last_name = 'Lisboa'
+    admin.active_organization = org
     admin.save()
     print(f"✅ Superusuário atualizado: {admin.username}")
     print(f"   Email: marcio@grupolisboa.com.br")

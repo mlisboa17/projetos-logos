@@ -90,6 +90,19 @@ class ImagemProdutoPendente(models.Model):
         verbose_name="Lote"
     )
     
+    bbox_data = models.TextField(
+        blank=True,
+        verbose_name="Dados do Bounding Box",
+        help_text="Coordenadas do bbox em formato JSON"
+    )
+
+    metodo_deteccao = models.CharField(
+        max_length=50,
+        blank=True,
+        verbose_name="Método de Detecção",
+        help_text="Como o produto foi detectado (YOLO, código de barras, OCR, etc)"
+    )
+    
     class Meta:
         verbose_name = "Imagem Pendente"
         verbose_name_plural = "Imagens Pendentes"

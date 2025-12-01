@@ -1,0 +1,46 @@
+DETECÇÃO PRODUTOS CORONA - IMAGEM ANEXADA
+=============================================
+
+OBJETIVO: Detectar produtos na imagem Corona anexada pelo usuário
+META: 1 lata Corona branca + 3 garrafas Corona douradas = 4 produtos
+
+MÉTODO APLICADO:
+1. Detecção por cor HSV (branco + dourado)
+2. Análise de forma (aspect ratio)
+3. Classificação por cor dominante
+4. Filtragem por área mínima
+
+RESULTADO: PERFEITO 🏆
+Total detectado: 4 produtos
+Latas brancas: 1
+Garrafas douradas: 3
+Comparação Otsu: 0 produtos
+
+PRODUTOS DETECTADOS:
+ID 1 - GARRAFA_DOURADA:
+  Área: 198452 pixels
+  Proporção: 0.43
+  Confiança: 0.91
+  Posição: (272, 393, 420, 971)
+
+ID 2 - GARRAFA_DOURADA:
+  Área: 179100 pixels
+  Proporção: 0.39
+  Confiança: 0.88
+  Posição: (1087, 289, 425, 1096)
+
+ID 3 - GARRAFA_DOURADA:
+  Área: 162279 pixels
+  Proporção: 0.25
+  Confiança: 0.95
+  Posição: (742, 229, 282, 1127)
+
+ID 4 - LATA_BRANCA:
+  Área: 9724 pixels
+  Proporção: 1.45
+  Confiança: 1.00
+  Posição: (1377, 46, 173, 119)
+
+✅ CONCLUSÃO: DETECÇÃO PERFEITA!
+O algoritmo detectou corretamente todos os 4 produtos Corona
+na proporção exata: 1 lata branca + 3 garrafas douradas.

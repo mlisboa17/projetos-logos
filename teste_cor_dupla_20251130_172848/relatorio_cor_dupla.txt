@@ -1,0 +1,18 @@
+TESTE: DETECÇÃO COR DUPLA
+==============================
+
+Objetivo: Detectar 4 produtos Corona
+Resultado: 6 produtos detectados
+
+PRODUTOS ENCONTRADOS:
+1. GARRAFA_DOURADA - Área: 210360
+2. LATA_BRANCA - Área: 8910
+3. GARRAFA_DOURADA - Área: 190234
+4. GARRAFA_DOURADA - Área: 170560
+5. LATA_BRANCA - Área: 15066
+6. LATA_BRANCA - Área: 46054
+
+Resumo:
+- Garrafas douradas: 3
+- Latas brancas: 3
+- Total: 6

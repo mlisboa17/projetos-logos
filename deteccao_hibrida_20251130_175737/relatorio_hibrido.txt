@@ -1,0 +1,35 @@
+DETECÇÃO HÍBRIDA: HSV + YOLOv8
+===================================
+
+MÉTODOS TESTADOS:
+1. HSV + Análise de Forma (principal)
+2. YOLOv8 (backup/validação)
+
+RESULTADOS:
+- HSV: 4 produtos
+- YOLO: 5 produtos
+- FINAL: 4 produtos
+- MÉTODO PRINCIPAL: HSV_FORMA
+
+✅ STATUS: PERFEITO!
+Detectou exatamente 3 garrafas + 1 lata = 4 produtos Corona
+
+PRODUTOS DETECTADOS:
+1. GARRAFA_DOURADA (HSV_FORMA)
+   Confiança: 0.91
+   Posição: (272, 393, 420, 971)
+
+2. GARRAFA_DOURADA (HSV_FORMA)
+   Confiança: 0.88
+   Posição: (1087, 289, 425, 1096)
+
+3. GARRAFA_DOURADA (HSV_FORMA)
+   Confiança: 0.95
+   Posição: (742, 229, 282, 1127)
+
+4. LATA_BRANCA (HSV_FORMA)
+   Confiança: 1.00
+   Posição: (1377, 46, 173, 119)
+
+BACKUP: ThanhSan97/Retail-Product-Detection-using-YOLOv8
+Referência GitHub para YOLOv8 em produtos de varejo

@@ -1,0 +1,43 @@
+=== PIPELINE ZOOM OTIMIZADO ===
+
+Imagem processada: imagens_teste/corona_produtos.jpeg
+Data/Hora: 30/11/2025 16:33:30
+
+PRODUTOS PROCESSADOS: 6
+- Produto 1: Área=43878, Ratio=1.10
+- Produto 2: Área=34787, Ratio=1.14
+- Produto 3: Área=12454, Ratio=0.90
+- Produto 4: Área=48668, Ratio=0.41
+- Produto 5: Área=94324, Ratio=0.53
+- Produto 6: Área=84552, Ratio=0.37
+
+OTIMIZAÇÕES APLICADAS:
+- Zoom controlado (máx 3x, limitado a 2000px)
+- OCR com timeout de 10 segundos
+- Redimensionamento automático para OCR
+- Processamento rápido e seguro
+
+TEXTOS DETECTADOS:
+- Produto 1 - Rápido - Palavra: wy
+- Produto 2 - Rápido - Palavra: wy
+- Produto 2 - Rápido - Geral: CE 
+Ry No
+Y SERIA MODELO 5 DE RL 
+EJA MEXICO
+- Produto 4 - Rápido - Geral: mir  Ro
+E DP us ly  O
+
+EN
+ao
+E  Em DECY
+- Produto 5 - Rápido - Geral: A a 
+q
+
+MARCAS IDENTIFICADAS:
+- MEXICO
+
+=== ARQUIVOS GERADOS ===
+1_sem_fundo.jpg - Imagem com fundo removido
+2_produto_X_zoom.jpg - Produtos com zoom controlado
+3_produto_X_ocr.jpg - Produtos otimizados para OCR
+4_relatorio_otimizado.txt - Este relatório

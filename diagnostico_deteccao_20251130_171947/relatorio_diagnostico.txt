@@ -1,0 +1,17 @@
+DIAGNÓSTICO DE DETECÇÃO DE PRODUTOS
+==================================================
+
+Imagem: imagens_teste/corona_produtos.jpeg
+Data: 30/11/2025 17:19:51
+
+OBJETIVO: Detectar exatamente 4 produtos Corona
+
+RESULTADOS POR MÉTODO:
+- MÉTODO 1 - Contornos Simples: 20 produtos
+- MÉTODO 2 - Contornos Rigorosos: 0 produtos
+- MÉTODO 3 - Detecção por Cor: 3 produtos
+- MÉTODO 4 - Template Matching: 253437 produtos
+- MÉTODO 5 - Análise Vertical: 1 produtos
+
+CONSENSO: 0 produtos (mais frequente)
+MÉDIA: 50692.2 produtos

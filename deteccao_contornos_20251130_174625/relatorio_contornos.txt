@@ -1,0 +1,24 @@
+DETECÇÃO POR CONTORNOS EXTERNOS
+===================================
+
+MÉTODO:
+1. Conversão para escala de cinza
+2. Detecção de bordas (Canny)
+3. Encontrar contornos externos
+4. Filtrar por tamanho e forma
+5. Eliminar sobreposições
+6. Classificar por proporção
+
+RESULTADO: PRECISA AJUSTAR 🔧
+Total: 1 produtos
+Garrafas: 0
+Latas: 1
+Outros: 0
+
+PRODUTOS DETECTADOS:
+ID 1 - LATA:
+  Área: 44577 pixels
+  Proporção W/H: 1.21
+  Extent: 0.53
+  Centro: (1283, 1110)
+

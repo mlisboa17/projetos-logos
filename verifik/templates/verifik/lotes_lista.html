@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lotes de Fotos - VerifiK</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1B4D3E 0%, #D4AF37 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #1B4D3E;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-align: center;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #1B4D3E 0%, #2a6b54 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 3em;
+            font-weight: bold;
+            display: block;
+        }
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background: #1B4D3E;
+            color: white;
+            font-weight: 600;
+        }
+        tr:hover {
+            background: #f5f5f5;
+        }
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background: #D4AF37;
+            color: #1B4D3E;
+        }
+        .btn-primary:hover {
+            background: #c09d2d;
+            transform: translateY(-2px);
+        }
+        .badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        .badge-success { background: #28a745; color: white; }
+        .badge-warning { background: #ffc107; color: #000; }
+        .badge-danger { background: #dc3545; color: white; }
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+        .empty-state-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #1B4D3E;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">← Voltar ao Início</a>
+        
+        <h1>📦 Lotes de Fotos Coletadas</h1>
+        
+        <div style="margin-bottom: 30px; text-align: center;">
+            <a href="{% url 'processar_automatico' %}" class="btn btn-primary" style="font-size: 1.2em; padding: 15px 30px;">
+                🤖 Processar Imagens Automaticamente com IA
+            </a>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <span class="stat-number">{{ total_lotes }}</span>
+                <span class="stat-label">Total de Lotes</span>
+            </div>
+        </div>
+
+        {% if lotes %}
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nome do Lote</th>
+                    <th>Enviado por</th>
+                    <th>Data</th>
+                    <th>Total</th>
+                    <th>Pendentes</th>
+                    <th>Aprovadas</th>
+                    <th>Rejeitadas</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for lote in lotes %}
+                <tr>
+                    <td><strong>{{ lote.id }}</strong></td>
+                    <td>{{ lote.nome }}</td>
+                    <td>
+                        {% if lote.enviado_por %}
+                            {{ lote.enviado_por.get_full_name|default:lote.enviado_por.username }}
+                        {% else %}
+                            <em>Sistema</em>
+                        {% endif %}
+                    </td>
+                    <td>{{ lote.data_criacao|date:"d/m/Y H:i" }}</td>
+                    <td><span class="badge badge-primary">{{ lote.total_imagens }}</span></td>
+                    <td><span class="badge badge-warning">{{ lote.imagens_pendentes }}</span></td>
+                    <td><span class="badge badge-success">{{ lote.imagens_aprovadas_count }}</span></td>
+                    <td><span class="badge badge-danger">{{ lote.imagens_rejeitadas_count }}</span></td>
+                    <td>
+                        <a href="{% url 'detalhe_lote' lote.id %}" class="btn btn-primary">Ver Detalhes</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-state-icon">📭</div>
+            <h2>Nenhum lote encontrado</h2>
+            <p>Quando funcionários enviarem fotos, os lotes aparecerão aqui.</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

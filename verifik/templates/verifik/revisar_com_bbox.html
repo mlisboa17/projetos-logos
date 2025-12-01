@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revisar Produtos com BBox - VerifiK</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 { color: #667eea; margin-bottom: 30px; }
+        .image-review {
+            margin-bottom: 50px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border: 3px solid #667eea;
+        }
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #667eea;
+        }
+        .review-layout {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 30px;
+        }
+        .canvas-wrapper {
+            position: relative;
+            background: #fff;
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        canvas {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            cursor: crosshair;
+            border-radius: 8px;
+        }
+        .detections-panel {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+            max-height: 800px;
+            overflow-y: auto;
+        }
+        .detection-card {
+            background: #f8f9fa;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border: 3px solid #FF00FF;
+            transition: all 0.3s;
+        }
+        .detection-card:hover {
+            box-shadow: 0 5px 15px rgba(255, 0, 255, 0.3);
+            transform: translateX(5px);
+        }
+        .detection-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .detection-number {
+            background: #FF00FF;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        .confianca-badge {
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        .alta { background: #28a745; color: white; }
+        .media { background: #ffc107; color: #000; }
+        .baixa { background: #dc3545; color: white; }
+        .info-row {
+            margin: 8px 0;
+            padding: 8px;
+            background: white;
+            border-radius: 5px;
+            font-size: 0.95em;
+        }
+        .info-row strong {
+            color: #667eea;
+        }
+        .produto-sugerido {
+            background: #d4edda;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #28a745;
+        }
+        .produto-sugerido h4 {
+            color: #28a745;
+            margin-bottom: 5px;
+        }
+        .select-produto {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-size: 0.95em;
+        }
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin: 5px;
+            transition: all 0.3s;
+        }
+        .btn-success { background: #28a745; color: white; }
+        .btn-warning { background: #ffc107; color: #000; }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-secondary { background: #6c757d; color: white; }
+        .btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+        .btn-group {
+            display: flex;
+            gap: 5px;
+            margin-top: 10px;
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #667eea;
+            font-weight: bold;
+        }
+        .status-approved {
+            background: #d4edda !important;
+            border-color: #28a745 !important;
+        }
+        .status-rejected {
+            background: #f8d7da !important;
+            border-color: #dc3545 !important;
+            opacity: 0.6;
+        }
+        .status-manual {
+            background: #fff3cd !important;
+            border-color: #ffc107 !important;
+        }
+        .tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            margin: 2px;
+        }
+        .tag-forma { background: #667eea; color: white; }
+        .tag-ocr { background: #764ba2; color: white; }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{% url 'listar_lotes' %}" class="back-link">← Voltar</a>
+        
+        <h1>🤖 Revisão Inteligente com Múltiplos BBoxes</h1>
+
+        <div id="imagesContainer"></div>
+    </div>
+
+    <script>
+        const imagens = {{ imagens_json|safe }};
+        const produtos = {{ produtos_json|safe }};
+        const csrfToken = '{{ csrf_token }}';
+
+        function renderImagens() {
+            const container = document.getElementById('imagesContainer');
+            
+            imagens.forEach((imagemData, imgIdx) => {
+                const div = document.createElement('div');
+                div.className = 'image-review';
+                div.innerHTML = `
+                    <div class="review-header">
+                        <div>
+                            <h2>Imagem ${imgIdx + 1} de ${imagens.length}</h2>
+                            <p style="color: #666;">Arquivo: ${imagemData.filename}</p>
+                            <p style="color: #dc3545;">Atual: ${imagemData.produto_atual}</p>
+                        </div>
+                        <div id="status_${imgIdx}" style="font-weight: bold; font-size: 1.2em;"></div>
+                    </div>
+                    <div class="review-layout">
+                        <div class="canvas-wrapper">
+                            <canvas id="canvas_${imgIdx}"></canvas>
+                        </div>
+                        <div class="detections-panel" id="detections_${imgIdx}">
+                            <div class="loading">🔍 Analisando produtos...</div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(div);
+
+                // Carregar e processar imagem
+                processarImagem(imagemData, imgIdx);
+            });
+        }
+
+        async function processarImagem(imagemData, imgIdx) {
+            const canvas = document.getElementById(`canvas_${imgIdx}`);
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            
+            img.onload = async function() {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
+
+                // Chamar API de detecção
+                await detectarProdutos(imagemData, imgIdx, img, canvas, ctx);
+            };
+            
+            img.src = imagemData.url;
+        }
+
+        async function detectarProdutos(imagemData, imgIdx, img, canvas, ctx) {
+            try {
+                const response = await fetch(imagemData.url);
+                const blob = await response.blob();
+                
+                const formData = new FormData();
+                formData.append('image', blob);
+
+                const apiResponse = await fetch('/verifik/coleta/api/detectar-produtos/', {
+                    method: 'POST',
+                    headers: { 'X-CSRFToken': csrfToken },
+                    body: formData
+                });
+
+                const data = await apiResponse.json();
+
+                if (data.success && data.bboxes.length > 0) {
+                    renderDetections(data.bboxes, imgIdx, imagemData, img, canvas, ctx);
+                    desenharBboxes(data.bboxes, img, canvas, ctx);
+                } else {
+                    document.getElementById(`detections_${imgIdx}`).innerHTML = `
+                        <div style="text-align: center; padding: 20px; color: #dc3545;">
+                            <h3>⚠️ Nenhum produto detectado</h3>
+                            <p>A IA não conseguiu detectar produtos nesta imagem.</p>
+                            <button class="btn btn-danger" onclick="rejeitarImagem(${imagemData.id})">
+                                ❌ Rejeitar Imagem
+                            </button>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                document.getElementById(`detections_${imgIdx}`).innerHTML = `
+                    <div style="color: #dc3545;">❌ Erro ao processar: ${error.message}</div>
+                `;
+            }
+        }
+
+        function renderDetections(bboxes, imgIdx, imagemData, img, canvas, ctx) {
+            const panel = document.getElementById(`detections_${imgIdx}`);
+            panel.innerHTML = '';
+
+            bboxes.forEach((bbox, bboxIdx) => {
+                const card = document.createElement('div');
+                card.className = 'detection-card';
+                card.id = `detection_${imgIdx}_${bboxIdx}`;
+
+                const confiancaClass = bbox.confianca_sugestao >= 70 ? 'alta' : 
+                                      bbox.confianca_sugestao >= 40 ? 'media' : 'baixa';
+
+                card.innerHTML = `
+                    <div class="detection-header">
+                        <span class="detection-number">Produto ${bboxIdx + 1}</span>
+                        <span class="confianca-badge ${confiancaClass}">
+                            ${bbox.confianca_sugestao.toFixed(2)}%
+                        </span>
+                    </div>
+
+                    ${bbox.codigo_barras ? `
+                        <div style="background: linear-gradient(135deg, #ffd700, #ffed4e); padding: 12px; border-radius: 8px; margin-bottom: 10px; border: 3px solid #ffa500;">
+                            <h4 style="margin: 0; color: #000;">🔥 CÓDIGO DE BARRAS DETECTADO!</h4>
+                            <div style="font-size: 1.2em; font-weight: bold; color: #000; margin: 5px 0;">${bbox.codigo_barras}</div>
+                            <small style="color: #333;">Tipo: ${bbox.tipo_barcode} | Confiança: 99.99%</small>
+                        </div>
+                    ` : ''}
+
+                    <div class="info-row">
+                        <strong>🔍 Forma:</strong> 
+                        <span class="tag tag-forma">${bbox.forma.toUpperCase()}</span>
+                    </div>
+
+                    <div class="info-row">
+                        <strong>📝 OCR:</strong><br>
+                        ${bbox.ocr_texto.length > 0 ? 
+                            bbox.ocr_texto.map(t => `<span class="tag tag-ocr">${t}</span>`).join(' ') : 
+                            '<em>Nenhum texto</em>'}
+                    </div>
+
+                    ${bbox.produto_sugerido_id ? `
+                        <div class="produto-sugerido">
+                            <h4>🎯 Sugestão da IA</h4>
+                            <strong>${getProdutoNome(bbox.produto_sugerido_id)}</strong><br>
+                            <small>💡 ${bbox.razao_sugestao}</small>
+                        </div>
+
+                        <select class="select-produto" id="select_${imgIdx}_${bboxIdx}">
+                            <option value="">-- Escolha o produto --</option>
+                            ${produtos.map(p => `
+                                <option value="${p.id}" ${p.id == bbox.produto_sugerido_id ? 'selected' : ''}>
+                                    ${p.nome}
+                                </option>
+                            `).join('')}
+                        </select>
+
+                        <div class="btn-group">
+                            <button class="btn btn-success" onclick="aprovarBbox(${imagemData.id}, ${imgIdx}, ${bboxIdx}, ${bbox.produto_sugerido_id}, ${JSON.stringify(bbox).replace(/"/g, '&quot;')})">
+                                ✅ Aprovar
+                            </button>
+                            <button class="btn btn-warning" onclick="salvarManual(${imagemData.id}, ${imgIdx}, ${bboxIdx}, ${JSON.stringify(bbox).replace(/"/g, '&quot;')})">
+                                🔧 Manual
+                            </button>
+                            <button class="btn btn-danger" onclick="rejeitarBbox(${imgIdx}, ${bboxIdx})">
+                                ❌ Rejeitar
+                            </button>
+                        </div>
+                    ` : `
+                        <div style="background: #f8d7da; padding: 10px; border-radius: 5px; color: #dc3545;">
+                            <strong>⚠️ Baixa confiança</strong><br>
+                            Selecione o produto manualmente:
+                        </div>
+                        
+                        <select class="select-produto" id="select_${imgIdx}_${bboxIdx}">
+                            <option value="">-- Escolha o produto --</option>
+                            ${produtos.map(p => `<option value="${p.id}">${p.nome}</option>`).join('')}
+                        </select>
+
+                        <div class="btn-group">
+                            <button class="btn btn-warning" onclick="salvarManual(${imagemData.id}, ${imgIdx}, ${bboxIdx}, ${JSON.stringify(bbox).replace(/"/g, '&quot;')})">
+                                💾 Salvar Manual
+                            </button>
+                            <button class="btn btn-danger" onclick="rejeitarBbox(${imgIdx}, ${bboxIdx})">
+                                ❌ Rejeitar
+                            </button>
+                        </div>
+                    `}
+                `;
+
+                panel.appendChild(card);
+            });
+
+            // Adicionar botão de aprovar tudo
+            if (bboxes.filter(b => b.produto_sugerido_id && b.confianca_sugestao >= 70).length > 0) {
+                const btnTodos = document.createElement('button');
+                btnTodos.className = 'btn btn-success';
+                btnTodos.style.width = '100%';
+                btnTodos.style.marginTop = '20px';
+                btnTodos.innerHTML = `✅ Aprovar TODOS com Alta Confiança (${bboxes.filter(b => b.produto_sugerido_id && b.confianca_sugestao >= 70).length})`;
+                btnTodos.onclick = () => aprovarTodos(imagemData.id, imgIdx, bboxes);
+                panel.appendChild(btnTodos);
+            }
+        }
+
+        function desenharBboxes(bboxes, img, canvas, ctx) {
+            // Redesenhar imagem
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0);
+
+            // Desenhar cada bbox
+            bboxes.forEach((bbox, idx) => {
+                const x = (bbox.x - bbox.width / 2) * canvas.width;
+                const y = (bbox.y - bbox.height / 2) * canvas.height;
+                const w = bbox.width * canvas.width;
+                const h = bbox.height * canvas.height;
+
+                // Cor baseada em confiança - DOURADO para código de barras (99.99%)
+                let cor;
+                if (bbox.confianca_sugestao >= 99.9) {
+                    cor = '#FFD700'; // ⭐ DOURADO - Código de barras!
+                } else if (bbox.confianca_sugestao >= 70) {
+                    cor = '#28a745'; // Verde - Alta
+                } else if (bbox.confianca_sugestao >= 40) {
+                    cor = '#ffc107'; // Amarelo - Média
+                } else {
+                    cor = '#dc3545'; // Vermelho - Baixa
+                }
+
+                ctx.strokeStyle = cor;
+                ctx.lineWidth = 4;
+                ctx.strokeRect(x, y, w, h);
+
+                // Sombra
+                ctx.shadowColor = cor;
+                ctx.shadowBlur = 10;
+                ctx.strokeRect(x, y, w, h);
+                ctx.shadowBlur = 0;
+
+                // Label
+                ctx.fillStyle = cor;
+                ctx.fillRect(x, y - 35, 150, 35);
+                ctx.fillStyle = bbox.confianca_sugestao >= 99.9 ? '#000' : '#FFF';
+                ctx.font = 'bold 16px Arial';
+                ctx.fillText(`Produto ${idx + 1}`, x + 5, y - 10);
+            });
+        }
+
+        function getProdutoNome(id) {
+            const produto = produtos.find(p => p.id == id);
+            return produto ? produto.nome : 'Desconhecido';
+        }
+
+        async function aprovarBbox(imagemId, imgIdx, bboxIdx, produtoId, bboxData) {
+            const select = document.getElementById(`select_${imgIdx}_${bboxIdx}`);
+            const produtoFinal = select.value || produtoId;
+
+            if (!produtoFinal) {
+                alert('Selecione um produto!');
+                return;
+            }
+
+            try {
+                const response = await fetch('/verifik/coleta/api/aprovar-bbox/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: JSON.stringify({
+                        imagem_id: imagemId,
+                        produto_id: produtoFinal,
+                        bbox_data: bboxData
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    const card = document.getElementById(`detection_${imgIdx}_${bboxIdx}`);
+                    card.className = 'detection-card status-approved';
+                    card.innerHTML = `
+                        <div style="text-align: center; padding: 20px;">
+                            <h3 style="color: #28a745;">✅ APROVADO</h3>
+                            <p>${getProdutoNome(produtoFinal)}</p>
+                            <small>Salvo no dataset com sucesso!</small>
+                        </div>
+                    `;
+                } else {
+                    alert('Erro ao aprovar: ' + result.error);
+                }
+            } catch (error) {
+                alert('Erro: ' + error.message);
+            }
+        }
+
+        async function salvarManual(imagemId, imgIdx, bboxIdx, bboxData) {
+            const select = document.getElementById(`select_${imgIdx}_${bboxIdx}`);
+            
+            if (!select.value) {
+                alert('Selecione um produto primeiro!');
+                return;
+            }
+
+            aprovarBbox(imagemId, imgIdx, bboxIdx, select.value, bboxData);
+        }
+
+        function rejeitarBbox(imgIdx, bboxIdx) {
+            if (!confirm('Rejeitar este produto detectado?')) return;
+
+            const card = document.getElementById(`detection_${imgIdx}_${bboxIdx}`);
+            card.className = 'detection-card status-rejected';
+            card.innerHTML = `
+                <div style="text-align: center; padding: 20px; color: #dc3545;">
+                    <h3>❌ REJEITADO</h3>
+                    <small>Este produto não será salvo</small>
+                </div>
+            `;
+        }
+
+        async function aprovarTodos(imagemId, imgIdx, bboxes) {
+            if (!confirm(`Aprovar ${bboxes.filter(b => b.confianca_sugestao >= 70).length} produtos com alta confiança?`)) return;
+
+            for (let i = 0; i < bboxes.length; i++) {
+                const bbox = bboxes[i];
+                if (bbox.produto_sugerido_id && bbox.confianca_sugestao >= 70) {
+                    await aprovarBbox(imagemId, imgIdx, i, bbox.produto_sugerido_id, bbox);
+                    await new Promise(resolve => setTimeout(resolve, 500)); // Delay entre aprovações
+                }
+            }
+
+            alert('✅ Todos os produtos aprovados!');
+        }
+
+        async function rejeitarImagem(imagemId) {
+            if (!confirm('Rejeitar esta imagem completamente?')) return;
+
+            window.location.href = `/verifik/coleta/rejeitar-imagem/${imagemId}/`;
+        }
+
+        // Inicializar
+        renderImagens();
+    </script>
+</body>
+</html>

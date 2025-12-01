@@ -203,7 +203,7 @@ def user_login(request):
         user = authenticate(request, username=email, password=password)
         
         if user is not None:
-            if user.is_approved:
+            if user.is_active:
                 login(request, user)
                 next_url = request.GET.get('next', 'home')
                 return redirect(next_url)

@@ -1,0 +1,560 @@
+{% extends 'verifik/base.html' %}
+
+{% block title %}{{ title }} - VerifiK{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Cabeçalho da Interface -->
+    <div class="row mb-4">
+        <div class="col">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="mb-2">🤖 {{ title }}</h1>
+                    <p class="text-muted mb-0">Sistema ultra-rápido de detecção de marcas com IA</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <button id="btn-teste" class="btn btn-warning btn-sm">
+                        <i class="bi bi-bug"></i> Teste Debug
+                    </button>
+                    <button id="btn-exemplo" class="btn btn-outline-info btn-sm">
+                        <i class="bi bi-image"></i> Exemplo
+                    </button>
+                    <button id="btn-limpar" class="btn btn-outline-secondary btn-sm">
+                        <i class="bi bi-trash"></i> Limpar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interface Principal -->
+    <div class="row">
+        <!-- Painel de Upload e Controles -->
+        <div class="col-lg-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="bi bi-cloud-upload"></i> Upload de Imagem</h5>
+                </div>
+                <div class="card-body">
+                    <!-- Área de Upload -->
+                    <div id="upload-area" class="upload-zone mb-4">
+                        <div class="upload-content">
+                            <i class="bi bi-cloud-upload upload-icon"></i>
+                            <h6>Arraste uma imagem aqui</h6>
+                            <p class="text-muted small mb-3">ou clique para selecionar</p>
+                            <input type="file" id="file-input" accept="image/*" hidden>
+                            <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('file-input').click()">
+                                <i class="bi bi-folder-open"></i> Selecionar Arquivo
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Preview da Imagem -->
+                    <div id="preview-container" class="text-center mb-4" style="display: none;">
+                        <img id="image-preview" src="" alt="Preview" class="img-fluid rounded shadow-sm" style="max-height: 200px;">
+                        <div class="mt-2">
+                            <small id="file-info" class="text-muted"></small>
+                        </div>
+                    </div>
+
+                    <!-- Botão de Detecção -->
+                    <div class="d-grid gap-2">
+                        <button id="btn-detectar" class="btn btn-success btn-lg" disabled>
+                            <i class="bi bi-search"></i> Detectar Marcas
+                        </button>
+                    </div>
+
+                    <!-- Marcas Conhecidas -->
+                    <div class="mt-4">
+                        <h6 class="text-muted">🏷️ Marcas Conhecidas:</h6>
+                        <div class="marcas-grid">
+                            {% for marca in marcas_conhecidas %}
+                            <span class="badge bg-light text-dark me-1 mb-1">{{ marca }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Painel de Resultados -->
+        <div class="col-lg-8">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="bi bi-graph-up"></i> Resultados da Detecção</h5>
+                    <div id="status-badge" class="badge bg-secondary">Aguardando...</div>
+                </div>
+                <div class="card-body">
+                    <!-- Estado Inicial -->
+                    <div id="resultado-inicial" class="text-center py-5">
+                        <i class="bi bi-robot text-muted" style="font-size: 4rem;"></i>
+                        <h4 class="text-muted mt-3">Envie uma imagem para começar</h4>
+                        <p class="text-muted">O sistema detectará automaticamente marcas de produtos</p>
+                    </div>
+
+                    <!-- Loading -->
+                    <div id="loading-container" class="text-center py-5" style="display: none;">
+                        <div class="spinner-border text-primary mb-3" role="status">
+                            <span class="visually-hidden">Processando...</span>
+                        </div>
+                        <h5 class="text-primary">🤖 Analisando imagem...</h5>
+                        <p class="text-muted">Detectando objetos, extraindo texto e identificando marcas</p>
+                        <div class="progress mt-3" style="max-width: 300px; margin: 0 auto;">
+                            <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" 
+                                 role="progressbar" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Resultados -->
+                    <div id="resultados-container" style="display: none;">
+                        <!-- Estatísticas Rápidas -->
+                        <div class="row mb-4">
+                            <div class="col-6 col-md-3">
+                                <div class="stat-card">
+                                    <div class="stat-number" id="stat-tempo">-</div>
+                                    <div class="stat-label">Tempo (s)</div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <div class="stat-card">
+                                    <div class="stat-number" id="stat-regioes">-</div>
+                                    <div class="stat-label">Regiões</div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <div class="stat-card">
+                                    <div class="stat-number" id="stat-textos">-</div>
+                                    <div class="stat-label">Textos</div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <div class="stat-card">
+                                    <div class="stat-number" id="stat-marcas">-</div>
+                                    <div class="stat-label">Marcas</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Marcas Detectadas -->
+                        <div class="mb-4">
+                            <h6 class="fw-bold">🏷️ Marcas Identificadas:</h6>
+                            <div id="marcas-detectadas">
+                                <!-- Preenchido dinamicamente -->
+                            </div>
+                        </div>
+
+                        <!-- Textos Extraídos -->
+                        <div class="mb-4">
+                            <h6 class="fw-bold">📝 Textos Extraídos:</h6>
+                            <div id="textos-extraidos" class="accordion">
+                                <!-- Preenchido dinamicamente -->
+                            </div>
+                        </div>
+
+                        <!-- Ações -->
+                        <div class="d-flex gap-2 flex-wrap">
+                            <button id="btn-salvar-resultado" class="btn btn-primary btn-sm">
+                                <i class="bi bi-save"></i> Salvar Resultado
+                            </button>
+                            <button id="btn-exportar-json" class="btn btn-outline-secondary btn-sm">
+                                <i class="bi bi-download"></i> Exportar JSON
+                            </button>
+                            <button id="btn-nova-deteccao" class="btn btn-outline-info btn-sm">
+                                <i class="bi bi-arrow-repeat"></i> Nova Detecção
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Erro -->
+                    <div id="erro-container" class="alert alert-danger" style="display: none;">
+                        <h6 class="alert-heading"><i class="bi bi-exclamation-triangle"></i> Erro na Detecção</h6>
+                        <p id="erro-mensagem" class="mb-0"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Estilos personalizados para a interface */
+.upload-zone {
+    border: 2px dashed #007bff;
+    border-radius: 10px;
+    padding: 2rem 1rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    background: #f8f9fa;
+}
+
+.upload-zone:hover, .upload-zone.dragover {
+    border-color: #0056b3;
+    background: #e3f2fd;
+}
+
+.upload-icon {
+    font-size: 2.5rem;
+    color: #007bff;
+    margin-bottom: 1rem;
+}
+
+.marcas-grid {
+    max-height: 120px;
+    overflow-y: auto;
+}
+
+.stat-card {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    border: 1px solid #e9ecef;
+}
+
+.stat-number {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #28a745;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: #6c757d;
+    margin-top: 0.25rem;
+}
+
+.marca-item {
+    background: linear-gradient(45deg, #28a745, #20c997);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    margin: 0.25rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.marca-confianca {
+    background: rgba(255,255,255,0.2);
+    padding: 0.1rem 0.4rem;
+    border-radius: 10px;
+    font-size: 0.75rem;
+}
+
+.texto-item {
+    background: #f8f9fa;
+    border-left: 4px solid #007bff;
+    padding: 0.75rem;
+    margin: 0.5rem 0;
+    border-radius: 0 8px 8px 0;
+    font-family: monospace;
+    font-size: 0.9rem;
+}
+
+.bi-robot {
+    opacity: 0.3;
+}
+</style>
+
+<script>
+// JavaScript para funcionalidade da interface
+let arquivoSelecionado = null;
+let ultimoResultado = null;
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM carregado, inicializando interface...');
+    
+    // Elementos DOM
+    const uploadArea = document.getElementById('upload-area');
+    const fileInput = document.getElementById('file-input');
+    const btnDetectar = document.getElementById('btn-detectar');
+    const btnLimpar = document.getElementById('btn-limpar');
+    const btnExemplo = document.getElementById('btn-exemplo');
+    
+    console.log('Elementos encontrados:', {
+        uploadArea: !!uploadArea,
+        fileInput: !!fileInput,
+        btnDetectar: !!btnDetectar
+    });
+
+    // Upload por drag & drop
+    uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.classList.add('dragover');
+    });
+
+    uploadArea.addEventListener('dragleave', () => {
+        uploadArea.classList.remove('dragover');
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            processarArquivo(files[0]);
+        }
+    });
+
+    // Upload por clique
+    uploadArea.addEventListener('click', () => {
+        fileInput.click();
+    });
+
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+            processarArquivo(e.target.files[0]);
+        }
+    });
+
+    // Botão detectar
+    btnDetectar.addEventListener('click', detectarMarcas);
+
+    // Botão limpar
+    btnLimpar.addEventListener('click', limparInterface);
+
+    // Botão exemplo
+    btnExemplo.addEventListener('click', carregarExemplo);
+    
+    // Botão teste debug
+    document.getElementById('btn-teste').addEventListener('click', function() {
+        console.log('=== TESTE DEBUG ===');
+        console.log('Arquivo selecionado:', arquivoSelecionado);
+        console.log('Botão detectar:', document.getElementById('btn-detectar'));
+        console.log('Botão detectar disabled:', document.getElementById('btn-detectar').disabled);
+        
+        if (arquivoSelecionado) {
+            alert('Arquivo OK: ' + arquivoSelecionado.name + '\nTipo: ' + arquivoSelecionado.type + '\nTamanho: ' + (arquivoSelecionado.size / 1024 / 1024).toFixed(2) + ' MB');
+        } else {
+            alert('Nenhum arquivo selecionado!');
+        }
+    });
+});
+
+function processarArquivo(arquivo) {
+    console.log('Processando arquivo:', arquivo.name, arquivo.type, arquivo.size);
+    
+    // Validar tipo
+    const tiposPermitidos = ['image/jpeg', 'image/jpg', 'image/png', 'image/bmp'];
+    if (!tiposPermitidos.includes(arquivo.type)) {
+        alert('Tipo de arquivo não suportado. Use JPEG, PNG ou BMP.');
+        return;
+    }
+
+    // Validar tamanho (10MB max)
+    if (arquivo.size > 10 * 1024 * 1024) {
+        alert('Arquivo muito grande. Máximo 10MB.');
+        return;
+    }
+
+    arquivoSelecionado = arquivo;
+    console.log('Arquivo selecionado:', arquivo);
+
+    // Mostrar preview
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        console.log('FileReader carregou a imagem');
+        
+        // Pegar elementos corretamente
+        const imagePreview = document.getElementById('image-preview');
+        const previewContainer = document.getElementById('preview-container');
+        const fileInfo = document.getElementById('file-info');
+        
+        imagePreview.src = e.target.result;
+        previewContainer.style.display = 'block';
+        
+        // Habilitar botão e mudar cor
+        const btnDetectar = document.getElementById('btn-detectar');
+        btnDetectar.disabled = false;
+        btnDetectar.innerHTML = '<i class="bi bi-search"></i> Detectar Marcas - PRONTO!';
+        btnDetectar.classList.add('btn-warning');
+        
+        console.log('Botão detectar habilitado');
+
+        // Atualizar info
+        const tamanhoMB = (arquivo.size / 1024 / 1024).toFixed(2);
+        fileInfo.textContent = `${arquivo.name} (${tamanhoMB} MB) - PRONTO PARA DETECTAR!`;
+        fileInfo.style.color = 'green';
+        fileInfo.style.fontWeight = 'bold';
+    };
+    
+    reader.onerror = (e) => {
+        console.error('Erro ao ler arquivo:', e);
+        alert('Erro ao ler o arquivo');
+    };
+    
+    reader.readAsDataURL(arquivo);
+}
+
+function detectarMarcas() {
+    console.log('Botão detectar clicado!');
+    
+    if (!arquivoSelecionado) {
+        alert('Selecione uma imagem primeiro.');
+        console.log('Erro: Nenhum arquivo selecionado');
+        return;
+    }
+
+    console.log('Iniciando detecção para:', arquivoSelecionado.name);
+
+    // Mostrar loading
+    mostrarLoading();
+
+    // Criar FormData
+    const formData = new FormData();
+    formData.append('imagem', arquivoSelecionado);
+    
+    console.log('FormData criado, enviando para API...');
+
+    // Enviar para API
+    fetch('{% url "verifik_api_detectar_imagem" %}', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken')
+        }
+    })
+    .then(response => {
+        console.log('Resposta recebida, status:', response.status);
+        return response.json();
+    })
+    .then(data => {
+        console.log('Dados recebidos:', data);
+        esconderLoading();
+        
+        if (data.sucesso) {
+            console.log('Sucesso! Mostrando resultados...');
+            mostrarResultados(data);
+        } else {
+            console.log('Erro nos dados:', data.erro);
+            mostrarErro(data.erro || 'Erro desconhecido');
+        }
+    })
+    .catch(error => {
+        console.error('Erro na requisição:', error);
+        esconderLoading();
+        mostrarErro('Erro de conexão: ' + error.message);
+    });
+}
+
+function mostrarLoading() {
+    document.getElementById('resultado-inicial').style.display = 'none';
+    document.getElementById('resultados-container').style.display = 'none';
+    document.getElementById('erro-container').style.display = 'none';
+    document.getElementById('loading-container').style.display = 'block';
+    document.getElementById('status-badge').textContent = 'Processando...';
+    document.getElementById('status-badge').className = 'badge bg-warning';
+
+    // Simular progresso
+    let progresso = 0;
+    const progressBar = document.getElementById('progress-bar');
+    const interval = setInterval(() => {
+        progresso += Math.random() * 20;
+        if (progresso >= 100) {
+            progresso = 100;
+            clearInterval(interval);
+        }
+        progressBar.style.width = progresso + '%';
+    }, 200);
+}
+
+function esconderLoading() {
+    document.getElementById('loading-container').style.display = 'none';
+}
+
+function mostrarResultados(data) {
+    ultimoResultado = data;
+
+    // Atualizar estatísticas
+    document.getElementById('stat-tempo').textContent = data.tempo_processamento.toFixed(2);
+    document.getElementById('stat-regioes').textContent = data.regioes_processadas;
+    document.getElementById('stat-textos').textContent = data.textos_extraidos;
+    document.getElementById('stat-marcas').textContent = data.total_marcas_unicas;
+
+    // Mostrar marcas detectadas
+    const marcasContainer = document.getElementById('marcas-detectadas');
+    if (data.marcas_detectadas && data.marcas_detectadas.length > 0) {
+        marcasContainer.innerHTML = data.marcas_detectadas.map(marca => `
+            <div class="marca-item">
+                🍺 ${marca.marca}
+                <span class="marca-confianca">${marca.confianca}</span>
+            </div>
+        `).join('');
+    } else {
+        marcasContainer.innerHTML = '<div class="alert alert-info">Nenhuma marca identificada</div>';
+    }
+
+    // Mostrar textos extraídos
+    const textosContainer = document.getElementById('textos-extraidos');
+    if (data.textos_detalhes && data.textos_detalhes.length > 0) {
+        textosContainer.innerHTML = data.textos_detalhes.slice(0, 5).map((texto, index) => `
+            <div class="texto-item">
+                <strong>Versão ${texto.versao}.${texto.config}:</strong><br>
+                "${texto.texto.substring(0, 100)}${texto.texto.length > 100 ? '...' : ''}"
+            </div>
+        `).join('');
+    } else {
+        textosContainer.innerHTML = '<div class="alert alert-info">Nenhum texto extraído</div>';
+    }
+
+    // Mostrar container de resultados
+    document.getElementById('resultados-container').style.display = 'block';
+    document.getElementById('status-badge').textContent = 'Concluído';
+    document.getElementById('status-badge').className = 'badge bg-success';
+}
+
+function mostrarErro(mensagem) {
+    document.getElementById('erro-mensagem').textContent = mensagem;
+    document.getElementById('erro-container').style.display = 'block';
+    document.getElementById('status-badge').textContent = 'Erro';
+    document.getElementById('status-badge').className = 'badge bg-danger';
+}
+
+function limparInterface() {
+    console.log('Limpando interface...');
+    
+    arquivoSelecionado = null;
+    ultimoResultado = null;
+    
+    const fileInput = document.getElementById('file-input');
+    const previewContainer = document.getElementById('preview-container');
+    const btnDetectar = document.getElementById('btn-detectar');
+    
+    fileInput.value = '';
+    previewContainer.style.display = 'none';
+    btnDetectar.disabled = true;
+    btnDetectar.innerHTML = '<i class="bi bi-search"></i> Detectar Marcas';
+    btnDetectar.classList.remove('btn-warning');
+    
+    document.getElementById('resultado-inicial').style.display = 'block';
+    document.getElementById('loading-container').style.display = 'none';
+    document.getElementById('resultados-container').style.display = 'none';
+    document.getElementById('erro-container').style.display = 'none';
+    
+    document.getElementById('status-badge').textContent = 'Aguardando...';
+    document.getElementById('status-badge').className = 'badge bg-secondary';
+}
+
+function carregarExemplo() {
+    alert('Carregue uma imagem de exemplo do seu dispositivo para testar o sistema.');
+}
+
+// Função utilitária para CSRF token
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+</script>
+{% endblock %}

@@ -1,0 +1,10 @@
+=== PIPELINE LÓGICA CORRETA ===
+
+Imagem: imagens_teste/corona_produtos.jpeg
+Data: 30/11/2025 16:26:50
+
+FASE 1 - YOLO INICIAL: 0 produtos
+FASE 3 - YOLO PREPROCESSADA: 0 produtos
+DECISÃO ASSERTIVA: NENHUMA
+
+RESULTADOS FINAIS:

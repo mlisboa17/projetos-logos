@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Galeria de Imagens Processadas - VerifiK{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">
+                <i class="fas fa-images"></i> Galeria de Imagens Processadas
+                <small class="text-muted">({{ total }} imagens)</small>
+            </h1>
+        </div>
+    </div>
+
+    {% if imagens %}
+    <div class="row">
+        {% for img in imagens %}
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="card h-100">
+                <div class="card-img-top" style="height: 250px; overflow: hidden; background: #f8f9fa;">
+                    <img src="{{ img.caminho }}" class="img-fluid w-100 h-100" style="object-fit: contain;" alt="Processada">
+                </div>
+                <div class="card-body">
+                    <h6 class="card-title">{{ img.tipo }}</h6>
+                    <p class="card-text small text-muted">
+                        <i class="fas fa-calendar"></i> {{ img.data|date:"d/m/Y H:i" }}
+                    </p>
+                    <p class="card-text small text-truncate" title="{{ img.original }}">
+                        <i class="fas fa-file"></i> {{ img.original|truncatechars:30 }}
+                    </p>
+                </div>
+                <div class="card-footer bg-white">
+                    <a href="{{ img.caminho }}" target="_blank" class="btn btn-sm btn-primary">
+                        <i class="fas fa-download"></i> Download
+                    </a>
+                    <a href="{{ img.caminho }}" data-lightbox="galeria" class="btn btn-sm btn-info">
+                        <i class="fas fa-expand"></i> Ampliar
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        <i class="fas fa-info-circle"></i> Nenhuma imagem processada encontrada. 
+        <a href="{% url 'acessorios:index' %}">Comece a processar imagens!</a>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Lightbox para ampliar imagens -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
+
+<style>
+    .card {
+        transition: transform 0.2s, box-shadow 0.2s;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,8 @@
+# Dataset YOLO - Detecção de Embalagens VerifiK
+path: C:\Users\gabri\OneDrive\Área de Trabalho\verifiK_Biel\projetos-logos\dataset_yolo
+train: train/images
+val: val/images
+test: test/images
+
+nc: 5
+names: ['LATA_350ML', 'LATA_473ML', 'GARRAFA_LONG_NECK', 'GARRAFA_600ML', 'OUTROS']

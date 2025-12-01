@@ -1,0 +1,21 @@
+MÉTODO CONNECTED COMPONENTS
+==============================
+
+BASEADO NA PESQUISA:
+1. Remoção do fundo (limiarização)
+2. Connected Component Labeling
+3. Análise de cada componente
+4. Classificação por forma
+
+RESULTADO:
+- Total detectado: 1 produtos
+- Garrafas: 0
+- Latas: 1
+- Status: AJUSTAR
+
+DETALHES DOS PRODUTOS:
+Produto 1 (LATA):
+  - Área: 2186544 pixels
+  - Proporção: 1.03
+  - Bounding box: (0, 0, 1550, 1500)
+

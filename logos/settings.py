@@ -95,6 +95,7 @@ INSTALLED_APPS = [
     'verifik',     # 🤖 Sistema de IA - Detecção de produtos por câmeras
     'solar_monitor',  #  Monitoramento em tempo real das usinas solares
     'transcricao_caixa',  # 📸 Transcrição de imagens para fechamento de caixa
+    'acessorios',  # 🎨 Processamento de imagens e ferramentas auxiliares
 ]
 
 # ============================================================
@@ -243,6 +244,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Custom User Model
 AUTH_USER_MODEL = 'accounts.User'
+
+# Custom Authentication Backend (aceita email ou username)
+AUTHENTICATION_BACKENDS = [
+    'accounts.backends.EmailOrUsernameBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
 
 # Email Configuration (development - console backend)
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

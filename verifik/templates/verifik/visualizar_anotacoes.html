@@ -1,0 +1,247 @@
+{% extends 'verifik/base.html' %}
+
+{% block title %}Visualizar Anotações - VerifiK{% endblock %}
+
+{% block content %}
+<style>
+    .header-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+    .stat-card {
+        background: linear-gradient(135deg, #1B4D3E 0%, #2a6b54 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 15px;
+        text-align: center;
+    }
+    .stat-number {
+        font-size: 2.5em;
+        font-weight: bold;
+        display: block;
+    }
+    .stat-label {
+        font-size: 0.9em;
+        opacity: 0.9;
+    }
+    .images-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(600px, 1fr));
+        gap: 30px;
+    }
+    .image-container {
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    .image-header {
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #eee;
+    }
+    .image-title {
+        font-size: 1.2em;
+        font-weight: 600;
+        color: #1B4D3E;
+        margin-bottom: 5px;
+    }
+    .image-meta {
+        font-size: 0.85em;
+        color: #666;
+    }
+    .canvas-wrapper {
+        position: relative;
+        background: #000;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-bottom: 15px;
+    }
+    canvas {
+        max-width: 100%;
+        display: block;
+    }
+    .annotations-list {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 10px;
+    }
+    .annotation-item {
+        display: flex;
+        align-items: center;
+        padding: 8px 12px;
+        margin: 5px 0;
+        background: white;
+        border-radius: 8px;
+        border-left: 4px solid;
+    }
+    .color-box {
+        width: 20px;
+        height: 20px;
+        border-radius: 4px;
+        margin-right: 10px;
+    }
+    .produto-info {
+        flex: 1;
+    }
+    .produto-nome {
+        font-weight: 600;
+        color: #2c3e50;
+    }
+    .produto-django {
+        font-size: 0.85em;
+        color: #27ae60;
+    }
+    .coords {
+        font-size: 0.75em;
+        color: #999;
+        font-family: monospace;
+    }
+</style>
+
+<h1 style="color: #1B4D3E; margin-bottom: 30px;">📦 Visualizar Anotações com Bounding Boxes</h1>
+
+<div class="header-stats">
+    <div class="stat-card">
+        <span class="stat-number">{{ total_imagens }}</span>
+        <span class="stat-label">Imagens Anotadas</span>
+    </div>
+    <div class="stat-card" style="background: linear-gradient(135deg, #D4AF37 0%, #F4D03F 100%);">
+        <span class="stat-number">{{ total_anotacoes }}</span>
+        <span class="stat-label">Total de Produtos Marcados</span>
+    </div>
+    <div class="stat-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <span class="stat-number">{{ exportacoes|length }}</span>
+        <span class="stat-label">Exportações Processadas</span>
+    </div>
+</div>
+
+{% if not exportacoes %}
+<div style="text-align: center; padding: 60px; background: white; border-radius: 15px;">
+    <div style="font-size: 4em; margin-bottom: 20px;">📭</div>
+    <h2 style="color: #666;">Nenhuma imagem anotada encontrada</h2>
+    <p style="color: #999;">As exportações não contêm imagens com anotações de bounding boxes.</p>
+</div>
+{% else %}
+
+<div class="images-grid">
+    {% for exp in exportacoes %}
+    <div class="image-container">
+        <div class="image-header">
+            <div class="image-title">📷 {{ exp.arquivo }}</div>
+            <div class="image-meta">
+                📁 {{ exp.pasta }}<br>
+                📅 {{ exp.data }}<br>
+                🎯 {{ exp.total_anotacoes }} produto(s) marcado(s)
+            </div>
+        </div>
+
+        <div class="canvas-wrapper">
+            <canvas id="canvas-{{ forloop.counter }}" 
+                    data-image="{{ exp.imagem_path }}"
+                    data-annotations='{{ exp.anotacoes|safe|escapejs }}'></canvas>
+        </div>
+
+        <div class="annotations-list">
+            <strong style="color: #2c3e50; margin-bottom: 10px; display: block;">🏷️ Produtos Detectados:</strong>
+            {% for anotacao in exp.anotacoes %}
+            <div class="annotation-item" style="border-left-color: {{ forloop.counter|get_color }};">
+                <div class="color-box" style="background: {{ forloop.counter|get_color }};"></div>
+                <div class="produto-info">
+                    <div class="produto-nome">{{ anotacao.produto_nome }}</div>
+                    {% if anotacao.produto_django %}
+                    <div class="produto-django">✅ Cadastrado: {{ anotacao.produto_django.descricao_produto }}</div>
+                    {% else %}
+                    <div style="font-size: 0.85em; color: #e74c3c;">⚠️ Produto não encontrado na base</div>
+                    {% endif %}
+                    <div class="coords">
+                        x: {{ anotacao.x|floatformat:3 }}, 
+                        y: {{ anotacao.y|floatformat:3 }}, 
+                        w: {{ anotacao.width|floatformat:3 }}, 
+                        h: {{ anotacao.height|floatformat:3 }}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+// Cores para bounding boxes
+const CORES = [
+    '#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF',
+    '#00FFFF', '#FFA500', '#800080', '#FFC0CB', '#A52A2A'
+];
+
+function desenharImagemComBBox(canvasId, imagePath, anotacoes) {
+    const canvas = document.getElementById(canvasId);
+    const ctx = canvas.getContext('2d');
+    
+    const img = new Image();
+    img.onload = function() {
+        // Ajustar tamanho do canvas
+        canvas.width = img.width;
+        canvas.height = img.height;
+        
+        // Desenhar imagem
+        ctx.drawImage(img, 0, 0);
+        
+        // Desenhar cada bounding box
+        anotacoes.forEach((anotacao, idx) => {
+            const cor = CORES[idx % CORES.length];
+            
+            // Converter coordenadas normalizadas para pixels
+            const xCenter = anotacao.x * img.width;
+            const yCenter = anotacao.y * img.height;
+            const width = anotacao.width * img.width;
+            const height = anotacao.height * img.height;
+            
+            // Calcular cantos
+            const x1 = xCenter - width / 2;
+            const y1 = yCenter - height / 2;
+            
+            // Desenhar retângulo
+            ctx.strokeStyle = cor;
+            ctx.lineWidth = 3;
+            ctx.strokeRect(x1, y1, width, height);
+            
+            // Desenhar label
+            const label = anotacao.produto_nome;
+            ctx.font = 'bold 16px Arial';
+            const textMetrics = ctx.measureText(label);
+            const textWidth = textMetrics.width;
+            const textHeight = 20;
+            
+            // Fundo do label
+            ctx.fillStyle = cor;
+            ctx.fillRect(x1, y1 - textHeight - 8, textWidth + 16, textHeight + 8);
+            
+            // Texto
+            ctx.fillStyle = 'white';
+            ctx.fillText(label, x1 + 8, y1 - 8);
+        });
+    };
+    
+    img.src = 'file:///' + imagePath.replace(/\\/g, '/');
+}
+
+// Processar todos os canvas
+document.addEventListener('DOMContentLoaded', function() {
+    const canvases = document.querySelectorAll('canvas[data-image]');
+    
+    canvases.forEach(canvas => {
+        const imagePath = canvas.dataset.image;
+        const anotacoes = JSON.parse(canvas.dataset.annotations.replace(/&#x27;/g, '"'));
+        
+        desenharImagemComBBox(canvas.id, imagePath, anotacoes);
+    });
+});
+</script>
+
+{% endif %}
+
+{% endblock %}

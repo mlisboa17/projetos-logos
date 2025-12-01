@@ -15,6 +15,7 @@ from .models import (
     DeteccaoProduto, Incidente, EvidenciaIncidente, Alerta,
     Camera, CameraStatus, ImagemProduto
 )
+from .models_anotacao import ImagemAnotada, AnotacaoProduto
 from .forms import ProdutoMaeForm, CodigoBarrasFormSet, ImagemProdutoFormSet
 from .serializers import (
     FuncionarioSerializer, PerfilGestorSerializer, ProdutoMaeSerializer, CodigoBarrasProdutoMaeSerializer,
@@ -341,6 +342,23 @@ def remover_imagem(request, imagem_id):
     return redirect('verifik_produto_detalhe', pk=produto_id)
 
 
+@login_required
+def listar_imagens_anotadas(request):
+    """Lista galeria de todas as imagens anotadas"""
+    imagens = ImagemAnotada.objects.all().order_by('-id')
+    context = {'imagens': imagens, 'total': imagens.count()}
+    return render(request, 'verifik/listar_imagens_anotadas.html', context)
+
+
+@login_required
+def visualizar_imagem_anotada(request, img_id):
+    """Visualizar detalhes de uma imagem anotada com suas anotações"""
+    imagem = get_object_or_404(ImagemAnotada, id=img_id)
+    anotacoes = imagem.anotacoes.all()
+    context = {'imagem': imagem, 'anotacoes': anotacoes, 'total_anotacoes': anotacoes.count()}
+    return render(request, 'verifik/visualizar_imagem_anotada.html', context)
+
+
 # ==============================================
 # 🔌 API REST VIEWSETS
 # ==============================================
@@ -578,3 +596,113 @@ class CameraStatusViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     filterset_fields = ['camera', 'status']
     ordering_fields = ['data_hora']
+
+
+# ==============================================
+# 🤖 VIEWS DE DETECÇÃO INTELIGENTE
+# ==============================================
+
+@login_required
+def deteccao_inteligente(request):
+    """Interface de detecção inteligente de marcas"""
+    
+    # Verificar se usuário tem acesso ao VerifiK
+    if not request.user.active_organization:
+        messages.warning(request, 'Selecione uma organização para acessar o VerifiK.')
+        return redirect('/')
+    
+    context = {
+        'title': 'Detecção Inteligente de Marcas',
+        'marcas_conhecidas': [
+            'Heineken', 'Budweiser', 'Devassa', 'Corona', 'Stella Artois',
+            'Brahma', 'Skol', 'Antarctica', 'Original', 'Eisenbahn', 'Bohemia'
+        ],
+        'user': request.user
+    }
+    
+    return render(request, 'verifik/deteccao_inteligente.html', context)
+
+
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
+import json
+import os
+import tempfile
+from PIL import Image
+import base64
+import io
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def api_detectar_imagem(request):
+    """API para detectar marcas em imagens enviadas"""
+    
+    try:
+        # Verificar se usuário está autenticado
+        if not request.user.is_authenticated:
+            return JsonResponse({'erro': 'Usuário não autenticado'}, status=401)
+        
+        # Processar arquivo enviado
+        if 'imagem' not in request.FILES:
+            return JsonResponse({'erro': 'Nenhuma imagem enviada'}, status=400)
+        
+        arquivo_imagem = request.FILES['imagem']
+        
+        # Validar tipo de arquivo
+        tipos_permitidos = ['image/jpeg', 'image/jpg', 'image/png', 'image/bmp']
+        if arquivo_imagem.content_type not in tipos_permitidos:
+            return JsonResponse({'erro': f'Tipo de arquivo não suportado: {arquivo_imagem.content_type}'}, status=400)
+        
+        # Salvar temporariamente
+        with tempfile.NamedTemporaryFile(delete=False, suffix='.jpg') as temp_file:
+            for chunk in arquivo_imagem.chunks():
+                temp_file.write(chunk)
+            temp_path = temp_file.name
+        
+        try:
+            # Importar nosso detector inteligente
+            import sys
+            projeto_root = os.path.dirname(os.path.dirname(__file__))
+            sys.path.append(projeto_root)
+            
+            from detector_inteligente import DetectorInteligenteMarcas
+            
+            # Processar imagem
+            detector = DetectorInteligenteMarcas()
+            resultado = detector.processar_imagem_inteligente(temp_path)
+            
+            # Limpar arquivo temporário
+            os.unlink(temp_path)
+            
+            if 'erro' in resultado:
+                return JsonResponse({'erro': resultado['erro']}, status=500)
+            
+            # Preparar resposta
+            resposta = {
+                'sucesso': True,
+                'arquivo': resultado['arquivo'],
+                'tempo_processamento': resultado['tempo_processamento'],
+                'regioes_processadas': resultado['regioes_processadas'],
+                'textos_extraidos': resultado['textos_extraidos'],
+                'total_marcas_unicas': resultado['total_marcas_unicas'],
+                'marcas_detectadas': resultado['marcas_detectadas'],
+                'textos_detalhes': resultado['textos_detalhes'][:10],  # Limitar para não sobrecarregar
+            }
+            
+            return JsonResponse(resposta)
+            
+        except ImportError as e:
+            return JsonResponse({
+                'erro': f'Detector não disponível: {str(e)}',
+                'detalhes': 'Certifique-se que o detector_inteligente.py está no diretório raiz'
+            }, status=500)
+            
+        except Exception as e:
+            # Limpar arquivo temporário em caso de erro
+            if os.path.exists(temp_path):
+                os.unlink(temp_path)
+            return JsonResponse({'erro': f'Erro no processamento: {str(e)}'}, status=500)
+            
+    except Exception as e:
+        return JsonResponse({'erro': f'Erro interno: {str(e)}'}, status=500)

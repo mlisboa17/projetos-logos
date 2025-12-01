@@ -106,7 +106,13 @@
                     </h3>
                     
                     <div style="color: #7f8c8d; font-size: 0.9rem; margin-bottom: 0.5rem;">
-                        <div>📤 {{ imagem.enviado_por.get_full_name|default:imagem.enviado_por.username }}</div>
+                        <div>📤 
+                            {% if imagem.enviado_por %}
+                                {{ imagem.enviado_por.get_full_name|default:imagem.enviado_por.username }}
+                            {% else %}
+                                Sistema
+                            {% endif %}
+                        </div>
                         <div>📅 {{ imagem.data_envio|date:"d/m/Y H:i" }}</div>
                         {% if imagem.lote %}
                             <div>📦 Lote: {{ imagem.lote.nome }}</div>
@@ -158,12 +164,18 @@
                     </div>
                     {% elif imagem.status == 'aprovada' %}
                     <div style="margin-top: 1rem; color: #27ae60; text-align: center; font-weight: 600;">
-                        ✓ Aprovada por {{ imagem.aprovado_por.get_full_name|default:imagem.aprovado_por.username }}
+                        ✓ Aprovada
+                        {% if imagem.aprovado_por %}
+                            por {{ imagem.aprovado_por.get_full_name|default:imagem.aprovado_por.username }}
+                        {% endif %}
                         <br><small style="color: #7f8c8d;">{{ imagem.data_aprovacao|date:"d/m/Y H:i" }}</small>
                     </div>
                     {% else %}
                     <div style="margin-top: 1rem; color: #e74c3c; text-align: center; font-weight: 600;">
-                        ✗ Rejeitada por {{ imagem.aprovado_por.get_full_name|default:imagem.aprovado_por.username }}
+                        ✗ Rejeitada
+                        {% if imagem.aprovado_por %}
+                            por {{ imagem.aprovado_por.get_full_name|default:imagem.aprovado_por.username }}
+                        {% endif %}
                         <br><small style="color: #7f8c8d;">{{ imagem.data_aprovacao|date:"d/m/Y H:i" }}</small>
                     </div>
                     {% endif %}

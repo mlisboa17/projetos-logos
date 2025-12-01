@@ -67,6 +67,9 @@ urlpatterns = [
     # Transcrição de Caixa URLs
     path('transcricao/', include('transcricao_caixa.urls')),
     
+    # Acessórios - Processamento de Imagens
+    path('acessorios/', include('acessorios.urls')),
+    
     # Django Admin
     path('admin/', admin.site.urls),
     

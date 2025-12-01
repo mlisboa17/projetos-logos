@@ -1,0 +1,49 @@
+=== PIPELINE ZOOM OTIMIZADO ===
+
+Imagem processada: C:\Users\gabri\Downloads\OneDrive_2025-11-30\BRUNO SENA CASA CAIADA\ProdutosParaImportar\Marca_Spaten (2).jpeg
+Data/Hora: 30/11/2025 16:38:41
+
+PRODUTOS PROCESSADOS: 4
+- Produto 1: Área=56770, Ratio=0.82
+- Produto 2: Área=19139, Ratio=0.74
+- Produto 3: Área=402598, Ratio=1.40
+- Produto 4: Área=34422, Ratio=0.94
+
+OTIMIZAÇÕES APLICADAS:
+- Zoom controlado (máx 3x, limitado a 2000px)
+- OCR com timeout de 10 segundos
+- Redimensionamento automático para OCR
+- Processamento rápido e seguro
+
+TEXTOS DETECTADOS:
+- Produto 1 - Rápido - Linha: mt
+- Produto 2 - Rápido - Geral: a
+  A E
+- Produto 3 - Rápido - Palavra: ae
+- Produto 3 - Rápido - Geral: O À ado E 4 ma E
+Bec  7 is 
+mr  RR 
+ 3 
+na A É oF
+- Produto 4 - Rápido - Palavra: ra
+- Produto 4 - Rápido - Geral: DN 7
+ne 3
+ Ase ane 
+Res y vw yy 
+ é cá  a
+pw e
+Ase
+7 es A 
+  AY bs
+are 1
+
+=== PRODUTOS IDENTIFICADOS PELO SISTEMA ===
+Baseado na análise de texto e contexto:
+
+• Cerveja Spaten (identificada pelo nome da imagem)
+
+=== ARQUIVOS GERADOS ===
+1_sem_fundo.jpg - Imagem com fundo removido
+2_produto_X_zoom.jpg - Produtos com zoom controlado
+3_produto_X_ocr.jpg - Produtos otimizados para OCR
+4_relatorio_otimizado.txt - Este relatório
