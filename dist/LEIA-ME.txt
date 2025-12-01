@@ -1,0 +1,48 @@
+# 📦 VerifiK Sistema de Coleta v2.4 - Instalação
+
+## 🚀 COMO INSTALAR (2 passos)
+
+### Se for a PRIMEIRA VEZ neste computador:
+
+1. **Clique com botão direito** em `INSTALAR_VERIFIK.bat`
+2. Selecione **"Executar como Administrador"**
+3. Aguarde a instalação automática das dependências
+4. Pronto! Agora pode usar o sistema
+
+### Se JÁ INSTALOU antes:
+
+- Duplo clique em `VerifiK_ColetaImagens_v2.4_Responsivo.exe`
+
+---
+
+## ⚠️ Problemas Visuais?
+
+Se a interface aparecer distorcida, cortada ou com botões fora da tela:
+
+**SOLUÇÃO RÁPIDA:**
+1. Baixe: https://aka.ms/vs/17/release/vc_redist.x64.exe
+2. Execute o instalador
+3. Reinicie o computador
+4. Execute o VerifiK novamente
+
+---
+
+## 📋 Requisitos
+
+- Windows 10 ou superior (64 bits)
+- 4GB de RAM (recomendado 8GB)
+- Resolução mínima: 1366x768
+
+---
+
+## 🆕 Versão 2.4 - Melhorias de Interface
+
+✅ Busca de produtos não empurra mais os botões  
+✅ Anotações mostram nomes completos dos produtos  
+✅ Canvas maior para desenhar com conforto  
+✅ Campo de observações expandido  
+
+---
+
+**Data**: 27/11/2025  
+**Suporte**: suporte@logos.com.br
