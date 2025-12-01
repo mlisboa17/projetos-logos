@@ -1,0 +1,1142 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ titulo }} - VerifiK</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .status-banner {
+            padding: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .status-success {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid #4CAF50;
+            color: #4CAF50;
+        }
+
+        .status-error {
+            background: rgba(244, 67, 54, 0.2);
+            border: 1px solid #f44336;
+            color: #f44336;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 350px 400px;
+            gap: 20px;
+            min-height: 70vh;
+        }
+
+        .video-section {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .controls-panel {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            height: fit-content;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            background: #000;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            border: 2px solid #4CAF50;
+        }
+
+        .video-feed {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .video-overlay {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .control-group {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .control-group:last-child {
+            border-bottom: none;
+        }
+
+        .control-group h3 {
+            margin-bottom: 15px;
+            color: #87CEEB;
+            font-size: 1.1em;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #f44336, #da190b);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        .detection-log {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            height: 200px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .log-entry {
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .log-time {
+            color: #87CEEB;
+            font-weight: bold;
+        }
+
+        .log-product {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        .log-text {
+            color: #FFD700;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .results-panel {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            height: fit-content;
+        }
+
+        .result-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .result-product {
+            border-left: 4px solid #4CAF50;
+            background: rgba(76, 175, 80, 0.1);
+        }
+
+        .result-text {
+            border-left: 4px solid #FFD700;
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .result-title {
+            font-weight: bold;
+            color: #87CEEB;
+        }
+
+        .result-confidence {
+            background: rgba(76, 175, 80, 0.8);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+        }
+
+        .result-content {
+            color: white;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .bbox-info {
+            font-size: 12px;
+            color: #ccc;
+            margin-top: 5px;
+        }
+
+        .clear-results {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-bottom: 15px;
+        }
+
+        .result-summary {
+            border-left: 4px solid #667eea !important;
+            background: linear-gradient(135deg, #667eea, #764ba2) !important;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @media (max-width: 1400px) {
+            .main-grid {
+                grid-template-columns: 1fr 350px;
+            }
+            
+            .results-panel {
+                display: none;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .video-container {
+                height: 400px;
+            }
+
+            .results-panel {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🤖 {{ titulo }}</h1>
+        <p>Sistema Inteligente de Detecção com YOLOv8 + OCR</p>
+    </div>
+
+    {% if libs_available %}
+    <div class="status-banner status-success">
+        ✅ Sistema Operacional - YOLOv8 e EasyOCR carregados com sucesso
+    </div>
+    {% else %}
+    <div class="status-banner status-error">
+        ❌ Bibliotecas não encontradas - Instale: pip install ultralytics easyocr opencv-python
+    </div>
+    {% endif %}
+
+    <div class="container">
+        <div class="main-grid">
+            <!-- Seção do Vídeo -->
+            <div class="video-section">
+                <h2>📹 Feed da Câmera</h2>
+                <div class="video-container">
+                    {% if libs_available %}
+                    <img src="{% url 'detector_yolo_ocr:video_feed' %}" alt="Feed da Câmera" class="video-feed" id="videoFeed">
+                    <div class="video-overlay">
+                        <span id="fpsCounter">FPS: 0</span> | 
+                        <span id="statusIndicator">Parado</span>
+                    </div>
+                    {% else %}
+                    <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #f44336;">
+                        <h3>⚠️ Bibliotecas não instaladas</h3>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Controles do Vídeo -->
+                <div class="control-group">
+                    <button class="btn btn-primary" id="startBtn" onclick="startDetection()" {% if not libs_available %}disabled{% endif %}>
+                        ▶️ Iniciar Detecção
+                    </button>
+                    <button class="btn btn-danger" id="stopBtn" onclick="stopDetection()" disabled {% if not libs_available %}disabled{% endif %}>
+                        ⏹️ Parar Detecção
+                    </button>
+                </div>
+
+                <!-- Upload de Imagem -->
+                <div class="control-group">
+                    <h3>🔬 Processamento Avançado</h3>
+                    <form id="uploadForm" enctype="multipart/form-data" style="margin-bottom: 15px;">
+                        {% csrf_token %}
+                        <input type="file" id="imagemInput" name="imagem" accept="image/*" style="display: none;" onchange="previewImage()">
+                        
+                        <!-- Seleção de Arquivo -->
+                        <div style="margin-bottom: 15px;">
+                            <button type="button" class="btn btn-primary" onclick="document.getElementById('imagemInput').click()" {% if not libs_available %}disabled{% endif %}>
+                                📂 Escolher Foto
+                            </button>
+                        </div>
+                        
+                        <!-- Opções de Processamento -->
+                        <div id="processingOptions" style="display: none; margin-bottom: 15px; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 8px;">
+                            <h4 style="margin-bottom: 10px; color: #87CEEB;">🔧 Opções de Processamento</h4>
+                            
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+                                <!-- Pré-processamento -->
+                                <div>
+                                    <label style="color: white; font-weight: bold; display: block; margin-bottom: 5px;">📐 Redimensionamento:</label>
+                                    <select id="resizeOption" class="form-control" style="background: rgba(0,0,0,0.5); color: white; border: 1px solid #ccc; width: 100%;">
+                                        <option value="none">Tamanho Original</option>
+                                        <option value="640">640x640 (Rápido)</option>
+                                        <option value="1024" selected>1024x1024 (Padrão)</option>
+                                        <option value="1280">1280x1280 (Melhor)</option>
+                                    </select>
+                                </div>
+                                
+                                <div>
+                                    <label style="color: white; font-weight: bold; display: block; margin-bottom: 5px;">🎨 Filtros:</label>
+                                    <select id="filterOption" class="form-control" style="background: rgba(0,0,0,0.5); color: white; border: 1px solid #ccc; width: 100%;">
+                                        <option value="none" selected>Sem Filtro</option>
+                                        <option value="sharpen">🔍 Nitidez</option>
+                                        <option value="contrast">🌟 Contraste</option>
+                                        <option value="brightness">☀️ Brilho</option>
+                                        <option value="grayscale">⚫ Escala Cinza</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+                                <div>
+                                    <label style="color: white; font-weight: bold; display: block; margin-bottom: 5px;">🎯 Detecção:</label>
+                                    <select id="detectionMode" class="form-control" style="background: rgba(0,0,0,0.5); color: white; border: 1px solid #ccc; width: 100%;">
+                                        <option value="normal" selected>🤖 YOLOv8 Padrão</option>
+                                        <option value="aggressive">🔥 Agressivo (Baixa confiança)</option>
+                                        <option value="conservative">🎯 Conservativo (Alta confiança)</option>
+                                        <option value="multi_scale">📏 Multi-escala</option>
+                                    </select>
+                                </div>
+                                
+                                <div>
+                                    <label style="color: white; font-weight: bold; display: block; margin-bottom: 5px;">📝 OCR:</label>
+                                    <select id="ocrMode" class="form-control" style="background: rgba(0,0,0,0.5); color: white; border: 1px solid #ccc; width: 100%;">
+                                        <option value="normal" selected>📖 Padrão (PT+EN)</option>
+                                        <option value="numbers">🔢 Apenas Números</option>
+                                        <option value="text_only">📝 Apenas Texto</option>
+                                        <option value="enhanced">⚡ OCR Aprimorado</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <!-- Opções Avançadas -->
+                            <details style="margin-top: 15px;">
+                                <summary style="color: #FFD700; cursor: pointer; font-weight: bold;">⚙️ Opções Avançadas</summary>
+                                <div style="margin-top: 10px; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 5px;">
+                                    <div style="margin-bottom: 10px;">
+                                        <label style="color: white;">🔍 Confiança Mínima: <span id="confidenceValue">0.5</span></label>
+                                        <input type="range" id="confidenceSlider" min="0.1" max="0.9" step="0.1" value="0.5" 
+                                               style="width: 100%;" onchange="document.getElementById('confidenceValue').textContent = this.value">
+                                    </div>
+                                    
+                                    <div style="display: flex; gap: 15px; margin-bottom: 10px; flex-wrap: wrap;">
+                                        <label style="color: white;">
+                                            <input type="checkbox" id="removeBackground" style="margin-right: 5px;">
+                                            🎭 Remover Fundo
+                                        </label>
+                                        <label style="color: white;">
+                                            <input type="checkbox" id="edgeDetection" style="margin-right: 5px;">
+                                            📐 Detecção de Bordas
+                                        </label>
+                                    </div>
+                                    
+                                    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                                        <label style="color: white;">
+                                            <input type="checkbox" id="binaryThreshold" style="margin-right: 5px;">
+                                            ⚫⚪ Binarização
+                                        </label>
+                                        <label style="color: white;">
+                                            <input type="checkbox" id="noiseReduction" style="margin-right: 5px;">
+                                            🔇 Redução de Ruído
+                                        </label>
+                                    </div>
+                                </div>
+                            </details>
+                        </div>
+                        
+                        <!-- Botões de Ação -->
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <button type="button" class="btn btn-success" id="processBtn" onclick="processImageAdvanced()" style="display: none; flex: 1;" {% if not libs_available %}disabled{% endif %}>
+                                🔍 Processar com IA
+                            </button>
+                            <button type="button" class="btn btn-info" id="previewBtn" onclick="previewProcessing()" style="display: none;" {% if not libs_available %}disabled{% endif %}>
+                                👁️ Preview
+                            </button>
+                        </div>
+                        
+                        <button type="button" class="btn btn-secondary" onclick="clearResults()" style="margin-top: 10px; width: 100%;">
+                            🗑️ Limpar Resultados
+                        </button>
+                    </form>
+                    
+                    <!-- Status de Processamento -->
+                    <div id="processing-status" style="display: none; text-align: center; margin-top: 15px; padding: 15px; background: linear-gradient(45deg, #ff6b6b, #ee5a52); color: white; border-radius: 10px; font-weight: bold; font-size: 16px; animation: pulse 1.5s infinite;">
+                        ⏳ PROCESSANDO...
+                    </div>
+                    <div id="imagePreview" style="display: none; max-width: 100%; margin-top: 10px;">
+                        <img id="previewImg" style="max-width: 200px; border-radius: 5px; border: 1px solid #ccc;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Painel de Controles -->
+            <div class="controls-panel">
+                <div class="control-group">
+                    <h3>📊 Estatísticas em Tempo Real</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-value" id="totalDetections">0</div>
+                            <div class="stat-label">Detecções</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="currentFps">0</div>
+                            <div class="stat-label">FPS</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="uniqueProducts">0</div>
+                            <div class="stat-label">Produtos Únicos</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="textsRead">0</div>
+                            <div class="stat-label">Textos Lidos</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <h3>📝 Log de Detecções</h3>
+                    <div class="detection-log" id="detectionLog">
+                        <div class="log-entry">
+                            <span class="log-time">[Sistema]</span> 
+                            Aguardando início da detecção...
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Painel de Resultados -->
+            <div class="results-panel">
+                <div class="control-group">
+                    <h3>🎯 Resultados de Detecção</h3>
+                    <button class="clear-results" onclick="clearResults()">🗑️ Limpar Resultados</button>
+                    <div id="resultsContainer">
+                        <div class="result-card">
+                            <div class="result-header">
+                                <span class="result-title">💡 Como usar</span>
+                            </div>
+                            <div class="result-content">
+                                • Inicie a câmera ou envie uma foto<br>
+                                • Produtos detectados aparecem em <span style="color: #4CAF50;">verde</span><br>
+                                • Textos lidos aparecem em <span style="color: #FFD700;">amarelo</span><br>
+                                • Clique em "Limpar" para reset
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2025 VerifiK - Sistema Inteligente de Detecção de Produtos</p>
+        <p>Desenvolvido com YOLOv8, OpenCV, EasyOCR e Django</p>
+    </div>
+
+    <script>
+        let detectionActive = false;
+        let updateInterval;
+
+        function startDetection() {
+            {% if libs_available %}
+            fetch("{% url 'detector_yolo_ocr:iniciar' %}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    detectionActive = true;
+                    document.getElementById('startBtn').disabled = true;
+                    document.getElementById('stopBtn').disabled = false;
+                    document.getElementById('statusIndicator').textContent = 'Detectando';
+                    startUpdates();
+                    addLogEntry('Sistema', 'Detecção iniciada com sucesso');
+                } else {
+                    addLogEntry('Erro', data.message || 'Falha ao iniciar detecção');
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                addLogEntry('Erro', 'Erro de conexão com o servidor');
+            });
+            {% endif %}
+        }
+
+        function stopDetection() {
+            {% if libs_available %}
+            fetch("{% url 'detector_yolo_ocr:parar' %}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    detectionActive = false;
+                    document.getElementById('startBtn').disabled = false;
+                    document.getElementById('stopBtn').disabled = true;
+                    document.getElementById('statusIndicator').textContent = 'Parado';
+                    stopUpdates();
+                    addLogEntry('Sistema', 'Detecção parada');
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                addLogEntry('Erro', 'Erro ao parar detecção');
+            });
+            {% endif %}
+        }
+
+        function updateStats() {
+            {% if libs_available %}
+            fetch("{% url 'detector_yolo_ocr:stats' %}")
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('totalDetections').textContent = data.total_deteccoes || 0;
+                document.getElementById('currentFps').textContent = (data.fps || 0).toFixed(1);
+                document.getElementById('uniqueProducts').textContent = (data.produtos_detectados || []).length;
+                document.getElementById('textsRead').textContent = (data.textos_lidos || []).length;
+                document.getElementById('fpsCounter').textContent = `FPS: ${(data.fps || 0).toFixed(1)}`;
+                
+                // Adicionar novos produtos detectados ao log
+                if (data.produtos_detectados && data.produtos_detectados.length > 0) {
+                    data.produtos_detectados.slice(-3).forEach(produto => {
+                        if (produto) {
+                            addLogEntry('Produto', produto, 'log-product');
+                            addResultCard('Produto', produto);
+                        }
+                    });
+                }
+                
+                // Adicionar textos lidos ao log
+                if (data.textos_lidos && data.textos_lidos.length > 0) {
+                    data.textos_lidos.slice(-2).forEach(texto => {
+                        if (texto) {
+                            addLogEntry('OCR', texto, 'log-text');
+                            addResultCard('Texto', texto);
+                        }
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao atualizar estatísticas:', error);
+            });
+            {% endif %}
+        }
+
+        function checkStatus() {
+            {% if libs_available %}
+            fetch("{% url 'detector_yolo_ocr:status' %}")
+            .then(response => response.json())
+            .then(data => {
+                const isActive = data.detectando || false;
+                if (isActive !== detectionActive) {
+                    detectionActive = isActive;
+                    document.getElementById('startBtn').disabled = isActive;
+                    document.getElementById('stopBtn').disabled = !isActive;
+                    document.getElementById('statusIndicator').textContent = isActive ? 'Detectando' : 'Parado';
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao verificar status:', error);
+            });
+            {% endif %}
+        }
+
+        function addLogEntry(type, message, className = '') {
+            const log = document.getElementById('detectionLog');
+            const now = new Date();
+            const time = now.toLocaleTimeString();
+            
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.innerHTML = `<span class="log-time">[${time}]</span> <span class="${className}">[${type}]</span> ${message}`;
+            
+            log.appendChild(entry);
+            log.scrollTop = log.scrollHeight;
+            
+            // Limitar a 50 entradas
+            while (log.children.length > 50) {
+                log.removeChild(log.firstChild);
+            }
+
+            // Também adicionar ao painel de resultados
+            if (type === 'Produto' || type === 'OCR') {
+                addResultCard(type, message, className);
+            }
+        }
+
+        function addResultCard(type, message, confidence = null) {
+            const container = document.getElementById('resultsContainer');
+            const now = new Date();
+            const time = now.toLocaleTimeString();
+            
+            // Remover card de instruções se existir
+            const instructions = container.querySelector('.result-card');
+            if (instructions && instructions.textContent.includes('Como usar')) {
+                instructions.remove();
+            }
+            
+            const card = document.createElement('div');
+            card.className = `result-card ${type === 'Produto' ? 'result-product' : 'result-text'}`;
+            
+            let confidenceHtml = '';
+            if (confidence && type === 'Produto') {
+                const match = message.match(/Confiança (\d+\.?\d*)%/);
+                if (match) {
+                    confidenceHtml = `<span class="result-confidence">${match[1]}%</span>`;
+                }
+            }
+            
+            card.innerHTML = `
+                <div class="result-header">
+                    <span class="result-title">${type === 'Produto' ? '📦 Produto Detectado' : '📝 Texto Lido'}</span>
+                    ${confidenceHtml}
+                </div>
+                <div class="result-content">
+                    ${message.replace(/Objeto \d+: Confiança \d+\.?\d*%, /, '').replace(/Confiança \d+\.?\d*%/, '').trim()}
+                </div>
+                <div class="bbox-info">⏰ ${time}</div>
+            `;
+            
+            container.insertBefore(card, container.firstChild);
+            
+            // Limitar a 10 cards
+            while (container.children.length > 10) {
+                container.removeChild(container.lastChild);
+            }
+        }
+
+        function clearResults() {
+            const container = document.getElementById('resultsContainer');
+            container.innerHTML = `
+                <div class="result-card">
+                    <div class="result-header">
+                        <span class="result-title">✨ Resultados Limpos</span>
+                    </div>
+                    <div class="result-content">
+                        Pronto para novas detecções!
+                    </div>
+                </div>
+            `;
+            addLogEntry('Sistema', 'Painel de resultados limpo');
+        }
+
+        // Função para bloquear/desbloquear botões durante processamento
+        function toggleProcessingMode(isProcessing) {
+            const buttons = document.querySelectorAll('.btn');
+            const statusText = document.getElementById('processing-status');
+            
+            buttons.forEach(btn => {
+                btn.disabled = isProcessing;
+                if (isProcessing) {
+                    btn.style.opacity = '0.5';
+                    btn.style.cursor = 'not-allowed';
+                } else {
+                    btn.style.opacity = '1';
+                    btn.style.cursor = 'pointer';
+                }
+            });
+            
+            if (statusText) {
+                statusText.style.display = isProcessing ? 'block' : 'none';
+            }
+        }
+
+        // Função para gerar resumo final dos resultados
+        function generateResultsSummary() {
+            const resultsContainer = document.getElementById('resultsContainer');
+            
+            if (!resultsContainer) {
+                console.error('Container de resultados não encontrado!');
+                return;
+            }
+            
+            // Contar produtos e textos pelos cards existentes
+            const allCards = resultsContainer.querySelectorAll('.result-card');
+            let productCards = [];
+            let textCards = [];
+            
+            allCards.forEach(card => {
+                if (card.classList.contains('result-product')) {
+                    productCards.push(card);
+                } else if (card.classList.contains('result-text')) {
+                    textCards.push(card);
+                }
+            });
+            
+            console.log('Produtos encontrados:', productCards.length);
+            console.log('Textos encontrados:', textCards.length);
+            
+            // Remover resumo anterior se existir
+            const oldSummary = resultsContainer.querySelector('.result-summary');
+            if (oldSummary) {
+                oldSummary.remove();
+            }
+            
+            // Criar resumo
+            const summaryCard = document.createElement('div');
+            summaryCard.className = 'result-card result-summary';
+            summaryCard.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+            summaryCard.style.border = '2px solid #667eea';
+            summaryCard.style.marginBottom = '20px';
+            
+            let summaryContent = `
+                <div class="result-header">
+                    <span class="result-title" style="color: white; font-size: 18px; font-weight: bold;">📊 RESUMO FINAL</span>
+                </div>
+                <div class="summary-content" style="color: white; margin-top: 15px;">
+                    <div style="font-size: 16px; font-weight: bold; margin-bottom: 15px; text-align: center; background: rgba(255,255,255,0.2); padding: 10px; border-radius: 8px;">
+                        📦 QUANTIDADE DE PRODUTOS/OBJETOS: ${productCards.length}
+                    </div>
+            `;
+            
+            // Listar produtos detectados
+            if (productCards.length > 0) {
+                productCards.forEach((card, index) => {
+                    const titleElement = card.querySelector('.result-title');
+                    const contentElement = card.querySelector('.result-content');
+                    const confidenceElement = card.querySelector('.result-confidence');
+                    
+                    const title = titleElement ? titleElement.textContent : '';
+                    const content = contentElement ? contentElement.textContent.trim() : `Objeto ${index + 1}`;
+                    const confidence = confidenceElement ? confidenceElement.textContent : '';
+                    
+                    summaryContent += `
+                        <div style="background: rgba(76, 175, 80, 0.3); padding: 12px; margin: 10px 0; border-radius: 8px; border-left: 4px solid #4CAF50;">
+                            <strong>PRODUTO ${index + 1}:</strong><br>
+                            ${content} ${confidence ? '(Confiança: ' + confidence + ')' : ''}
+                        </div>
+                    `;
+                });
+            }
+            
+            // Listar textos encontrados
+            if (textCards.length > 0) {
+                summaryContent += `
+                    <div style="font-size: 16px; font-weight: bold; margin: 20px 0 15px 0; text-align: center; background: rgba(255,255,255,0.2); padding: 10px; border-radius: 8px;">
+                        📝 TEXTOS ENCONTRADOS: ${textCards.length}
+                    </div>
+                `;
+                
+                textCards.forEach((card, index) => {
+                    const contentElement = card.querySelector('.result-content');
+                    const content = contentElement ? contentElement.textContent.trim() : `Texto ${index + 1}`;
+                    
+                    summaryContent += `
+                        <div style="background: rgba(255, 215, 0, 0.3); padding: 12px; margin: 10px 0; border-radius: 8px; border-left: 4px solid #FFD700;">
+                            <strong>TEXTO ${index + 1}:</strong><br>
+                            ${content}
+                        </div>
+                    `;
+                });
+            }
+            
+            // Adicionar mensagem se não houver resultados
+            if (productCards.length === 0 && textCards.length === 0) {
+                summaryContent += `
+                    <div style="text-align: center; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 8px;">
+                        <strong>Nenhum produto ou texto foi detectado nesta imagem.</strong><br>
+                        Tente com uma imagem de melhor qualidade ou com produtos mais visíveis.
+                    </div>
+                `;
+            }
+            
+            summaryContent += `</div>`;
+            summaryCard.innerHTML = summaryContent;
+            
+            // Inserir no topo do container
+            resultsContainer.insertBefore(summaryCard, resultsContainer.firstChild);
+        }
+
+        function previewImage() {
+            const input = document.getElementById('imagemInput');
+            const preview = document.getElementById('imagePreview');
+            const img = document.getElementById('previewImg');
+            const processBtn = document.getElementById('processBtn');
+            const previewBtn = document.getElementById('previewBtn');
+            const options = document.getElementById('processingOptions');
+            
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    img.src = e.target.result;
+                    preview.style.display = 'block';
+                    processBtn.style.display = 'inline-block';
+                    previewBtn.style.display = 'inline-block';
+                    options.style.display = 'block';
+                    addLogEntry('Upload', 'Imagem carregada - Configurações avançadas disponíveis');
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function processImage() {
+            {% if libs_available %}
+            const input = document.getElementById('imagemInput');
+            if (!input.files || !input.files[0]) {
+                addLogEntry('Erro', 'Nenhuma imagem selecionada');
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('imagem', input.files[0]);
+            formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+            
+            addLogEntry('Sistema', 'Processando imagem com YOLOv8 + OCR...');
+            
+            // Bloquear botões durante processamento
+            toggleProcessingMode(true);
+            
+            fetch("{% url 'detector_yolo_ocr:upload' %}", {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Desbloquear botões
+                toggleProcessingMode(false);
+                if (data.success) {
+                    addLogEntry('Sucesso', `${data.total_deteccoes} objetos detectados`);
+                    
+                    // Atualizar estatísticas
+                    document.getElementById('totalDetections').textContent = data.total_deteccoes;
+                    document.getElementById('textsRead').textContent = data.total_textos;
+                    
+                    // Mostrar produtos detectados
+                    data.produtos_detectados.forEach((produto, index) => {
+                        const confiancaMsg = `Produto ${index + 1} - Confiança ${(produto.confianca * 100).toFixed(1)}%`;
+                        addLogEntry('Produto', confiancaMsg, 'log-product');
+                        
+                        // Adicionar card visual
+                        addResultCard('Produto', `Objeto ${index + 1}`, (produto.confianca * 100).toFixed(1));
+                    });
+                    
+                    // Mostrar textos lidos
+                    data.textos_lidos.forEach(texto => {
+                        addLogEntry('OCR', texto, 'log-text');
+                        
+                        // Adicionar card visual
+                        addResultCard('Texto', texto);
+                    });
+                    
+                    // Gerar resumo final dos resultados sempre
+                    setTimeout(() => {
+                        generateResultsSummary();
+                        addLogEntry('Sistema', 'Resumo final gerado com sucesso');
+                    }, 1000);
+                    
+                } else {
+                    addLogEntry('Erro', data.message);
+                    // Gerar resumo mesmo com erro
+                    setTimeout(() => {
+                        generateResultsSummary();
+                    }, 1000);
+                }
+            })
+            .catch(error => {
+                // Desbloquear botões em caso de erro
+                toggleProcessingMode(false);
+                console.error('Erro:', error);
+                addLogEntry('Erro', 'Erro ao processar imagem');
+                // Gerar resumo mesmo com erro
+                setTimeout(() => {
+                    generateResultsSummary();
+                }, 1000);
+            });
+            {% endif %}
+        }
+
+        // Função para processamento avançado de imagem
+        function processImageAdvanced() {
+            {% if libs_available %}
+            const input = document.getElementById('imagemInput');
+            if (!input.files || !input.files[0]) {
+                addLogEntry('Erro', 'Nenhuma imagem selecionada');
+                return;
+            }
+            
+            // Coletar configurações
+            const config = {
+                resize: document.getElementById('resizeOption').value,
+                filter: document.getElementById('filterOption').value,
+                detection_mode: document.getElementById('detectionMode').value,
+                ocr_mode: document.getElementById('ocrMode').value,
+                confidence: parseFloat(document.getElementById('confidenceSlider').value),
+                remove_background: document.getElementById('removeBackground').checked,
+                edge_detection: document.getElementById('edgeDetection').checked,
+                binary_threshold: document.getElementById('binaryThreshold').checked,
+                noise_reduction: document.getElementById('noiseReduction').checked
+            };
+            
+            const formData = new FormData();
+            formData.append('imagem', input.files[0]);
+            formData.append('config', JSON.stringify(config));
+            formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+            
+            addLogEntry('Sistema', `Processando com configurações avançadas...`);
+            addLogEntry('Config', `Modo: ${config.detection_mode}, OCR: ${config.ocr_mode}, Confiança: ${config.confidence}`);
+            
+            // Bloquear botões durante processamento
+            toggleProcessingMode(true);
+            
+            fetch("{% url 'detector_yolo_ocr:upload' %}", {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Desbloquear botões
+                toggleProcessingMode(false);
+                
+                if (data.success) {
+                    addLogEntry('Sucesso', `${data.total_deteccoes} objetos detectados com configurações avançadas`);
+                    
+                    // Atualizar estatísticas
+                    document.getElementById('totalDetections').textContent = data.total_deteccoes;
+                    document.getElementById('textsRead').textContent = data.total_textos;
+                    
+                    // Mostrar produtos detectados
+                    data.produtos_detectados.forEach((produto, index) => {
+                        const confiancaMsg = `Produto ${index + 1} - Confiança ${(produto.confianca * 100).toFixed(1)}%`;
+                        addLogEntry('Produto', confiancaMsg, 'log-product');
+                        
+                        // Adicionar card visual
+                        addResultCard('Produto', `Objeto ${index + 1}`, (produto.confianca * 100).toFixed(1));
+                    });
+                    
+                    // Mostrar textos lidos
+                    data.textos_lidos.forEach(texto => {
+                        addLogEntry('OCR', texto, 'log-text');
+                        
+                        // Adicionar card visual
+                        addResultCard('Texto', texto);
+                    });
+                    
+                    // Gerar resumo final sempre
+                    setTimeout(() => {
+                        generateResultsSummary();
+                        addLogEntry('Sistema', 'Resumo final gerado com sucesso');
+                    }, 1000);
+                    
+                } else {
+                    addLogEntry('Erro', data.message);
+                    // Gerar resumo mesmo com erro
+                    setTimeout(() => {
+                        generateResultsSummary();
+                    }, 1000);
+                }
+            })
+            .catch(error => {
+                // Desbloquear botões em caso de erro
+                toggleProcessingMode(false);
+                console.error('Erro:', error);
+                addLogEntry('Erro', 'Erro ao processar imagem');
+                // Gerar resumo mesmo com erro
+                setTimeout(() => {
+                    generateResultsSummary();
+                }, 1000);
+            });
+            {% endif %}
+        }
+
+        // Função para preview do processamento
+        function previewProcessing() {
+            const input = document.getElementById('imagemInput');
+            if (!input.files || !input.files[0]) {
+                addLogEntry('Erro', 'Nenhuma imagem selecionada para preview');
+                return;
+            }
+
+            const config = {
+                resize: document.getElementById('resizeOption').value,
+                filter: document.getElementById('filterOption').value,
+                remove_background: document.getElementById('removeBackground').checked,
+                edge_detection: document.getElementById('edgeDetection').checked,
+                binary_threshold: document.getElementById('binaryThreshold').checked,
+                noise_reduction: document.getElementById('noiseReduction').checked
+            };
+
+            addLogEntry('Preview', `Gerando preview com: ${config.filter}, ${config.resize}`);
+            
+            // Simular preview (aqui você pode implementar preview real no backend)
+            const preview = document.getElementById('imagePreview');
+            const img = document.getElementById('previewImg');
+            
+            // Aplicar filtros CSS temporários para demonstração
+            let filters = '';
+            if (config.filter === 'grayscale') filters += 'grayscale(100%) ';
+            if (config.filter === 'contrast') filters += 'contrast(150%) ';
+            if (config.filter === 'brightness') filters += 'brightness(120%) ';
+            if (config.filter === 'sharpen') filters += 'contrast(120%) saturate(120%) ';
+            if (config.edge_detection) filters += 'invert(1) ';
+            if (config.binary_threshold) filters += 'contrast(200%) brightness(150%) ';
+            
+            img.style.filter = filters;
+            addLogEntry('Preview', 'Filtros aplicados temporariamente na visualização');
+        }
+
+        function startUpdates() {
+            updateInterval = setInterval(() => {
+                updateStats();
+                checkStatus();
+            }, 1000);
+        }
+
+        function stopUpdates() {
+            if (updateInterval) {
+                clearInterval(updateInterval);
+            }
+        }
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            checkStatus();
+            {% if libs_available %}
+            addLogEntry('Sistema', 'Interface carregada - Pronto para detectar');
+            {% else %}
+            addLogEntry('Erro', 'Bibliotecas não instaladas - Sistema indisponível');
+            {% endif %}
+        });
+
+        // Atualizar status a cada 5 segundos mesmo quando parado
+        setInterval(checkStatus, 5000);
+    </script>
+</body>
+</html>
